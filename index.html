@@ -132,6 +132,34 @@ td svg{width:90px;height:26px;display:block;margin-left:auto}
 .act{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:14px}
 .act button{min-height:52px;font-size:16px;font-weight:700;border-radius:14px;color:#fff}
 .sell{background:var(--dn)}.buy{background:var(--up)}.sell:hover,.buy:hover{filter:brightness(.93)}
+/* 우편함 */
+.mailbtn{position:relative}
+.badge{position:absolute;top:2px;right:0;min-width:17px;height:17px;border-radius:9px;background:var(--up);color:#fff;font-size:11px;font-weight:700;line-height:17px;padding:0 5px;text-align:center}
+.mpanel{max-width:560px}
+.mtabs{display:flex;gap:18px;border-bottom:1px solid var(--line);margin:16px 0 4px}
+.mtabs button{font-size:15px;font-weight:700;color:var(--sub);padding:0 0 10px;border-radius:0;border-bottom:2px solid transparent;min-height:36px}
+.mtabs button.on{color:var(--ink);border-bottom-color:var(--ink)}
+.mlist{list-style:none;margin:0;padding:0}
+.mlist li{display:grid;grid-template-columns:40px minmax(0,1fr) auto;gap:12px;align-items:center;padding:14px 0;border-bottom:1px solid var(--line)}
+.env{width:40px;height:40px;border-radius:50%;background:var(--dnbg);display:grid;place-items:center}
+.env svg{width:20px;height:20px}
+.mlist .done .env{background:var(--soft)}.mlist .done .env svg{opacity:.4}
+.mlist b{font-size:15px;font-weight:600;display:block}.mlist p{margin:2px 0 0;font-size:13px;color:var(--ink2);white-space:pre-wrap;overflow-wrap:anywhere}
+.mlist small{font-size:12px;color:var(--sub)}
+.mlist .amt{font-weight:700;color:var(--up);font-size:15px;text-align:right}
+.mlist .get{display:block;margin-top:4px;background:var(--blue);color:#fff;font-weight:600;font-size:13px;padding:0 12px;min-height:32px;margin-left:auto}
+.mlist .got{display:block;margin-top:4px;font-size:12px;color:var(--sub);text-align:right}
+.mlist .del{display:block;margin-top:4px;font-size:12px;color:var(--sub);min-height:28px;margin-left:auto;padding:0 6px;text-decoration:underline}
+.mtop{display:flex;justify-content:space-between;align-items:center;margin:10px 0 0;font-size:14px}
+.form{display:grid;gap:12px;margin-top:14px}
+.form label{font-size:13px;color:var(--sub);font-weight:500;display:grid;gap:4px}
+.form input,.form textarea,.form select{font:inherit;font-size:16px;border:1px solid var(--soft);background:var(--page);color:var(--ink);border-radius:10px;padding:10px 12px;width:100%}
+.form textarea{min-height:70px;resize:vertical}
+.form .two2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.ulist{max-height:200px;overflow:auto;margin-top:6px;border:1px solid var(--line);border-radius:12px}
+.ulist button{display:flex;justify-content:space-between;width:100%;padding:8px 12px;border-radius:0;font-size:14px;min-height:40px;border-bottom:1px solid var(--line)}
+.ulist button:hover{background:var(--page)}
+.sect{font-size:14px;font-weight:700;margin:20px 0 4px}
 /* 주문 시트 */
 .sheetdim{z-index:35}
 .sheet{background:var(--card);width:100%;max-width:440px;border-radius:22px;padding:24px 22px}
@@ -168,14 +196,14 @@ td svg{width:90px;height:26px;display:block;margin-left:auto}
 @media(max-width:1180px){.market{grid-template-columns:minmax(0,1fr) minmax(0,1.6fr)}.newsbox{grid-column:1/-1;margin:16px 0 0}}
 @media(max-width:980px){.wrap{display:flex;flex-direction:column}.side{position:static;max-height:none;min-height:0;border-left:0;border-top:8px solid var(--page);order:2;width:100%}.content{order:1}.search{width:180px}}
 @media(max-width:700px){.market{grid-template-columns:minmax(0,1fr)}.mbig{border-right:0;padding:0 0 12px;border-bottom:1px solid var(--line)}.mgrid{padding:10px 0 0;border:0}
-  .hide-s{display:none}.links{display:none}.search{order:5;width:100%}td,th{padding:9px 6px}.pos{grid-template-columns:1fr 1fr}.panel{padding:18px}.pprice{font-size:28px}.side{order:0}.ticker .warn{display:none}}
+  .hide-s{display:none}.links button:not(.mailbtn){display:none}.search{order:5;width:100%}td,th{padding:9px 6px}.pos{grid-template-columns:1fr 1fr}.panel{padding:18px}.pprice{font-size:28px}.side{order:0}.ticker .warn{display:none}}
 @media(prefers-reduced-motion:reduce){.toast{transition:none}}
 </style>
 </head>
 <body>
 <header class="nav"><div class="navin">
   <div class="brand"><span class="mark">N</span>나스닥 모의투자</div>
-  <nav class="links"><button id="goHome">홈</button><button id="goRank">실시간 차트</button><button id="goMine">내 계좌</button></nav>
+  <nav class="links"><button id="goHome">홈</button><button id="goRank">실시간 차트</button><button id="goMine">내 계좌</button><button id="goMail" class="mailbtn">우편함<span class="badge" id="badge" hidden></span></button></nav>
   <span class="sp"></span>
   <label class="search"><span class="mute" aria-hidden="true">⌕</span><input id="search" placeholder="종목 이름·티커 검색" aria-label="종목 검색"><kbd>/</kbd></label>
   <div class="seg" role="group" aria-label="속도"><button data-s="1" class="on">1x</button><button data-s="4">4x</button><button data-s="15">15x</button><button id="pause">일시정지</button></div>
@@ -225,6 +253,29 @@ td svg{width:90px;height:26px;display:block;margin-left:auto}
   <div class="ctl"><span class="mute" style="font-size:13px">1칸 = 15초 · 차트에 마우스를 올리면 가격이 보여요</span><div class="seg"><button data-c="line" class="on">라인</button><button data-c="candle">캔들</button></div></div>
   <div class="pos" id="pos"></div>
   <div class="act"><button class="sell" id="openSell">판매하기</button><button class="buy" id="openBuy">구매하기</button></div>
+</div></div>
+
+<div class="dim" id="mdim"><div class="panel mpanel" role="dialog" aria-modal="true" aria-labelledby="mTitle">
+  <div class="phead"><div><div class="pname" id="mTitle">우편함</div><div class="psub">운영자가 보낸 돈을 여기서 받을 수 있어요</div></div><button class="x" id="mClose" aria-label="닫기">×</button></div>
+  <div class="mtabs" id="mTabs"><button class="on" data-m="in">받은 우편</button><button data-m="admin" id="adminTab" hidden>보내기 (운영자)</button></div>
+  <div id="mIn"><div class="mtop" id="mTop"></div><ul class="mlist" id="mList"></ul></div>
+  <div id="mAdmin" hidden>
+    <form class="form" id="sendForm">
+      <div class="two2">
+        <label>받는 사람<select id="sTo"><option value="all">전체 사용자</option><option value="one">특정 아이디</option></select></label>
+        <label>금액 (달러)<input id="sAmt" type="number" min="1" step="1" inputmode="numeric" placeholder="예: 5000" required></label>
+      </div>
+      <label id="sIdWrap" hidden>받는 아이디<input id="sId" autocapitalize="off" spellcheck="false" placeholder="아래 목록에서 눌러도 돼요"></label>
+      <label>제목<input id="sTitle" maxlength="40" placeholder="예: 주말 보너스" required></label>
+      <label>메시지 (선택)<textarea id="sBody" maxlength="300" placeholder="받는 사람에게 보일 한마디"></textarea></label>
+      <button class="pri" style="min-height:48px;border-radius:12px" id="sGo" type="submit">보내기</button>
+      <div class="mute" style="font-size:13px" id="sMsg"></div>
+    </form>
+    <div class="sect">가입한 사용자 <button class="chip" style="min-height:28px;font-size:12px;margin-left:6px" id="uRefresh">새로고침</button></div>
+    <div class="ulist" id="uList"></div>
+    <div class="sect">보낸 우편</div>
+    <ul class="mlist" id="sentList"></ul>
+  </div>
 </div></div>
 
 <div class="dim sheetdim" id="sdim"><div class="sheet" role="dialog" aria-modal="true" aria-labelledby="shTitle">
@@ -305,7 +356,8 @@ function makeNews(){
 }
 function worth(){return G.cash+Object.entries(G.hold).reduce((a,[i,h])=>a+h.q*G.stocks[i].p,0)}
 function newGame(){
-  G={tick:0,cash:START,hold:{},news:[],log:[],pending:[],regime:0,sel:1,nextNews:12,
+  const keepClaimed=G&&Array.isArray(G.claimed)?G.claimed:[];
+  G={tick:0,cash:START,hold:{},news:[],log:[],pending:[],regime:0,sel:1,nextNews:12,claimed:keepClaimed,
      stocks:DEF.map(d=>({t:d[0],name:d[1],sec:d[2],ref:d[3],vol:d[4],beta:d[5],p:d[3],c:[],cur:null}))};
   G.stocks.forEach(s=>{let p=100;const arr=[];
     for(let k=0;k<60;k++){const o=p;let h=o,l=o;for(let j=0;j<PER;j++){p*=Math.exp(s.vol*.065*norm());h=Math.max(h,p);l=Math.min(l,p)}arr.push({o,h,l,c:p})}
@@ -503,7 +555,7 @@ let confirmReset=0;
 $('reset').addEventListener('click',()=>{if(!confirmReset){confirmReset=1;$('reset').textContent='한 번 더 누르면 초기화돼요';setTimeout(()=>{confirmReset=0;$('reset').textContent='처음부터 다시'},2500);return}
   confirmReset=0;$('reset').textContent='처음부터 다시';newGame();start();pushCloud(true);toast('$100,000로 새로 시작해요')});
 document.addEventListener('keydown',e=>{
-  if(e.key==='Escape'){if(sheet)closeSheet();else if(detailOpen)closeDetail();return}
+  if(e.key==='Escape'){if(sheet)closeSheet();else if(detailOpen)closeDetail();else closeMail();return}
   if(e.key==='Enter'&&sheet&&e.target===$('q')){$('shGo').click();return}
   if(e.key==='/'&&!['INPUT','TEXTAREA'].includes(e.target.tagName)&&!$('gate').classList.contains('show')){e.preventDefault();$('search').focus()}});
 
@@ -567,12 +619,13 @@ $('guest').addEventListener('click',()=>{gate.classList.remove('show');$('me').t
 $('logout').addEventListener('click',async()=>{if(user&&fb){await pushCloud(true);await fb.a.signOut(fb.auth)}else{gateMode(false);gate.classList.add('show')}});
 async function pushCloud(force){
   if(!fb||!user||!cloudReady||(!cloudDirty&&!force))return;cloudDirty=false;
-  try{await fb.f.setDoc(fb.f.doc(fb.db,'users',user.uid),{state:JSON.stringify(G),updatedAt:fb.f.serverTimestamp()})}catch(e){cloudDirty=true}
+  try{await fb.f.setDoc(fb.f.doc(fb.db,'users',user.uid),{state:JSON.stringify(G),name:(user.email||'').replace(DOMAIN,''),worth:Math.round(worth()*100)/100,updatedAt:fb.f.serverTimestamp()})}catch(e){cloudDirty=true}
 }
 setInterval(pushCloud,15000);
 document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='hidden')pushCloud()});
 async function onUser(u){
   user=u;cloudReady=false;
+  stopMail();
   if(!u){UKEY=KEY;if(!load())newGame();render();$('me').textContent='';$('logout').hidden=true;gateMode(false);gate.classList.add('show');return}
   gate.classList.remove('show');$('pw').value='';$('pw2').value='';
   $('me').textContent=(u.email||'').replace(DOMAIN,'')+'님';$('logout').hidden=false;$('logout').textContent='로그아웃';$('logout').className='chip';
@@ -581,8 +634,86 @@ async function onUser(u){
     if(snap.exists()){try{s=JSON.parse(snap.data().state)}catch(e){}}
     if(s&&s.stocks&&s.stocks.length===DEF.length){G=s;lastSort=-99;save()}else if(!load())newGame();
   }catch(e){if(!load())newGame();toast('저장된 잔고를 불러오지 못해 이 기기 저장본으로 시작해요')}
-  render();cloudReady=true;pushCloud(true);
+  render();cloudReady=true;pushCloud(true);startMail(u);
 }
+// ---- 우편함 ----
+const ADMINS=['sjwook123456'+DOMAIN];
+let mails=[],sent=[],unsubIn=null,unsubSent=null,firstMail=true;
+const isAdmin=()=>!!(user&&ADMINS.includes(user.email));
+const ENV='<svg viewBox="0 0 24 24" fill="none" stroke="#3182f6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>';
+const when=m=>{const t=m.createdAt&&m.createdAt.toDate?m.createdAt.toDate():new Date();return t.toLocaleString('ko-KR',{month:'numeric',day:'numeric',hour:'2-digit',minute:'2-digit'})};
+const ms=m=>m.createdAt&&m.createdAt.toMillis?m.createdAt.toMillis():Date.now();
+function claimed(){if(!Array.isArray(G.claimed))G.claimed=[];return G.claimed}
+function unread(){return mails.filter(m=>!claimed().includes(m.id)).length}
+function badge(){const n=user?unread():0;$('badge').hidden=!n;$('badge').textContent=n>99?'99+':n}
+function stopMail(){if(unsubIn)unsubIn();if(unsubSent)unsubSent();unsubIn=unsubSent=null;mails=[];sent=[];firstMail=true;$('adminTab').hidden=true;badge()}
+function startMail(u){
+  const f=fb.f,col=f.collection(fb.db,'mail');
+  unsubIn=f.onSnapshot(f.query(col,f.where('to','in',['all',u.email])),snap=>{
+    const before=unread();
+    mails=snap.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=>ms(b)-ms(a));
+    if(!firstMail&&unread()>before)toast('새 우편이 도착했어요');
+    if(firstMail&&unread())toast(`받지 않은 우편이 ${unread()}개 있어요`);
+    firstMail=false;badge();renderMail();
+  },()=>{mails=[];badge()});
+  if(ADMINS.includes(u.email)){$('adminTab').hidden=false;
+    unsubSent=f.onSnapshot(col,snap=>{sent=snap.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=>ms(b)-ms(a));renderSent()},()=>{})}
+}
+function claim(m){
+  if(claimed().includes(m.id))return;const amt=Number(m.amount);if(!(amt>0&&amt<=1e9))return;
+  G.cash+=amt;claimed().push(m.id);
+  G.log.unshift({t:`우편 수령 · ${String(m.title||'').slice(0,40)}`,d:`+${usd(amt)}`,c:'up',at:G.tick});
+  save();render();pushCloud(true);badge();renderMail();
+}
+function renderMail(){
+  if(!$('mdim').classList.contains('show'))return;
+  const n=unread(),sum=mails.filter(m=>!claimed().includes(m.id)).reduce((a,m)=>a+Number(m.amount||0),0);
+  if(!user){$('mTop').innerHTML='';$('mList').innerHTML='<li style="display:block" class="mute">로그인하면 운영자가 보낸 우편을 받을 수 있어요.</li>';return}
+  $('mTop').innerHTML=n?`<span>받을 수 있는 돈 <b class="up num">${esc(usd(sum))}</b></span><button class="pri" id="claimAll" style="min-height:36px">모두 받기</button>`:'';
+  $('mList').innerHTML=mails.length?mails.map(m=>{const done=claimed().includes(m.id);
+    return `<li class="${done?'done':''}"><span class="env">${ENV}</span><span><b>${esc(m.title||'우편')}</b>${m.body?`<p>${esc(m.body)}</p>`:''}<small>운영자 · ${esc(when(m))}${m.to==='all'?' · 전체 발송':''}</small></span>
+      <span><span class="amt num">+${esc(usd(Number(m.amount)||0))}</span>${done?'<span class="got">받음</span>':`<button class="get" data-claim="${esc(m.id)}">받기</button>`}</span></li>`}).join('')
+    :'<li style="display:block" class="mute">아직 받은 우편이 없어요.</li>';
+}
+function renderSent(){
+  $('sentList').innerHTML=sent.length?sent.map(m=>`<li><span class="env">${ENV}</span><span><b>${esc(m.title||'우편')}</b><small>${m.to==='all'?'전체 사용자':esc(m.toName||m.to)} · ${esc(when(m))}</small></span><span><span class="amt num">+${esc(usd(Number(m.amount)||0))}</span><button class="del" data-del="${esc(m.id)}">회수</button></span></li>`).join('')
+    :'<li style="display:block" class="mute">아직 보낸 우편이 없어요.</li>';
+}
+async function loadUsers(){
+  $('uList').innerHTML='<div class="mute" style="padding:10px 12px;font-size:13px">불러오는 중…</div>';
+  try{const snap=await fb.f.getDocs(fb.f.collection(fb.db,'users'));
+    const us=snap.docs.map(d=>d.data()).filter(u=>u.name).sort((a,b)=>(b.worth||0)-(a.worth||0));
+    $('uList').innerHTML=us.length?us.map(u=>`<button type="button" data-uid="${esc(u.name)}"><span>${esc(u.name)}</span><span class="mute num">${esc(usd(Number(u.worth)||0))}</span></button>`).join(''):'<div class="mute" style="padding:10px 12px;font-size:13px">아직 가입한 사람이 없어요</div>';
+  }catch(e){$('uList').innerHTML='<div class="mute" style="padding:10px 12px;font-size:13px">사용자 목록을 불러오지 못했어요</div>'}
+}
+function openMail(){$('mdim').classList.add('show');renderMail();renderSent();setTimeout(()=>$('mClose').focus(),30)}
+function closeMail(){$('mdim').classList.remove('show')}
+$('goMail').addEventListener('click',openMail);
+$('mClose').addEventListener('click',closeMail);
+$('mdim').addEventListener('click',e=>{if(e.target===$('mdim'))closeMail()});
+$('mList').addEventListener('click',e=>{const b=e.target.closest('[data-claim]');if(b){const m=mails.find(x=>x.id===b.dataset.claim);if(m){claim(m);toast(`${usd(Number(m.amount))}를 받았어요`)}}});
+$('mTop').addEventListener('click',e=>{if(!e.target.closest('#claimAll'))return;let tot=0;for(const m of mails.filter(x=>!claimed().includes(x.id))){tot+=Number(m.amount)||0;claim(m)}toast(`${usd(tot)}를 받았어요`)});
+$('mTabs').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;$('mTabs').querySelectorAll('button').forEach(o=>o.classList.toggle('on',o===b));
+  $('mIn').hidden=b.dataset.m!=='in';$('mAdmin').hidden=b.dataset.m!=='admin';if(b.dataset.m==='admin')loadUsers()});
+$('sTo').addEventListener('change',()=>{$('sIdWrap').hidden=$('sTo').value!=='one'});
+$('uList').addEventListener('click',e=>{const b=e.target.closest('[data-uid]');if(!b)return;$('sTo').value='one';$('sIdWrap').hidden=false;$('sId').value=b.dataset.uid});
+$('uRefresh').addEventListener('click',loadUsers);
+$('sendForm').addEventListener('submit',async e=>{
+  e.preventDefault();if(!isAdmin())return;
+  const all=$('sTo').value==='all',id=$('sId').value.trim().toLowerCase(),amt=Math.floor(+$('sAmt').value),title=$('sTitle').value.trim(),body=$('sBody').value.trim();
+  if(!all&&!/^[a-z0-9_]{3,20}$/.test(id))return $('sMsg').textContent='받는 아이디를 확인해 주세요.';
+  if(!(amt>=1&&amt<=1e9))return $('sMsg').textContent='금액은 $1 이상 $1,000,000,000 이하로 해주세요.';
+  if(!title)return $('sMsg').textContent='제목을 적어주세요.';
+  $('sGo').disabled=true;$('sMsg').textContent='보내는 중…';
+  try{await fb.f.addDoc(fb.f.collection(fb.db,'mail'),{to:all?'all':id+DOMAIN,toName:all?'전체':id,amount:amt,title,body,from:'운영자',createdAt:fb.f.serverTimestamp()});
+    $('sMsg').textContent=`${all?'전체 사용자':id}에게 ${usd(amt)}를 보냈어요.`;$('sAmt').value='';$('sTitle').value='';$('sBody').value='';}
+  catch(err){$('sMsg').textContent='보내지 못했어요 ('+(err&&err.code||'오류')+')'}
+  $('sGo').disabled=false;
+});
+$('sentList').addEventListener('click',async e=>{const b=e.target.closest('[data-del]');if(!b)return;
+  if(b.dataset.sure!=='1'){b.dataset.sure='1';b.textContent='한 번 더 누르면 회수';setTimeout(()=>{b.dataset.sure='';b.textContent='회수'},2500);return}
+  try{await fb.f.deleteDoc(fb.f.doc(fb.db,'mail',b.dataset.del));toast('우편을 회수했어요 (이미 받은 사람의 돈은 그대로예요)')}catch(err){toast('회수하지 못했어요')}});
+
 (async()=>{
   gate.classList.add('show');
   try{const base='https://www.gstatic.com/firebasejs/'+FBV+'/';
