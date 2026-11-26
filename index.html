@@ -813,6 +813,19 @@ const cusd=n=>{const a=Math.abs(n),sg=n<0?'-':'';return a>=1e9?sg+'$'+(a/1e9).to
 const csgn=n=>(n>0?'+':'')+cusd(n);
 const REAL={};let showAll=false,G,timer=null,speed=1,paused=false,chartType='line',hoverX=null,sheet=null,detailOpen=false,fSec='all',fSort='abs',query='',orderSig='',lastSort=-99;
 
+// ---- 휴장일 (거래소 공지 기준) ----
+const HOL={
+  US:{'2026-11-26':'추수감사절','2026-12-25':'크리스마스','2027-01-01':'새해','2027-01-18':'마틴 루터 킹 데이','2027-02-15':'대통령의 날','2027-03-26':'성금요일','2027-05-31':'메모리얼 데이','2027-06-18':'준틴스(대체)','2027-07-05':'독립기념일(대체)','2027-09-06':'노동절','2027-11-25':'추수감사절','2027-12-24':'크리스마스(대체)'},
+  KR:{'2026-12-25':'성탄절','2026-12-31':'연말 휴장','2027-01-01':'신정','2027-02-08':'설날','2027-02-09':'설날 대체휴일','2027-03-01':'삼일절','2027-05-03':'노동절 대체휴일','2027-05-05':'어린이날','2027-05-13':'부처님오신날','2027-07-19':'제헌절 대체휴일','2027-08-16':'광복절 대체휴일','2027-09-14':'추석','2027-09-15':'추석','2027-09-16':'추석','2027-10-04':'개천절 대체휴일','2027-10-11':'한글날 대체휴일','2027-12-27':'성탄절 대체휴일','2027-12-31':'연말 휴장'},
+  JP:{'2026-12-31':'연말 휴장','2027-01-01':'연초 휴장','2027-01-11':'성인의 날','2027-02-11':'건국기념일','2027-02-23':'천황탄생일','2027-03-22':'춘분의 날 대체휴일','2027-04-29':'쇼와의 날','2027-05-03':'헌법기념일','2027-05-04':'녹색의 날','2027-05-05':'어린이날','2027-07-19':'바다의 날','2027-08-11':'산의 날','2027-09-20':'경로의 날','2027-09-23':'추분의 날','2027-10-11':'스포츠의 날','2027-11-03':'문화의 날','2027-11-23':'근로감사의 날','2027-12-31':'연말 휴장'}};
+const MZ={US:'America/New_York',KR:'Asia/Seoul',JP:'Asia/Tokyo'},MNAME={US:'미국',KR:'한국',JP:'일본'};
+const MK=DEF.map(d=>d[6]==='coin'?null:/^KR\d/.test(d[0])||MKTCUR[d[6]]==='KRW'?'KR':d[0]==='JP10Y'||MKTCUR[d[6]]==='JPY'?'JP':'US');
+let MCL={},mclAt=0;
+function closedNow(){if(Date.now()-mclAt<30e3)return MCL;mclAt=Date.now();const o={};
+  for(const m of Object.keys(MZ)){const pt=new Intl.DateTimeFormat('en-CA',{timeZone:MZ[m],year:'numeric',month:'2-digit',day:'2-digit',weekday:'short'}).formatToParts(new Date()),g=k=>pt.find(x=>x.type===k).value;
+    const day=`${g('year')}-${g('month')}-${g('day')}`,wd=g('weekday');o[m]=wd==='Sat'||wd==='Sun'?'주말':HOL[m][day]||''}
+  return MCL=o}
+const isClosed=i=>MK[i]&&closedNow()[MK[i]];
 // ---- 시장 엔진 ----
 function tickOnce(){
   G.tick++;
@@ -823,7 +836,7 @@ function tickOnce(){
   const zm=norm()*.0007+G.regime;
   const zk=zm*.4+norm()*.0008,zj=zm*.4+norm()*.0007;
   G.stocks.forEach((s,i)=>{
-    if(UL[i]!=null)return;
+    if(UL[i]!=null||isClosed(i))return;
     if(REAL[i]){const p=REAL[i].p;s.lr=Math.log(p/s.p);s.p=p;bar(s);return}
     if(BR[i]){if(bridged(i)){bridgeTick(i,s);return}}
     let eff=0;
@@ -832,7 +845,7 @@ function tickOnce(){
     if(bd){const dy=norm()*bd[2]/100*.065+G.rr;s.y=Math.max(.01,(s.y!=null?s.y:bd[0])+dy);lr=-bd[1]*dy/100}
     else{const c=CUR(i),mf=c==='KRW'?zk:c==='JPY'?zj:zm;lr=s.beta*mf+s.vol*.065*norm()+eff}s.lr=lr;s.p=Math.max(.01,s.p*Math.exp(lr));bar(s);
   });
-  G.stocks.forEach((s,i)=>{if(UL[i]==null)return;const u=G.stocks[UL[i]];if(REAL[i]){const a=REAL[i],np=a.p*Math.pow(u.p/a.up,DEF[i][8]);s.lr=Math.log(np/s.p);s.p=np;bar(s);return}s.lr=DEF[i][8]*(u.lr||0);s.p=Math.max(.01,s.p*Math.exp(s.lr));bar(s)});
+  G.stocks.forEach((s,i)=>{if(UL[i]==null||isClosed(i))return;const u=G.stocks[UL[i]];if(REAL[i]){const a=REAL[i],np=a.p*Math.pow(u.p/a.up,DEF[i][8]);s.lr=Math.log(np/s.p);s.p=np;bar(s);return}s.lr=DEF[i][8]*(u.lr||0);s.p=Math.max(.01,s.p*Math.exp(s.lr));bar(s)});
   settleOptions();checkOrders();
   if(G.tick%600===0)payDividends();
   G.pending=G.pending.filter(e=>e.to>G.tick);
@@ -843,7 +856,7 @@ function bar(s){const c=s.cur;c.h=Math.max(c.h,s.p);c.l=Math.min(c.l,s.p);c.c=s.
 function makeNews(){
   const rumor=Math.random()<.4,p=rumor?.5:.88;let e;
   if(Math.random()<.2){const m=MKT[Math.floor(Math.random()*MKT.length)];e={all:1,v:m[1]*(.005+Math.random()*.01),t:m[0]}}
-  else{const hot=DEF.map((d,i)=>d[6]==='hot'?i:-1).filter(i=>i>=0),pickHot=Math.random()<.35,i=(()=>{for(let t=0;t<10;t++){const c=pickHot?hot[Math.floor(Math.random()*hot.length)]:NOLEV[Math.floor(Math.random()*NOLEV.length)];if(!bridged(c)&&!REAL[c])return c}return NOLEV[0]})(),s=G.stocks[i],good=Math.random()<.52,boost=pickHot?2.2:1;
+  else{const hot=DEF.map((d,i)=>d[6]==='hot'?i:-1).filter(i=>i>=0),pickHot=Math.random()<.35,i=(()=>{for(let t=0;t<10;t++){const c=pickHot?hot[Math.floor(Math.random()*hot.length)]:NOLEV[Math.floor(Math.random()*NOLEV.length)];if(!bridged(c)&&!REAL[c]&&!isClosed(c))return c}return NOLEV[0]})(),s=G.stocks[i],good=Math.random()<.52,boost=pickHot?2.2:1;
     const tpl=(good?POS:NEG)[Math.floor(Math.random()*5)],wide=tpl.includes('{s}');
     e={id:wide?-1:i,sec:wide?s.sec:null,v:(good?1:-1)*(.015+Math.random()*.045)*boost,t:tpl.replace('{n}',s.name).replace('{s}',s.sec)}}
   if(Math.random()>p)e.v=-e.v*.4;
@@ -1018,7 +1031,7 @@ function renderDetail(){
   const lg=$('pLogo');lg.textContent=s.t.slice(0,4);lg.style.background=color(i);
   $('pName').textContent=s.name;$('openOpt').hidden=CUR(i)!=='USD';{const y=yieldOf(i),cc=CUR(i);$('pYield').textContent=cc!=='USD'?`${curName(cc)}로 거래 · ≈ ${usd(s.p/rateOf(cc))} · ${DEF[i][6]==='kospi'?'코스피':DEF[i][6]==='kosdaq'?'코스닥':'도쿄증권거래소'}`:isBond(i)?`현재 금리 ${y.toFixed(3)}% · 1좌 = 액면 $100 · 10분마다 이자 지급`:y?`연 배당률 ${y}% · 10분마다 배당 지급(게임용)`:''}$('pHeart').classList.toggle('on',isW(i));$('pHeart').setAttribute('aria-pressed',isW(i));$('pSub').textContent=`${s.t} · ${s.sec}`;
   $('pPrice').innerHTML=esc(fp(i,s.p))+(REAL[i]?`<span class="real">${(REAL[i].src==='gs'||REAL[i].src==='yh')?'실제 가격 · 약 20분 지연':Date.now()-REAL[i].t<90e3?'실시간 체결가':'실제 가격 · 장 마감'}</span>`:bridged(i)?`<span class="real">${esc(PJ.date.slice(5).replace('-','/'))} 실제 시가·종가 고정</span>`:s.real?`<span class="real">실제 ${esc(s.real.day)} 반영</span>`:'');
-  $('pChg').textContent=`${s.real?'전일 종가':'시작가'}보다 ${fsg(i,s.p-s.ref)} (${pct(c)})`+(REAL[i]?(REAL[i].src==='btc'?' · 24시간 기준':''):bridged(i)?` · 오늘 밤 12시에 실제 종가 ${fp(i,BR[i].c)} 도달`:'');$('pChg').className='pchg num '+cls(c);
+  $('pChg').textContent=`${s.real?'전일 종가':'시작가'}보다 ${fsg(i,s.p-s.ref)} (${pct(c)})`+(REAL[i]?(REAL[i].src==='btc'?' · 24시간 기준':''):bridged(i)?` · 오늘 밤 12시에 실제 종가 ${fp(i,BR[i].c)} 도달`:'');if(isClosed(i))$('pChg').textContent+=` · ${MNAME[MK[i]]} 증시 휴장(${closedNow()[MK[i]]})`;$('pChg').className='pchg num '+cls(c);
   $('pos').innerHTML=h?`<div><span>보유 수량</span><b class="num">${ip(h.q)}주</b></div><div><span>평균 단가</span><b class="num">${fp(i,h.a)}</b></div><div><span>수익</span><b class="num ${cls(s.p-h.a)}">${fsg(i,(s.p-h.a)*h.q)}</b></div>`
     :`<div><span>보유 수량</span><b>0주</b></div><div><span>살 수 있는 수량</span><b class="num">${ip(maxBuy())}주</b></div><div><span>변동성</span><b>${s.vol>=.03?'높음':s.vol>=.018?'보통':'낮음'}</b></div>`;
   draw();
@@ -1506,6 +1519,7 @@ async function pullLive(){try{const r=await fetch('live.json?t='+Date.now(),{cac
   if(n&&!pullLive.done){pullLive.done=1;save();render();toast(`${n}개 종목이 실제 가격(약 20분 지연)을 따라요`)}}}catch(e){}
   setTimeout(pullLive,120e3)}
 setTimeout(pullLive,3000);
+setTimeout(()=>{const c=closedNow(),l=Object.keys(c).filter(m=>c[m]).map(m=>`${MNAME[m]}(${c[m]})`);if(l.length)toast(`오늘 ${l.join('·')} 증시 휴장이라 해당 종목은 멈춰 있어요`)},2500);
 }
 </script>
 </body>

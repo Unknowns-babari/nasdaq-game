@@ -47,3 +47,4 @@
 
 - 한국·일본·나머지 미국 종목: 운영관리 → "구글 시트 CSV 주소"에 sheet-template.csv로 만든 GOOGLEFINANCE 시트를 CSV로 웹에 게시한 주소를 넣으면 2분마다 실제 가격(약 20분 지연)과 환율 반영.
 - GitHub Actions(.github/workflows/live-prices.yml)가 평일 10분마다 야후 지연 시세를 live.json으로 갱신, 사이트가 2분마다 반영.
+- 휴장일(주말·미국/한국/일본 거래소 공휴일, 2027년까지)에는 해당 시장 종목 가격이 멈춤. 비트코인은 24시간.
