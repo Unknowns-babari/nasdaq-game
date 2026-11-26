@@ -158,7 +158,7 @@ td.hc{padding:0 0 0 4px!important;width:30px}
 .optbtn{width:100%;margin-top:8px;min-height:48px;border-radius:14px;background:var(--soft);font-weight:700;font-size:15px}
 .sell{background:var(--dn)}.buy{background:var(--up)}.sell:hover,.buy:hover{filter:brightness(.93)}
 /* 우편함 */
-.mailbtn{position:relative}
+.mailbtn{position:relative}.links button[hidden]{display:none}
 .badge{position:absolute;top:2px;right:0;min-width:17px;height:17px;border-radius:9px;background:var(--up);color:#fff;font-size:11px;font-weight:700;line-height:17px;padding:0 5px;text-align:center}
 .mpanel{max-width:560px}
 .mtabs{display:flex;gap:18px;border-bottom:1px solid var(--line);margin:16px 0 4px}
@@ -243,7 +243,7 @@ td.hc{padding:0 0 0 4px!important;width:30px}
 <body>
 <header class="nav"><div class="navin">
   <div class="brand"><span class="mark">N</span>나스닥 모의투자</div>
-  <nav class="links"><button id="goHome">홈</button><button id="goRank">실시간 차트</button><button id="goMine">내 계좌</button><button id="goMail" class="mailbtn">우편함<span class="badge" id="badge" hidden></span></button><button id="goAdmin" hidden>운영관리</button></nav>
+  <nav class="links"><button id="goHome">홈</button><button id="goRank">실시간 차트</button><button id="goMine">내 계좌</button><button id="goMail" class="mailbtn">우편함<span class="badge" id="badge" hidden></span></button><button id="goAdmin" class="mailbtn" hidden>운영관리</button></nav>
   <span class="sp"></span>
   <label class="search"><span class="mute" aria-hidden="true">⌕</span><input id="search" placeholder="종목 이름·티커 검색" aria-label="종목 검색"><kbd>/</kbd></label>
   <div class="seg" role="group" aria-label="속도"><button data-s="1" class="on">1x</button><button data-s="4">4x</button><button data-s="15">15x</button><button id="pause">일시정지</button></div>
