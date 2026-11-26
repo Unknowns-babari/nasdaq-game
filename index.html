@@ -1403,7 +1403,7 @@ $('sentList').addEventListener('click',async e=>{const b=e.target.closest('[data
     f.onSnapshot(f.doc(fb.db,'config','notice'),d=>{const n=d.exists()?d.data():null,tx=n&&n.on?String(n.text||''):'';
       let closed='';try{closed=sessionStorage.getItem('noticeX')||''}catch(e){}
       $('noticeTx').textContent=tx;$('notice').hidden=!tx||closed===tx;if(isAdmin()&&n)$('nText').value=n.text||''},()=>{});
-    f.onSnapshot(f.doc(fb.db,'config','feed'),d=>{const k=d.exists()&&d.data().finnhub||'';if(isAdmin())$('fhKey').value=k;startFinnhub(k)},()=>{});
+    f.onSnapshot(f.doc(fb.db,'config','feed'),d=>{const v=d.exists()?d.data().finnhub:undefined,k=typeof v==='string'?v:FH_DEFAULT;if(isAdmin())$('fhKey').value=k;startFinnhub(k)},()=>{});
   }catch(e){$('gerr').textContent='이 화면에서는 로그인을 쓸 수 없어요. 둘러보기로 플레이해 주세요.'}
 })();
 
@@ -1457,6 +1457,7 @@ startBTC();
 const FHSYM=(()=>{const out=[],add=i=>{if(i>=0&&!out.includes(i)&&CUR(i)==='USD'&&UL[i]==null&&!BOND[DEF[i][0]]&&i!==BTC&&out.length<50)out.push(i)};
   DEF.forEach(d=>{if(d[7])add(DEF.findIndex(x=>x[0]===d[7]))});
   ['big','semi','etf','soft','hot','cons','bio','ind','etc'].forEach(g=>DEF.forEach((d,i)=>{if(d[6]===g)add(i)}));return out})();
+const FH_DEFAULT='dc3tjk1r01qk29kdfke0dc3tjk1r01qk29kdfkeg';
 let fh={key:'',ws:null,timer:null,q:0};
 function startFinnhub(key){if(key===fh.key)return;fh.key=key;try{fh.ws&&(fh.ws.onclose=null,fh.ws.close())}catch(e){}clearTimeout(fh.timer);fh.ws=null;
   if(!key){FHSYM.forEach(i=>{if(REAL[i]&&REAL[i].src==='fh')delete REAL[i]});return}
@@ -1473,6 +1474,7 @@ function startFinnhub(key){if(key===fh.key)return;fh.key=key;try{fh.ws&&(fh.ws.o
         if(fresh)G.stocks[i].ref=q.pc;else setReal(i,q.c,'fh',q.pc,q.t*1000);if(k===FHSYM.length){save();render();toast(`미국 ${FHSYM.length}종목이 실제 가격을 따라요`)}}}}catch(e){}
     setTimeout(poll,wait)};
   poll()}
+startFinnhub(FH_DEFAULT);
 }
 </script>
 </body>
