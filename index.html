@@ -331,7 +331,9 @@ td.hc{padding:0 0 0 4px!important;width:30px}
     <div class="sect">실시간 시세 (Finnhub)</div>
     <div class="form" style="margin-top:4px"><label>Finnhub API 키<input id="fhKey" autocomplete="off" spellcheck="false" placeholder="finnhub.io 대시보드의 API Key"></label>
       <div class="mute" style="font-size:13px">넣으면 미국 주요 50종목이 실제 체결가로 움직여요. 키는 접속한 모든 사람의 브라우저에서 쓰이니 무료 키만 넣어 주세요.</div>
-      <div style="display:flex;gap:8px"><button class="pri" style="flex:1;min-height:42px;border-radius:12px" id="fhSave" type="button">저장</button><button class="chip" style="min-height:42px" id="fhOff" type="button">끄기</button></div><div class="mute" id="fhMsg" style="font-size:13px"></div></div>
+      <div style="display:flex;gap:8px"><button class="pri" style="flex:1;min-height:42px;border-radius:12px" id="fhSave" type="button">저장</button><button class="chip" style="min-height:42px" id="fhOff" type="button">끄기</button></div><div class="mute" id="fhMsg" style="font-size:13px"></div>
+      <label>구글 시트 CSV 주소 (한국·일본·나머지 미국 종목, 약 20분 지연)<input id="gsUrl" autocomplete="off" spellcheck="false" placeholder="https://docs.google.com/spreadsheets/d/e/.../pub?output=csv"></label>
+      <div style="display:flex;gap:8px"><button class="pri" style="flex:1;min-height:42px;border-radius:12px" id="gsSave" type="button">시트 연결</button><button class="chip" style="min-height:42px" id="gsOff" type="button">끊기</button></div><div class="mute" id="gsMsg" style="font-size:13px"></div></div>
     <div class="sect">가입한 사용자 <button class="chip" style="min-height:28px;font-size:12px;margin-left:6px" id="uRefresh">새로고침</button></div>
     <div class="ulist" id="uList"></div>
     <div class="sect">보낸 우편</div>
@@ -1015,7 +1017,7 @@ function renderDetail(){
   const i=G.sel,s=G.stocks[i],c=s.p/s.ref-1,h=G.hold[i];
   const lg=$('pLogo');lg.textContent=s.t.slice(0,4);lg.style.background=color(i);
   $('pName').textContent=s.name;$('openOpt').hidden=CUR(i)!=='USD';{const y=yieldOf(i),cc=CUR(i);$('pYield').textContent=cc!=='USD'?`${curName(cc)}로 거래 · ≈ ${usd(s.p/rateOf(cc))} · ${DEF[i][6]==='kospi'?'코스피':DEF[i][6]==='kosdaq'?'코스닥':'도쿄증권거래소'}`:isBond(i)?`현재 금리 ${y.toFixed(3)}% · 1좌 = 액면 $100 · 10분마다 이자 지급`:y?`연 배당률 ${y}% · 10분마다 배당 지급(게임용)`:''}$('pHeart').classList.toggle('on',isW(i));$('pHeart').setAttribute('aria-pressed',isW(i));$('pSub').textContent=`${s.t} · ${s.sec}`;
-  $('pPrice').innerHTML=esc(fp(i,s.p))+(REAL[i]?`<span class="real">${Date.now()-REAL[i].t<90e3?'실시간 체결가':'실제 가격 · 장 마감'}</span>`:bridged(i)?`<span class="real">${esc(PJ.date.slice(5).replace('-','/'))} 실제 시가·종가 고정</span>`:s.real?`<span class="real">실제 ${esc(s.real.day)} 반영</span>`:'');
+  $('pPrice').innerHTML=esc(fp(i,s.p))+(REAL[i]?`<span class="real">${REAL[i].src==='gs'?'실제 가격 · 약 20분 지연':Date.now()-REAL[i].t<90e3?'실시간 체결가':'실제 가격 · 장 마감'}</span>`:bridged(i)?`<span class="real">${esc(PJ.date.slice(5).replace('-','/'))} 실제 시가·종가 고정</span>`:s.real?`<span class="real">실제 ${esc(s.real.day)} 반영</span>`:'');
   $('pChg').textContent=`${s.real?'전일 종가':'시작가'}보다 ${fsg(i,s.p-s.ref)} (${pct(c)})`+(REAL[i]?(REAL[i].src==='btc'?' · 24시간 기준':''):bridged(i)?` · 오늘 밤 12시에 실제 종가 ${fp(i,BR[i].c)} 도달`:'');$('pChg').className='pchg num '+cls(c);
   $('pos').innerHTML=h?`<div><span>보유 수량</span><b class="num">${ip(h.q)}주</b></div><div><span>평균 단가</span><b class="num">${fp(i,h.a)}</b></div><div><span>수익</span><b class="num ${cls(s.p-h.a)}">${fsg(i,(s.p-h.a)*h.q)}</b></div>`
     :`<div><span>보유 수량</span><b>0주</b></div><div><span>살 수 있는 수량</span><b class="num">${ip(maxBuy())}주</b></div><div><span>변동성</span><b>${s.vol>=.03?'높음':s.vol>=.018?'보통':'낮음'}</b></div>`;
@@ -1292,7 +1294,10 @@ $('noticeX').addEventListener('click',()=>{$('notice').hidden=true;try{sessionSt
 async function setNotice(on){if(!isAdmin())return;const text=$('nText').value.trim();if(on&&!text)return $('nMsg').textContent='공지 내용을 적어주세요.';
   try{await fb.f.setDoc(fb.f.doc(fb.db,'config','notice'),{text,on,updatedAt:fb.f.serverTimestamp()});$('nMsg').textContent=on?'공지를 올렸어요.':'공지를 내렸어요.'}catch(e){$('nMsg').textContent='저장하지 못했어요 ('+(e&&e.code||'오류')+')'}}
 async function setFeed(on){if(!isAdmin())return;const k=on?$('fhKey').value.trim():'';if(on&&!/^[A-Za-z0-9]{10,64}$/.test(k))return $('fhMsg').textContent='키 형식이 이상해요. 대시보드의 API Key를 그대로 붙여 주세요.';
-  try{await fb.f.setDoc(fb.f.doc(fb.db,'config','feed'),{finnhub:k,updatedAt:fb.f.serverTimestamp()});$('fhMsg').textContent=on?'저장했어요. 잠시 후 실시간 시세가 들어와요.':'실시간 시세를 껐어요.'}catch(e){$('fhMsg').textContent='저장하지 못했어요 ('+(e&&e.code||'오류')+')'}}
+  try{await fb.f.setDoc(fb.f.doc(fb.db,'config','feed'),{finnhub:k,updatedAt:fb.f.serverTimestamp()},{merge:true});$('fhMsg').textContent=on?'저장했어요. 잠시 후 실시간 시세가 들어와요.':'실시간 시세를 껐어요.'}catch(e){$('fhMsg').textContent='저장하지 못했어요 ('+(e&&e.code||'오류')+')'}}
+async function setSheet(on){if(!isAdmin())return;const u=on?$('gsUrl').value.trim():'';if(on&&!/^https:\/\/docs\.google\.com\/spreadsheets\/d\/e\/[\w-]+\/pub\?/.test(u))return $('gsMsg').textContent='"웹에 게시" → CSV로 받은 주소(…/pub?…output=csv)를 붙여 주세요.';
+  try{await fb.f.setDoc(fb.f.doc(fb.db,'config','feed'),{sheet:u,updatedAt:fb.f.serverTimestamp()},{merge:true});$('gsMsg').textContent=on?'연결했어요. 몇 분 안에 가격이 들어와요.':'시트 연결을 끊었어요.'}catch(e){$('gsMsg').textContent='저장하지 못했어요 ('+(e&&e.code||'오류')+')'}}
+$('gsSave').addEventListener('click',()=>setSheet(true));$('gsOff').addEventListener('click',()=>setSheet(false));
 $('fhSave').addEventListener('click',()=>setFeed(true));$('fhOff').addEventListener('click',()=>setFeed(false));
 $('nPost').addEventListener('click',()=>setNotice(true));$('nOff').addEventListener('click',()=>setNotice(false));
 $('me').addEventListener('click',()=>{if(!user)return;$('aId').textContent='아이디: '+(user.email||'').replace(DOMAIN,'');$('pwMsg').textContent='';$('delMsg').textContent='';$('adim').classList.add('show')});
@@ -1403,7 +1408,7 @@ $('sentList').addEventListener('click',async e=>{const b=e.target.closest('[data
     f.onSnapshot(f.doc(fb.db,'config','notice'),d=>{const n=d.exists()?d.data():null,tx=n&&n.on?String(n.text||''):'';
       let closed='';try{closed=sessionStorage.getItem('noticeX')||''}catch(e){}
       $('noticeTx').textContent=tx;$('notice').hidden=!tx||closed===tx;if(isAdmin()&&n)$('nText').value=n.text||''},()=>{});
-    f.onSnapshot(f.doc(fb.db,'config','feed'),d=>{const v=d.exists()?d.data().finnhub:undefined,k=typeof v==='string'?v:FH_DEFAULT;if(isAdmin())$('fhKey').value=k;startFinnhub(k)},()=>{});
+    f.onSnapshot(f.doc(fb.db,'config','feed'),d=>{const dd=d.exists()?d.data():{},v=dd.finnhub,k=typeof v==='string'?v:FH_DEFAULT;if(isAdmin()){$('fhKey').value=k;$('gsUrl').value=dd.sheet||''}startFinnhub(k);startSheet(dd.sheet||'')},()=>{});
   }catch(e){$('gerr').textContent='이 화면에서는 로그인을 쓸 수 없어요. 둘러보기로 플레이해 주세요.'}
 })();
 
@@ -1475,6 +1480,24 @@ function startFinnhub(key){if(key===fh.key)return;fh.key=key;try{fh.ws&&(fh.ws.o
     setTimeout(poll,wait)};
   poll()}
 startFinnhub(FH_DEFAULT);
+// 한국·일본·나머지 미국 종목: 운영자가 게시한 구글 시트(GOOGLEFINANCE, 약 20분 지연)를 2분마다 읽음
+let gs={url:'',timer:null};
+function parseCSV(t){const out=[];let row=[],f='',q=false;for(let k=0;k<t.length;k++){const c=t[k];
+  if(q){if(c==='"'){if(t[k+1]==='"'){f+='"';k++}else q=false}else f+=c}
+  else if(c==='"')q=true;else if(c===','){row.push(f);f=''}else if(c==='\n'){row.push(f);out.push(row);row=[];f=''}else if(c!=='\r')f+=c}
+  if(f||row.length){row.push(f);out.push(row)}return out}
+const num=v=>{const n=parseFloat(String(v||'').replace(/[^\d.\-]/g,''));return n>0?n:0};
+function startSheet(url){if(url===gs.url)return;gs.url=url;clearTimeout(gs.timer);
+  if(!url){Object.keys(REAL).forEach(k=>{if(REAL[k].src==='gs')delete REAL[k]});return}
+  let first=true;const pull=async()=>{if(gs.url!==url)return;
+    try{const r=await fetch(url+(url.includes('?')?'&':'?')+'t='+Date.now(),{cache:'no-store'});if(r.ok){const rows=parseCSV(await r.text());let n=0;
+      for(const c of rows.slice(1)){const t=c[0],p=num(c[3]),pc=num(c[4]);if(!t||!p)continue;
+        if(t==='_KRW'){G.fx=p;continue}if(t==='_JPY'){G.jfx=p;continue}
+        const i=DEF.findIndex(d=>d[0]===t);if(i<0||UL[i]!=null)continue;
+        if(REAL[i]&&REAL[i].src!=='gs'&&Date.now()-REAL[i].t<300e3)continue;setReal(i,p,'gs',pc);n++}
+      if(first&&n){first=false;save();render();toast(`${n}개 종목이 구글 시트의 실제 가격을 따라요`)}}}catch(e){}
+    gs.timer=setTimeout(pull,120e3)};
+  pull()}
 }
 </script>
 </body>
