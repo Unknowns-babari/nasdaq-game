@@ -1,0 +1,14 @@
+{
+  "date": "2026-11-25",
+  "updated": "2026-11-26T06:55:00Z",
+  "source": "Alpha Vantage GLOBAL_QUOTE (정규장 시가·종가·전일 종가)",
+  "quotes": {
+    "AAPL": {"open": 353.475, "close": 355.58, "prev": 354.07},
+    "NVDA": {"open": 144.06, "close": 149.30, "prev": 155.38},
+    "MSFT": {"open": 485.23, "close": 489.93, "prev": 496.13},
+    "AMZN": {"open": 243.125, "close": 244.43, "prev": 252.29},
+    "GOOGL": {"open": 265.10, "close": 273.10, "prev": 279.05},
+    "META": {"open": 575.34, "close": 609.89, "prev": 589.82},
+    "TSLA": {"open": 370.515, "close": 380.14, "prev": 384.68}
+  }
+}
