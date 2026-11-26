@@ -814,8 +814,8 @@ function tickOnce(){
   if(Math.random()<.01)G.rr=(Math.random()-.5)*.0004;if(G.rr==null)G.rr=0;
   if(G.fx==null)G.fx=FX0;G.fx*=Math.exp(norm()*.0045*.065);if(G.krw==null)G.krw=0;
   if(G.jfx==null)G.jfx=JFX0;G.jfx*=Math.exp(norm()*.005*.065);if(G.jpy==null)G.jpy=0;
-  const zk=zm*.4+norm()*.0008,zj=zm*.4+norm()*.0007;
   const zm=norm()*.0007+G.regime;
+  const zk=zm*.4+norm()*.0008,zj=zm*.4+norm()*.0007;
   G.stocks.forEach((s,i)=>{
     if(UL[i]!=null)return;
     let eff=0;
