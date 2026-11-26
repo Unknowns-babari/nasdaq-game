@@ -1426,13 +1426,13 @@ function bridgeAt(b,ms){const day=kstDate(ms),mid=Date.parse(day+'T00:00:00+09:0
   return Math.exp(Math.log(b.o)+f*(Math.log(b.c)-Math.log(b.o))+b.vol*wb+j)}
 const bridged=i=>BR[i]&&PJ&&kstDate(Date.now())===addDay(PJ.date);
 function bridgeTick(i,s){const p=bridgeAt(BR[i],Date.now());s.lr=Math.log(p/s.p);s.p=p;bar(s)}
-function applyBridgeHistory(){for(const k of Object.keys(BR)){const i=+k,s=G.stocks[i],b=BR[i],now=Date.now();
+function applyBridgeHistory(){for(const k of Object.keys(BR)){const i=+k,s=G.stocks[i],b=BR[i],now=Date.now();if(REAL[i])continue;
   s.ref=b.prev;s.real={day:PJ.date.slice(5),fixed:1};
   if(!bridged(i))continue;const cs=[];for(let n=99;n>=1;n--){const t0=now-n*15e3,o=bridgeAt(b,t0),c=bridgeAt(b,t0+15e3),m=bridgeAt(b,t0+7.5e3);cs.push({o,h:Math.max(o,c,m),l:Math.min(o,c,m),c})}
   s.c=cs;s.p=bridgeAt(b,now);s.cur={o:s.p,h:s.p,l:s.p,c:s.p,n:0}}}
 async function syncPrices(){try{const r=await fetch('prices.json?d='+Date.now(),{cache:'no-store'});if(!r.ok)return;const j=await r.json();
   if(!j||!j.date||!j.quotes)return;PJ=j;let n=0;
-  for(const [t,q] of Object.entries(j.quotes)){const i=DEF.findIndex(d=>d[0]===t);if(i<0||!(q.close>0||q.price>0))continue;if(!q.close)q.close=q.price;BR[i]=makeBridge(t,q,DEF[i][4]);n++}
+  for(const [t,q] of Object.entries(j.quotes)){const i=DEF.findIndex(d=>d[0]===t);if(i<0||REAL[i]||!(q.close>0||q.price>0))continue;if(!q.close)q.close=q.price;BR[i]=makeBridge(t,q,DEF[i][4]);n++}
   for(const k of Object.keys(BR)){const i=+k;if(!bridged(i)&&G.syncedDay!==j.date){const s=G.stocks[i];s.p=BR[i].c;s.cur={o:s.p,h:s.p,l:s.p,c:s.p,n:0}}}
   if(j.fx>0&&G.syncedDay!==j.date)G.fx=j.fx;G.syncedDay=j.date;applyBridgeHistory();save();render();
   if(n)toast(kstDate(Date.now())===addDay(j.date)?`${n}개 종목이 ${j.date.slice(5).replace('-','/')} 실제 시가→종가 경로를 따라요`:`${n}개 종목을 ${j.date.slice(5).replace('-','/')} 실제 종가로 맞췄어요`)}catch(e){}}
