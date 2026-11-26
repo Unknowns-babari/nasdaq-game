@@ -566,9 +566,9 @@ function tickOnce(){
     if(UL[i]!=null)return;
     let eff=0;
     for(const e of G.pending){if(G.tick>=e.from&&G.tick<e.to&&(e.all||e.id===i||e.sec===s.sec))eff+=(e.all||e.id===i?e.v:e.v*.6)/(e.to-e.from)}
-    const lr=s.beta*zm+s.vol*.065*norm()+eff;s.lr=lr;s.p=r2(s.p*Math.exp(lr));bar(s);
+    const lr=s.beta*zm+s.vol*.065*norm()+eff;s.lr=lr;s.p=Math.max(.01,s.p*Math.exp(lr));bar(s);
   });
-  G.stocks.forEach((s,i)=>{if(UL[i]==null)return;const u=G.stocks[UL[i]];s.p=r2(s.p*Math.exp(DEF[i][8]*(u.lr||0)));bar(s)});
+  G.stocks.forEach((s,i)=>{if(UL[i]==null)return;const u=G.stocks[UL[i]];s.p=Math.max(.01,s.p*Math.exp(DEF[i][8]*(u.lr||0)));bar(s)});
   settleOptions();
   G.pending=G.pending.filter(e=>e.to>G.tick);
   if(G.tick>=G.nextNews){makeNews();G.nextNews=G.tick+25+Math.floor(Math.random()*40)}
