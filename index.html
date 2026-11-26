@@ -243,7 +243,7 @@ td.hc{padding:0 0 0 4px!important;width:30px}
 <body>
 <header class="nav"><div class="navin">
   <div class="brand"><span class="mark">N</span>나스닥 모의투자</div>
-  <nav class="links"><button id="goHome">홈</button><button id="goRank">실시간 차트</button><button id="goMine">내 계좌</button><button id="goMail" class="mailbtn">우편함<span class="badge" id="badge" hidden></span></button></nav>
+  <nav class="links"><button id="goHome">홈</button><button id="goRank">실시간 차트</button><button id="goMine">내 계좌</button><button id="goMail" class="mailbtn">우편함<span class="badge" id="badge" hidden></span></button><button id="goAdmin" hidden>운영관리</button></nav>
   <span class="sp"></span>
   <label class="search"><span class="mute" aria-hidden="true">⌕</span><input id="search" placeholder="종목 이름·티커 검색" aria-label="종목 검색"><kbd>/</kbd></label>
   <div class="seg" role="group" aria-label="속도"><button data-s="1" class="on">1x</button><button data-s="4">4x</button><button data-s="15">15x</button><button id="pause">일시정지</button></div>
@@ -1318,7 +1318,7 @@ const ms=m=>m.createdAt&&m.createdAt.toMillis?m.createdAt.toMillis():Date.now();
 function claimed(){if(!Array.isArray(G.claimed))G.claimed=[];return G.claimed}
 function unread(){return newMail}
 function badge(){const n=user?unread():0;$('badge').hidden=!n;$('badge').textContent=n>99?'99+':n}
-function stopMail(){if(unsubIn)unsubIn();if(unsubSent)unsubSent();unsubIn=unsubSent=null;mails=[];sent=[];firstMail=true;$('adminTab').hidden=true;badge()}
+function stopMail(){if(unsubIn)unsubIn();if(unsubSent)unsubSent();unsubIn=unsubSent=null;mails=[];sent=[];firstMail=true;$('adminTab').hidden=true;$('goAdmin').hidden=true;badge()}
 function startMail(u){
   const f=fb.f,col=f.collection(fb.db,'mail');
   unsubIn=f.onSnapshot(f.query(col,f.where('to','in',['all',u.email])),snap=>{
@@ -1326,7 +1326,7 @@ function startMail(u){
     mails=snap.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=>ms(b)-ms(a));
     autoClaim();firstMail=false;badge();renderMail();
   },()=>{mails=[];badge()});
-  if(ADMINS.includes(u.email)){$('adminTab').hidden=false;
+  if(ADMINS.includes(u.email)){$('adminTab').hidden=false;$('goAdmin').hidden=false;
     unsubSent=f.onSnapshot(col,snap=>{sent=snap.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=>ms(b)-ms(a));renderSent()},()=>{})}
 }
 function autoClaim(){if(!G)return;let tot=0,n=0;for(const m of mails){if(claimed().includes(m.id)||(m.at&&Date.now()<m.at))continue;
@@ -1365,7 +1365,8 @@ async function loadUsers(){
 }
 function openMail(){newMail=0;badge();$('mdim').classList.add('show');renderMail();renderSent();setTimeout(()=>$('mClose').focus(),30)}
 function closeMail(){$('mdim').classList.remove('show')}
-$('goMail').addEventListener('click',openMail);
+$('goMail').addEventListener('click',()=>{openMail();$('mTabs').querySelector('[data-m=in]').click()});
+$('goAdmin').addEventListener('click',()=>{openMail();$('adminTab').click()});
 $('mClose').addEventListener('click',closeMail);
 $('mdim').addEventListener('click',e=>{if(e.target===$('mdim'))closeMail()});
 $('mTabs').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;$('mTabs').querySelectorAll('button').forEach(o=>o.classList.toggle('on',o===b));
