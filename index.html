@@ -224,7 +224,7 @@ td svg{width:90px;height:26px;display:block;margin-left:auto}
     <div class="rtabs" role="tablist"><button class="on" data-v="chart">실시간 차트</button><button data-v="log">내 거래 내역</button></div>
     <div id="vChart">
       <div class="filters">
-        <div class="group" id="fSec"><button class="on" data-f="all">전체</button><button data-f="semi">반도체</button><button data-f="big">빅테크</button><button data-f="soft">소프트웨어</button><button data-f="bio">헬스케어</button><button data-f="cons">소비재</button><button data-f="ind">산업·에너지</button><button data-f="etc">기타</button></div>
+        <div class="group" id="fSec"><button class="on" data-f="all">전체</button><button data-f="etf">ETF</button><button data-f="hot">급등·테마</button><button data-f="semi">반도체</button><button data-f="big">빅테크</button><button data-f="soft">소프트웨어</button><button data-f="bio">헬스케어</button><button data-f="cons">소비재</button><button data-f="ind">산업·에너지</button><button data-f="etc">기타</button></div>
         <div class="group" id="fSort"><button class="on" data-o="abs">변동 큰 순</button><button data-o="fall">하락률 높은 순</button><button data-o="rise">상승률 높은 순</button><button data-o="price">가격 높은 순</button></div>
       </div>
       <table><thead><tr><th class="rk">순위</th><th class="l">종목</th><th>현재가</th><th>등락률</th><th class="hide-s">최근 흐름</th><th class="hide-s">변동성</th><th class="l hide-s">산업</th><th class="hide-s">내 보유</th></tr></thead><tbody id="tbody"></tbody></table>
@@ -308,7 +308,7 @@ td svg{width:90px;height:26px;display:block;margin-left:auto}
 <script>
 {
 const START=100000,FEE=.001,KEY='nasdaqlive1',PER=15;
-// 나스닥 100 전 종목: 티커, 이름, 업종, 시작가(2026-11-26 StockAnalysis.com 조회), 일간 변동성, 베타, 그룹
+// 나스닥 100 전 종목 + ETF + 급등·테마주: 티커, 이름, 업종, 시작가(2026-11-26 StockAnalysis.com 조회), 일간 변동성, 베타, 그룹
 const DEF=[
  ['AAPL','애플','IT 기기',356.27,0.02,1.15,'big'],
  ['NVDA','엔비디아','반도체',162.85,0.032,1.5,'semi'],
@@ -410,7 +410,46 @@ const DEF=[
  ['NBIS','네비우스','AI 클라우드',115.88,0.055,1.4,'soft'],
  ['AXON','액손','보안 장비',315.43,0.018,0.8,'ind'],
  ['CRWV','코어위브','AI 클라우드',53.13,0.06,1.4,'soft'],
- ['ALNY','앨나일람','바이오',165.04,0.025,0.8,'bio']];
+ ['ALNY','앨나일람','바이오',165.04,0.025,0.8,'bio'],
+ ['QQQ','인베스코 QQQ (나스닥100)','ETF·지수',651.03,0.013,1,'etf'],
+ ['SPY','SPDR S&P500','ETF·지수',718.78,0.011,1,'etf'],
+ ['VOO','뱅가드 S&P500','ETF·지수',663.91,0.011,1,'etf'],
+ ['IWM','러셀2000 ETF','ETF·지수',277.54,0.016,1.2,'etf'],
+ ['SCHD','슈왑 미국배당','ETF·배당',35.29,0.009,0.8,'etf'],
+ ['JEPI','JP모건 프리미엄인컴','ETF·배당',57.59,0.007,0.6,'etf'],
+ ['SMH','반에크 반도체','ETF·반도체',400.06,0.024,1.6,'etf'],
+ ['ARKK','ARK 이노베이션','ETF·테마',81.99,0.032,1.8,'etf'],
+ ['TLT','미국 장기국채 20년+','ETF·채권',79.38,0.01,-0.3,'etf'],
+ ['GLD','SPDR 금','ETF·원자재',355.45,0.012,0.1,'etf'],
+ ['IBIT','아이셰어즈 비트코인','ETF·코인',35.1,0.032,1.2,'etf'],
+ ['TQQQ','나스닥100 3배','ETF·레버리지',41.2,0.04,3.3,'etf'],
+ ['SQQQ','나스닥100 -3배','ETF·인버스',39.68,0.04,-3.3,'etf'],
+ ['SOXL','반도체 3배','ETF·레버리지',30.88,0.07,4.5,'etf'],
+ ['SOXS','반도체 -3배','ETF·인버스',58.4,0.07,-4.5,'etf'],
+ ['TSLL','테슬라 2배','ETF·레버리지',11.17,0.075,3.6,'etf'],
+ ['NVDL','엔비디아 2배','ETF·레버리지',17.83,0.06,3,'etf'],
+ ['GME','게임스탑','밈주식',23.89,0.06,1.8,'hot'],
+ ['AMC','AMC 엔터테인먼트','밈주식',2.89,0.06,1.8,'hot'],
+ ['IONQ','아이온큐','양자컴퓨터',20.72,0.06,1.8,'hot'],
+ ['RGTI','리게티 컴퓨팅','양자컴퓨터',7.16,0.06,1.8,'hot'],
+ ['QBTS','디웨이브 퀀텀','양자컴퓨터',6.52,0.06,1.8,'hot'],
+ ['SOUN','사운드하운드 AI','AI',2.625,0.06,1.8,'hot'],
+ ['BBAI','빅베어AI','AI',2.245,0.06,1.8,'hot'],
+ ['SMCI','슈퍼마이크로','AI 서버',21.65,0.06,1.8,'hot'],
+ ['HOOD','로빈후드','핀테크',62.17,0.045,1.8,'hot'],
+ ['SOFI','소파이','핀테크',15.42,0.04,1.8,'hot'],
+ ['NU','누 홀딩스','핀테크',13.22,0.03,1.8,'hot'],
+ ['COIN','코인베이스','코인',103.72,0.05,1.8,'hot'],
+ ['MARA','마라 홀딩스','비트코인 채굴',6.84,0.06,1.8,'hot'],
+ ['IREN','아이렌','AI 데이터센터',18.17,0.06,1.8,'hot'],
+ ['OKLO','오클로','원전',25.25,0.06,1.8,'hot'],
+ ['HIMS','힘스앤허스','헬스케어',27.59,0.06,1.8,'hot'],
+ ['ASTS','AST 스페이스모바일','우주',23.27,0.06,1.8,'hot'],
+ ['RDDT','레딧','소셜미디어',91.51,0.06,1.8,'hot'],
+ ['NIO','니오','전기차',2.9,0.06,1.8,'hot'],
+ ['AKAN','아칸다','급등 소형주',5.48,0.12,1.8,'hot'],
+ ['LVWR','라이브와이어','급등 소형주',1.41,0.1,1.8,'hot'],
+ ['ANF','애버크롬비앤피치','급등주',176.56,0.05,1.8,'hot']];
 const POS=['{n} 목표주가 상향 리포트','{n} 신제품 반응 기대 이상','{n} 대형 고객사 계약 소식','{s} 업종 수요 증가 전망','{n} 실적 기대감에 매수세 유입'];
 const NEG=['{n} 목표주가 하향 리포트','{n} 공급망 차질 우려','{s} 업종 규제 강화 검토','{n} 대량 매도 물량 출회','{s} 업종 수요 둔화 전망'];
 const MKT=[['연준 금리 인하 기대감 확산',1],['기술주로 자금 유입 전망',1],['국채 금리 급등, 기술주 부담',-1],['경기 둔화 우려 보고서',-1]];
@@ -446,9 +485,9 @@ function tickOnce(){
 function makeNews(){
   const rumor=Math.random()<.4,p=rumor?.5:.88;let e;
   if(Math.random()<.2){const m=MKT[Math.floor(Math.random()*MKT.length)];e={all:1,v:m[1]*(.005+Math.random()*.01),t:m[0]}}
-  else{const i=Math.floor(Math.random()*G.stocks.length),s=G.stocks[i],good=Math.random()<.52;
+  else{const hot=DEF.map((d,i)=>d[6]==='hot'?i:-1).filter(i=>i>=0),pickHot=Math.random()<.35,i=pickHot?hot[Math.floor(Math.random()*hot.length)]:Math.floor(Math.random()*G.stocks.length),s=G.stocks[i],good=Math.random()<.52,boost=pickHot?2.2:1;
     const tpl=(good?POS:NEG)[Math.floor(Math.random()*5)],wide=tpl.includes('{s}');
-    e={id:wide?-1:i,sec:wide?s.sec:null,v:(good?1:-1)*(.015+Math.random()*.045),t:tpl.replace('{n}',s.name).replace('{s}',s.sec)}}
+    e={id:wide?-1:i,sec:wide?s.sec:null,v:(good?1:-1)*(.015+Math.random()*.045)*boost,t:tpl.replace('{n}',s.name).replace('{s}',s.sec)}}
   if(Math.random()>p)e.v=-e.v*.4;
   e.from=G.tick+6;e.to=e.from+PER;G.pending.push(e);
   G.news.unshift({t:e.t,r:rumor,at:G.tick});if(G.news.length>40)G.news.length=40;
@@ -523,7 +562,7 @@ function openDetail(i){G.sel=i;detailOpen=true;$('pdim').classList.add('show');h
 function closeDetail(){detailOpen=false;$('pdim').classList.remove('show')}
 
 // ---- 지수·작은 차트 ----
-const IDX=[['모의 나스닥 100',DEF.map((_,i)=>i)],['반도체 지수',DEF.map((d,i)=>d[6]==='semi'?i:-1).filter(i=>i>=0)],['빅테크 지수',DEF.map((d,i)=>d[6]==='big'?i:-1).filter(i=>i>=0)]];
+const IDX=[['모의 나스닥 100',DEF.map((d,i)=>d[6]!=='etf'&&d[6]!=='hot'?i:-1).filter(i=>i>=0)],['반도체 지수',DEF.map((d,i)=>d[6]==='semi'?i:-1).filter(i=>i>=0)],['빅테크 지수',DEF.map((d,i)=>d[6]==='big'?i:-1).filter(i=>i>=0)]];
 function series(ids,n){const len=Math.min(...G.stocks.map(s=>s.c.length)),out=[];
   for(let k=Math.max(0,len-n);k<=len;k++){let sum=0;for(const i of ids){const s=G.stocks[i],c=s.c.length-len+k;sum+=(k<len?s.c[c].c:s.p)/DEF[i][3]}out.push(1000*sum/ids.length)}return out}
 function idxInfo(k,n){const v=series(IDX[k][1],n),last=v[v.length-1];return{v,last,chg:last/1000-1}}
@@ -547,7 +586,7 @@ function render(){
 }
 function renderMarket(){
   const a=idxInfo(0,40);
-  $('mBig').innerHTML=`<div class="nm">${IDX[0][0]} <span class="mute" style="font-size:12px">게임 지수</span></div><div class="v num">${a.last.toFixed(2)} <span class="${cls(a.chg)}" style="font-size:14px;font-weight:600">${pct(a.chg)}</span></div>${spark(a.v,a.chg>=0?UP:DN,true)}<div class="mute" style="font-size:12px">전 종목 시작가 = 1,000 기준 · 최근 10분</div>`;
+  $('mBig').innerHTML=`<div class="nm">${IDX[0][0]} <span class="mute" style="font-size:12px">게임 지수</span></div><div class="v num">${a.last.toFixed(2)} <span class="${cls(a.chg)}" style="font-size:14px;font-weight:600">${pct(a.chg)}</span></div>${spark(a.v,a.chg>=0?UP:DN,true)}<div class="mute" style="font-size:12px">나스닥 100 종목 시작가 = 1,000 기준 · 최근 10분</div>`;
   const items=[1,2].map(k=>{const x=idxInfo(k,40);return{nm:IDX[k][0],v:x.last.toFixed(2),chg:x.chg,s:x.v}});
   const st=G.stocks.map((s,i)=>({i,c:s.p/s.ref-1})).sort((x,y)=>y.c-x.c);
   const pick=(o,nm)=>({nm,v:G.stocks[o.i].name,chg:o.c,s:G.stocks[o.i].c.slice(-30).map(b=>b.c).concat([G.stocks[o.i].p])});
