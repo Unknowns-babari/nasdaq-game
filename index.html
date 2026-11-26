@@ -1017,7 +1017,7 @@ function renderDetail(){
   const i=G.sel,s=G.stocks[i],c=s.p/s.ref-1,h=G.hold[i];
   const lg=$('pLogo');lg.textContent=s.t.slice(0,4);lg.style.background=color(i);
   $('pName').textContent=s.name;$('openOpt').hidden=CUR(i)!=='USD';{const y=yieldOf(i),cc=CUR(i);$('pYield').textContent=cc!=='USD'?`${curName(cc)}로 거래 · ≈ ${usd(s.p/rateOf(cc))} · ${DEF[i][6]==='kospi'?'코스피':DEF[i][6]==='kosdaq'?'코스닥':'도쿄증권거래소'}`:isBond(i)?`현재 금리 ${y.toFixed(3)}% · 1좌 = 액면 $100 · 10분마다 이자 지급`:y?`연 배당률 ${y}% · 10분마다 배당 지급(게임용)`:''}$('pHeart').classList.toggle('on',isW(i));$('pHeart').setAttribute('aria-pressed',isW(i));$('pSub').textContent=`${s.t} · ${s.sec}`;
-  $('pPrice').innerHTML=esc(fp(i,s.p))+(REAL[i]?`<span class="real">${REAL[i].src==='gs'?'실제 가격 · 약 20분 지연':Date.now()-REAL[i].t<90e3?'실시간 체결가':'실제 가격 · 장 마감'}</span>`:bridged(i)?`<span class="real">${esc(PJ.date.slice(5).replace('-','/'))} 실제 시가·종가 고정</span>`:s.real?`<span class="real">실제 ${esc(s.real.day)} 반영</span>`:'');
+  $('pPrice').innerHTML=esc(fp(i,s.p))+(REAL[i]?`<span class="real">${(REAL[i].src==='gs'||REAL[i].src==='yh')?'실제 가격 · 약 20분 지연':Date.now()-REAL[i].t<90e3?'실시간 체결가':'실제 가격 · 장 마감'}</span>`:bridged(i)?`<span class="real">${esc(PJ.date.slice(5).replace('-','/'))} 실제 시가·종가 고정</span>`:s.real?`<span class="real">실제 ${esc(s.real.day)} 반영</span>`:'');
   $('pChg').textContent=`${s.real?'전일 종가':'시작가'}보다 ${fsg(i,s.p-s.ref)} (${pct(c)})`+(REAL[i]?(REAL[i].src==='btc'?' · 24시간 기준':''):bridged(i)?` · 오늘 밤 12시에 실제 종가 ${fp(i,BR[i].c)} 도달`:'');$('pChg').className='pchg num '+cls(c);
   $('pos').innerHTML=h?`<div><span>보유 수량</span><b class="num">${ip(h.q)}주</b></div><div><span>평균 단가</span><b class="num">${fp(i,h.a)}</b></div><div><span>수익</span><b class="num ${cls(s.p-h.a)}">${fsg(i,(s.p-h.a)*h.q)}</b></div>`
     :`<div><span>보유 수량</span><b>0주</b></div><div><span>살 수 있는 수량</span><b class="num">${ip(maxBuy())}주</b></div><div><span>변동성</span><b>${s.vol>=.03?'높음':s.vol>=.018?'보통':'낮음'}</b></div>`;
@@ -1498,6 +1498,14 @@ function startSheet(url){if(url===gs.url)return;gs.url=url;clearTimeout(gs.timer
       if(first&&n){first=false;save();render();toast(`${n}개 종목이 구글 시트의 실제 가격을 따라요`)}}}catch(e){}
     gs.timer=setTimeout(pull,120e3)};
   pull()}
+// GitHub Actions가 10분마다 갱신하는 live.json (야후 지연 시세). 시트·Finnhub이 최근에 넣은 값이 있으면 그쪽 우선.
+async function pullLive(){try{const r=await fetch('live.json?t='+Date.now(),{cache:'no-store'});if(r.ok){const j=await r.json();let n=0;
+  if(j.fx){if(j.fx.KRW>0&&!gs.url)G.fx=j.fx.KRW;if(j.fx.JPY>0&&!gs.url)G.jfx=j.fx.JPY}
+  for(const [t,q] of Object.entries(j.quotes||{})){const i=DEF.findIndex(d=>d[0]===t);if(i<0||UL[i]!=null||!(q.p>0))continue;
+    if(REAL[i]&&REAL[i].src!=='yh'&&Date.now()-REAL[i].t<300e3)continue;setReal(i,q.p,'yh',q.pc);n++}
+  if(n&&!pullLive.done){pullLive.done=1;save();render();toast(`${n}개 종목이 실제 가격(약 20분 지연)을 따라요`)}}}catch(e){}
+  setTimeout(pullLive,120e3)}
+setTimeout(pullLive,3000);
 }
 </script>
 </body>

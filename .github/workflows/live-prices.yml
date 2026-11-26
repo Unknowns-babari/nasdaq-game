@@ -1,0 +1,30 @@
+name: 실제 시세 갱신
+on:
+  schedule:
+    - cron: '*/10 * * * 1-5'   # 평일 10분마다 (GitHub 사정에 따라 늦어질 수 있음)
+    - cron: '17 */3 * * 0,6'   # 주말엔 3시간마다
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: live-prices
+  cancel-in-progress: false
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python scripts/fetch_live.py
+      - name: 바뀐 시세 올리기
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898699+github-actions[bot]@users.noreply.github.com'
+          [ -f live.json ] || exit 0
+          git add live.json
+          git diff --cached --quiet && exit 0
+          git commit -m "실제 시세 갱신"
+          for i in 1 2 3; do git pull --rebase -q && git push -q && break; sleep 5; done
