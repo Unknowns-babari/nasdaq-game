@@ -213,7 +213,7 @@ td svg{width:90px;height:26px;display:block;margin-left:auto}
 <div class="wrap">
 <main class="content" id="home">
   <div class="status"><span><span class="dot" id="dot"></span><b>미국장 모의 거래</b> <span class="mute" id="stTx">실시간</span></span><span class="mute" id="clock"></span>
-    <span class="sync" id="syncBox" hidden><span class="mute" id="syncMsg" style="font-size:13px"></span><button class="chip" id="syncAll">실제 시세 받기</button><span class="mute" id="quota" style="font-size:12px"></span></span></div>
+    <span class="sync" id="syncBox" hidden><span class="mute" id="syncMsg" style="font-size:13px"></span><button class="chip" id="syncAll">보유·선택 종목 실제 시세 받기</button><span class="mute" id="quota" style="font-size:12px"></span></span></div>
   <section class="market" aria-label="지수">
     <div class="mbig" id="mBig"></div>
     <div class="mgrid" id="mGrid"></div>
@@ -224,10 +224,11 @@ td svg{width:90px;height:26px;display:block;margin-left:auto}
     <div class="rtabs" role="tablist"><button class="on" data-v="chart">실시간 차트</button><button data-v="log">내 거래 내역</button></div>
     <div id="vChart">
       <div class="filters">
-        <div class="group" id="fSec"><button class="on" data-f="all">전체</button><button data-f="semi">반도체</button><button data-f="big">빅테크</button><button data-f="etc">기타</button></div>
-        <div class="group" id="fSort"><button class="on" data-o="chg">등락률 높은 순</button><button data-o="fall">하락률 높은 순</button><button data-o="price">가격 높은 순</button></div>
+        <div class="group" id="fSec"><button class="on" data-f="all">전체</button><button data-f="semi">반도체</button><button data-f="big">빅테크</button><button data-f="soft">소프트웨어</button><button data-f="bio">헬스케어</button><button data-f="cons">소비재</button><button data-f="ind">산업·에너지</button><button data-f="etc">기타</button></div>
+        <div class="group" id="fSort"><button class="on" data-o="abs">변동 큰 순</button><button data-o="fall">하락률 높은 순</button><button data-o="rise">상승률 높은 순</button><button data-o="price">가격 높은 순</button></div>
       </div>
       <table><thead><tr><th class="rk">순위</th><th class="l">종목</th><th>현재가</th><th>등락률</th><th class="hide-s">최근 흐름</th><th class="hide-s">변동성</th><th class="l hide-s">산업</th><th class="hide-s">내 보유</th></tr></thead><tbody id="tbody"></tbody></table>
+      <button class="chip" id="more" style="width:100%;margin-top:10px;min-height:44px">전체 종목 보기</button>
     </div>
     <div id="vLog" hidden><table><thead><tr><th class="l">거래</th><th class="l">내용</th><th>시점</th></tr></thead><tbody id="logBody"></tbody></table></div>
     <p class="note">시작가는 2026년 11월 26일에 조회한 실제 시세예요. 이후 가격·뉴스는 게임용 시뮬레이션이라 실제 시장과 달라요. 등락률은 시작가(실제 시세를 받은 종목은 전일 종가) 대비, 수수료 0.1%. 투자 조언이 아닌 게임이에요.</p>
@@ -236,8 +237,7 @@ td svg{width:90px;height:26px;display:block;margin-left:auto}
 
 <aside class="side" id="side">
   <div class="acc"><div class="t">내 총자산</div><div class="v num" id="total"></div><div class="pl num" id="pl"></div>
-    <div class="row2"><span class="mute">주문 가능</span><b class="num" id="cash"></b></div>
-    <button class="reset" id="reset">처음부터 다시</button></div>
+    <div class="row2"><span class="mute">주문 가능</span><b class="num" id="cash"></b></div></div>
   <div class="sh"><h3>내 주식 TOP 10</h3><small>평가금액 순</small></div>
   <ul class="mine" id="mine"></ul>
   <button class="add" id="addBtn"><i>+</i>주식 사러 가기</button>
@@ -256,7 +256,7 @@ td svg{width:90px;height:26px;display:block;margin-left:auto}
 </div></div>
 
 <div class="dim" id="mdim"><div class="panel mpanel" role="dialog" aria-modal="true" aria-labelledby="mTitle">
-  <div class="phead"><div><div class="pname" id="mTitle">우편함</div><div class="psub">운영자가 보낸 돈을 여기서 받을 수 있어요</div></div><button class="x" id="mClose" aria-label="닫기">×</button></div>
+  <div class="phead"><div><div class="pname" id="mTitle">우편함</div><div class="psub">운영자가 보낸 돈은 자동으로 계좌에 들어와요</div></div><button class="x" id="mClose" aria-label="닫기">×</button></div>
   <div class="mtabs" id="mTabs"><button class="on" data-m="in">받은 우편</button><button data-m="admin" id="adminTab" hidden>보내기 (운영자)</button></div>
   <div id="mIn"><div class="mtop" id="mTop"></div><ul class="mlist" id="mList"></ul></div>
   <div id="mAdmin" hidden>
@@ -268,6 +268,7 @@ td svg{width:90px;height:26px;display:block;margin-left:auto}
       <label id="sIdWrap" hidden>받는 아이디<input id="sId" autocapitalize="off" spellcheck="false" placeholder="아래 목록에서 눌러도 돼요"></label>
       <label>제목<input id="sTitle" maxlength="40" placeholder="예: 주말 보너스" required></label>
       <label>메시지 (선택)<textarea id="sBody" maxlength="300" placeholder="받는 사람에게 보일 한마디"></textarea></label>
+      <div class="mute" style="font-size:13px">보내는 돈은 운영자 자산에서 빠지지 않아요. 받는 사람 잔고에 그대로 더해져요.</div>
       <button class="pri" style="min-height:48px;border-radius:12px" id="sGo" type="submit">보내기</button>
       <div class="mute" style="font-size:13px" id="sMsg"></div>
     </form>
@@ -307,12 +308,109 @@ td svg{width:90px;height:26px;display:block;margin-left:auto}
 <script>
 {
 const START=100000,FEE=.001,KEY='nasdaqlive1',PER=15;
-// 티커, 이름, 업종, 시작가(2026-11-26 조회), 일간 변동성, 베타, 로고색, 그룹
+// 나스닥 100 전 종목: 티커, 이름, 업종, 시작가(2026-11-26 StockAnalysis.com 조회), 일간 변동성, 베타, 그룹
 const DEF=[
- ['AAPL','애플','IT 기기',356.27,.016,1,'#555','big'],['NVDA','엔비디아','반도체',162.85,.03,1.5,'#76b900','semi'],['MSFT','마이크로소프트','소프트웨어',523.88,.015,1,'#00a4ef','big'],
- ['AMZN','아마존','이커머스',266.66,.02,1.2,'#ff9900','big'],['GOOGL','알파벳','인터넷',295.77,.019,1.1,'#4285f4','big'],['META','메타','인터넷',641.69,.024,1.3,'#0866ff','big'],
- ['TSLA','테슬라','전기차',390.22,.04,1.8,'#cc0000','etc'],['AVGO','브로드컴','반도체',347.01,.03,1.4,'#c8102e','semi'],['AMD','AMD','반도체',534.06,.035,1.6,'#222','semi'],
- ['MU','마이크론','반도체',778.31,.035,1.6,'#0b5cab','semi'],['PLTR','팔란티어','소프트웨어',167.99,.04,1.8,'#101820','etc'],['COST','코스트코','유통',1106.21,.012,.6,'#005daa','etc']];
+ ['AAPL','애플','IT 기기',356.27,0.02,1.15,'big'],
+ ['NVDA','엔비디아','반도체',162.85,0.032,1.5,'semi'],
+ ['MSFT','마이크로소프트','소프트웨어',523.88,0.02,1.15,'big'],
+ ['AMZN','아마존','이커머스',266.66,0.02,1.15,'big'],
+ ['MU','마이크론','반도체',778.31,0.035,1.5,'semi'],
+ ['AMD','AMD','반도체',534.06,0.035,1.5,'semi'],
+ ['TSLA','테슬라','전기차',390.22,0.04,1.15,'big'],
+ ['META','메타','인터넷',641.69,0.02,1.15,'big'],
+ ['GOOGL','알파벳 A','인터넷',295.77,0.02,1.15,'big'],
+ ['WMT','월마트','유통',128.09,0.012,0.7,'cons'],
+ ['AVGO','브로드컴','반도체',347.01,0.032,1.5,'semi'],
+ ['SPCX','스페이스X','우주항공',139.11,0.045,0.8,'ind'],
+ ['GOOG','알파벳 C','인터넷',292.52,0.02,1.15,'big'],
+ ['COST','코스트코','유통',1106.21,0.012,0.7,'cons'],
+ ['PLTR','팔란티어','소프트웨어',167.99,0.045,1.4,'soft'],
+ ['CSCO','시스코','네트워크 장비',95.64,0.03,1.4,'soft'],
+ ['INTC','인텔','반도체',59.66,0.032,1.5,'semi'],
+ ['AMAT','어플라이드 머티리얼즈','반도체 장비',370.5,0.032,1.5,'semi'],
+ ['LRCX','램리서치','반도체 장비',225.92,0.032,1.5,'semi'],
+ ['TXN','텍사스 인스트루먼트','반도체',303.6,0.032,1.5,'semi'],
+ ['PANW','팔로알토 네트웍스','보안',322.24,0.03,1.4,'soft'],
+ ['NFLX','넷플릭스','미디어',62.15,0.02,1.15,'big'],
+ ['AMGN','암젠','바이오',465.67,0.025,0.8,'bio'],
+ ['LIN','린데','화학',526.06,0.013,0.8,'ind'],
+ ['CRWD','크라우드스트라이크','보안',226.61,0.03,1.4,'soft'],
+ ['GILD','길리어드','바이오',168.08,0.025,0.8,'bio'],
+ ['KLAC','KLA','반도체 장비',152.32,0.032,1.5,'semi'],
+ ['PEP','펩시코','음료',145.44,0.011,0.7,'cons'],
+ ['ADI','아날로그디바이스','반도체',397.97,0.032,1.5,'semi'],
+ ['TMUS','T모바일','통신',169.95,0.02,0.9,'etc'],
+ ['QCOM','퀄컴','반도체',172.47,0.032,1.5,'semi'],
+ ['SHOP','쇼피파이','이커머스',147.09,0.03,1.4,'soft'],
+ ['ISRG','인튜이티브 서지컬','의료기기',443.59,0.025,0.8,'bio'],
+ ['ASML','ASML','반도체 장비',1495.16,0.032,1.5,'semi'],
+ ['MRVL','마벨','반도체',156.76,0.032,1.5,'semi'],
+ ['VRTX','버텍스','바이오',538.6,0.025,0.8,'bio'],
+ ['SNDK','샌디스크','메모리',885.01,0.045,1.5,'semi'],
+ ['APP','앱러빈','소프트웨어',409.1,0.045,1.4,'soft'],
+ ['ADP','ADP','인사·급여',309.93,0.03,1.4,'soft'],
+ ['SBUX','스타벅스','외식',106.44,0.017,0.7,'cons'],
+ ['BKNG','부킹홀딩스','여행',159.58,0.017,0.7,'cons'],
+ ['STX','씨게이트','저장장치',528.29,0.032,1.5,'semi'],
+ ['MAR','메리어트','호텔',423.16,0.017,0.7,'cons'],
+ ['WDC','웨스턴디지털','저장장치',295.65,0.032,1.5,'semi'],
+ ['CEG','컨스텔레이션 에너지','전력',280.2,0.018,0.8,'ind'],
+ ['ADBE','어도비','소프트웨어',243.08,0.03,1.4,'soft'],
+ ['REGN','리제네론','바이오',955.47,0.025,0.8,'bio'],
+ ['CSX','CSX','철도',52.05,0.018,0.8,'ind'],
+ ['INTU','인튜이트','소프트웨어',341.7,0.03,1.4,'soft'],
+ ['FTNT','포티넷','보안',127.22,0.03,1.4,'soft'],
+ ['MNST','몬스터 베버리지','음료',46.46,0.017,0.7,'cons'],
+ ['CTAS','신타스','기업 서비스',226.24,0.018,0.8,'ind'],
+ ['MRNA','모더나','바이오',223.37,0.045,0.8,'bio'],
+ ['CMCSA','컴캐스트','미디어',25.16,0.02,0.9,'etc'],
+ ['CDNS','케이던스','반도체 설계',323.01,0.03,1.4,'soft'],
+ ['SNPS','시놉시스','반도체 설계',455.2,0.03,1.4,'soft'],
+ ['MDLZ','몬델리즈','식품',67.54,0.017,0.7,'cons'],
+ ['ARM','ARM','반도체 설계',190.53,0.032,1.5,'semi'],
+ ['ABNB','에어비앤비','여행',186.78,0.017,0.7,'cons'],
+ ['MELI','메르카도리브레','이커머스',1491.49,0.017,0.7,'cons'],
+ ['ORLY','오라일리','자동차 부품',92.19,0.017,0.7,'cons'],
+ ['ROST','로스스토어','유통',231.68,0.017,0.7,'cons'],
+ ['HON','하니웰','산업재',222.46,0.018,0.8,'ind'],
+ ['AEP','아메리칸 일렉트릭 파워','전력',129.18,0.011,0.8,'ind'],
+ ['DASH','도어대시','배달',171.51,0.017,0.7,'cons'],
+ ['MPWR','모놀리식 파워','반도체',1390.54,0.032,1.5,'semi'],
+ ['NXPI','NXP','반도체',265.09,0.032,1.5,'semi'],
+ ['FAST','패스널','산업재',55.19,0.018,0.8,'ind'],
+ ['DDOG','데이터독','소프트웨어',184.16,0.03,1.4,'soft'],
+ ['PCAR','파카','트럭',106.66,0.018,0.8,'ind'],
+ ['IDXX','아이덱스','의료',704.23,0.025,0.8,'bio'],
+ ['ADSK','오토데스크','소프트웨어',264.42,0.03,1.4,'soft'],
+ ['LITE','루멘텀','광통신',596.62,0.032,1.5,'semi'],
+ ['PDD','PDD','이커머스',78.97,0.017,0.7,'cons'],
+ ['HONA','하니웰 에어로스페이스','우주항공',165.01,0.018,0.8,'ind'],
+ ['FANG','다이아몬드백','석유',184.93,0.018,0.8,'ind'],
+ ['CCEP','코카콜라 유로퍼시픽','음료',118.57,0.017,0.7,'cons'],
+ ['XEL','엑셀 에너지','전력',81.61,0.011,0.8,'ind'],
+ ['PYPL','페이팔','결제',59.28,0.02,0.9,'etc'],
+ ['KDP','큐리그 닥터페퍼','음료',36.34,0.012,0.7,'cons'],
+ ['BKR','베이커휴즈','에너지 장비',49.44,0.018,0.8,'ind'],
+ ['EXC','엑셀론','전력',46.25,0.012,0.8,'ind'],
+ ['ROP','로퍼','소프트웨어',479.98,0.03,1.4,'soft'],
+ ['FER','페로비알','인프라',61.68,0.018,0.8,'ind'],
+ ['TTWO','테이크투','게임',227.82,0.03,1.4,'soft'],
+ ['TRI','톰슨로이터','정보 서비스',109.3,0.02,0.9,'etc'],
+ ['PAYX','페이첵스','인사·급여',115.68,0.03,1.4,'soft'],
+ ['MSTR','스트래티지','비트코인',111.62,0.055,0.9,'etc'],
+ ['TER','테라다인','반도체 장비',249.55,0.032,1.5,'semi'],
+ ['ALAB','아스테라랩스','반도체',221.83,0.05,1.5,'semi'],
+ ['WDAY','워크데이','소프트웨어',196.45,0.03,1.4,'soft'],
+ ['GEHC','GE 헬스케어','의료기기',83.02,0.025,0.8,'bio'],
+ ['RKLB','로켓랩','우주항공',61.53,0.055,0.8,'ind'],
+ ['ODFL','올드도미니언','물류',174.54,0.018,0.8,'ind'],
+ ['MCHP','마이크로칩','반도체',61.68,0.032,1.5,'semi'],
+ ['DXCM','덱스콤','의료기기',83.33,0.025,0.8,'bio'],
+ ['CPRT','코파트','자동차 경매',31.83,0.018,0.8,'ind'],
+ ['NBIS','네비우스','AI 클라우드',115.88,0.055,1.4,'soft'],
+ ['AXON','액손','보안 장비',315.43,0.018,0.8,'ind'],
+ ['CRWV','코어위브','AI 클라우드',53.13,0.06,1.4,'soft'],
+ ['ALNY','앨나일람','바이오',165.04,0.025,0.8,'bio']];
 const POS=['{n} 목표주가 상향 리포트','{n} 신제품 반응 기대 이상','{n} 대형 고객사 계약 소식','{s} 업종 수요 증가 전망','{n} 실적 기대감에 매수세 유입'];
 const NEG=['{n} 목표주가 하향 리포트','{n} 공급망 차질 우려','{s} 업종 규제 강화 검토','{n} 대량 매도 물량 출회','{s} 업종 수요 둔화 전망'];
 const MKT=[['연준 금리 인하 기대감 확산',1],['기술주로 자금 유입 전망',1],['국채 금리 급등, 기술주 부담',-1],['경기 둔화 우려 보고서',-1]];
@@ -325,9 +423,10 @@ const cls=x=>x>0?'up':x<0?'dn':'';
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const norm=()=>{let u=0,v=0;while(!u)u=Math.random();while(!v)v=Math.random();return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v)};
 const r2=p=>Math.max(.01,Math.round(p*100)/100);
-const logo=i=>`<span class="logo" style="background:${DEF[i][6]}">${esc(DEF[i][0].slice(0,4))}</span>`;
+const color=i=>{let h=0;for(const ch of DEF[i][0])h=(h*31+ch.charCodeAt(0))%360;return `hsl(${h},55%,40%)`};
+const logo=i=>`<span class="logo" style="background:${color(i)}">${esc(DEF[i][0].slice(0,4))}</span>`;
 const UP='#f04452',DN='#3182f6';
-let G,timer=null,speed=1,paused=false,chartType='line',hoverX=null,sheet=null,detailOpen=false,fSec='all',fSort='chg',query='',orderSig='',lastSort=-99;
+let showAll=false,G,timer=null,speed=1,paused=false,chartType='line',hoverX=null,sheet=null,detailOpen=false,fSec='all',fSort='abs',query='',orderSig='',lastSort=-99;
 
 // ---- 시장 엔진 ----
 function tickOnce(){
@@ -339,7 +438,7 @@ function tickOnce(){
     for(const e of G.pending){if(G.tick>=e.from&&G.tick<e.to&&(e.all||e.id===i||e.sec===s.sec))eff+=(e.all||e.id===i?e.v:e.v*.6)/(e.to-e.from)}
     s.p=r2(s.p*Math.exp(s.beta*zm+s.vol*.065*norm()+eff));
     const c=s.cur;c.h=Math.max(c.h,s.p);c.l=Math.min(c.l,s.p);c.c=s.p;c.n++;
-    if(c.n>=PER){s.c.push({o:c.o,h:c.h,l:c.l,c:c.c});if(s.c.length>150)s.c.shift();s.cur={o:s.p,h:s.p,l:s.p,c:s.p,n:0}}
+    if(c.n>=PER){s.c.push({o:c.o,h:c.h,l:c.l,c:c.c});if(s.c.length>100)s.c.shift();s.cur={o:s.p,h:s.p,l:s.p,c:s.p,n:0}}
   });
   G.pending=G.pending.filter(e=>e.to>G.tick);
   if(G.tick>=G.nextNews){makeNews();G.nextNews=G.tick+25+Math.floor(Math.random()*40)}
@@ -355,18 +454,31 @@ function makeNews(){
   G.news.unshift({t:e.t,r:rumor,at:G.tick});if(G.news.length>40)G.news.length=40;
 }
 function worth(){return G.cash+Object.entries(G.hold).reduce((a,[i,h])=>a+h.q*G.stocks[i].p,0)}
-function newGame(){
+function newGame(quiet){
   const keepClaimed=G&&Array.isArray(G.claimed)?G.claimed:[];
   G={tick:0,cash:START,hold:{},news:[],log:[],pending:[],regime:0,sel:1,nextNews:12,claimed:keepClaimed,
      stocks:DEF.map(d=>({t:d[0],name:d[1],sec:d[2],ref:d[3],vol:d[4],beta:d[5],p:d[3],c:[],cur:null}))};
   G.stocks.forEach(s=>{let p=100;const arr=[];
     for(let k=0;k<60;k++){const o=p;let h=o,l=o;for(let j=0;j<PER;j++){p*=Math.exp(s.vol*.065*norm());h=Math.max(h,p);l=Math.min(l,p)}arr.push({o,h,l,c:p})}
     const f=s.ref/p;s.c=arr.map(b=>({o:r2(b.o*f),h:r2(b.h*f),l:r2(b.l*f),c:r2(b.c*f)}));s.p=s.ref;s.cur={o:s.p,h:s.p,l:s.p,c:s.p,n:0}});
-  save();lastSort=-99;render();
+  if(quiet)return;save();lastSort=-99;render();
 }
 let UKEY=KEY,cloudDirty=false;
 function save(){cloudDirty=true;try{localStorage.setItem(UKEY,JSON.stringify(G))}catch(e){}}
-function load(){try{const s=JSON.parse(localStorage.getItem(UKEY));if(s&&s.stocks&&s.stocks.length===DEF.length){G=s;lastSort=-99;return true}}catch(e){}return false}
+function migrate(s){
+  if(!s||!Array.isArray(s.stocks))return null;
+  const same=s.stocks.length===DEF.length&&s.stocks.every((x,i)=>x.t===DEF[i][0]);
+  if(same){s.stocks.forEach(x=>{if(x.c.length<20)fill(x)});return s}
+  const prev=G;newGame(true);const n=G;G=prev;const map={};
+  s.stocks.forEach((x,i)=>{const j=DEF.findIndex(d=>d[0]===x.t);if(j<0)return;map[i]=j;const y=n.stocks[j];y.p=x.p;y.ref=x.ref;if(x.real)y.real=x.real;
+    const f=x.p/y.c[y.c.length-1].c;y.c=y.c.map(b=>({o:r2(b.o*f),h:r2(b.h*f),l:r2(b.l*f),c:r2(b.c*f)}));y.cur={o:x.p,h:x.p,l:x.p,c:x.p,n:0}});
+  n.cash=s.cash;n.log=s.log||[];n.news=[];n.claimed=s.claimed||[];n.hold={};
+  for(const [i,h] of Object.entries(s.hold||{}))if(map[i]!=null)n.hold[map[i]]=h;
+  n.sel=map[s.sel]!=null?map[s.sel]:1;return n;
+}
+function fill(x){const d=DEF.find(d=>d[0]===x.t);const base=[];let p=100;for(let k=0;k<60;k++){const o=p;let h=o,l=o;for(let j=0;j<PER;j++){p*=Math.exp(x.vol*.065*norm());h=Math.max(h,p);l=Math.min(l,p)}base.push({o,h,l,c:p})}
+  const f=(x.c[0]?x.c[0].o:x.p)/p;x.c=base.map(b=>({o:r2(b.o*f),h:r2(b.h*f),l:r2(b.l*f),c:r2(b.c*f)})).concat(x.c)}
+function load(){try{const s=migrate(JSON.parse(localStorage.getItem(UKEY)));if(s){G=s;lastSort=-99;return true}}catch(e){}return false}
 function loop(){for(let k=0;k<speed;k++)tickOnce();if(G.tick%5<speed)save();render()}
 function start(){clearInterval(timer);timer=setInterval(loop,1000);paused=false;$('pause').textContent='일시정지';$('pause').classList.remove('on');$('dot').classList.remove('off');$('stTx').textContent='실시간 · '+speed+'배속'}
 function stop(){clearInterval(timer);timer=null;paused=true;$('pause').textContent='재개';$('pause').classList.add('on');$('dot').classList.add('off');$('stTx').textContent='멈춤';save()}
@@ -411,7 +523,7 @@ function openDetail(i){G.sel=i;detailOpen=true;$('pdim').classList.add('show');h
 function closeDetail(){detailOpen=false;$('pdim').classList.remove('show')}
 
 // ---- 지수·작은 차트 ----
-const IDX=[['모의 나스닥 12',DEF.map((_,i)=>i)],['반도체 지수',DEF.map((d,i)=>d[7]==='semi'?i:-1).filter(i=>i>=0)],['빅테크 지수',DEF.map((d,i)=>d[7]==='big'?i:-1).filter(i=>i>=0)]];
+const IDX=[['모의 나스닥 100',DEF.map((_,i)=>i)],['반도체 지수',DEF.map((d,i)=>d[6]==='semi'?i:-1).filter(i=>i>=0)],['빅테크 지수',DEF.map((d,i)=>d[6]==='big'?i:-1).filter(i=>i>=0)]];
 function series(ids,n){const len=Math.min(...G.stocks.map(s=>s.c.length)),out=[];
   for(let k=Math.max(0,len-n);k<=len;k++){let sum=0;for(const i of ids){const s=G.stocks[i],c=s.c.length-len+k;sum+=(k<len?s.c[c].c:s.p)/DEF[i][3]}out.push(1000*sum/ids.length)}return out}
 function idxInfo(k,n){const v=series(IDX[k][1],n),last=v[v.length-1];return{v,last,chg:last/1000-1}}
@@ -435,20 +547,22 @@ function render(){
 }
 function renderMarket(){
   const a=idxInfo(0,40);
-  $('mBig').innerHTML=`<div class="nm">${IDX[0][0]} <span class="mute" style="font-size:12px">게임 지수</span></div><div class="v num">${a.last.toFixed(2)} <span class="${cls(a.chg)}" style="font-size:14px;font-weight:600">${pct(a.chg)}</span></div>${spark(a.v,a.chg>=0?UP:DN,true)}<div class="mute" style="font-size:12px">12종목 시작가 = 1,000 기준 · 최근 10분</div>`;
+  $('mBig').innerHTML=`<div class="nm">${IDX[0][0]} <span class="mute" style="font-size:12px">게임 지수</span></div><div class="v num">${a.last.toFixed(2)} <span class="${cls(a.chg)}" style="font-size:14px;font-weight:600">${pct(a.chg)}</span></div>${spark(a.v,a.chg>=0?UP:DN,true)}<div class="mute" style="font-size:12px">전 종목 시작가 = 1,000 기준 · 최근 10분</div>`;
   const items=[1,2].map(k=>{const x=idxInfo(k,40);return{nm:IDX[k][0],v:x.last.toFixed(2),chg:x.chg,s:x.v}});
   const st=G.stocks.map((s,i)=>({i,c:s.p/s.ref-1})).sort((x,y)=>y.c-x.c);
   const pick=(o,nm)=>({nm,v:G.stocks[o.i].name,chg:o.c,s:G.stocks[o.i].c.slice(-30).map(b=>b.c).concat([G.stocks[o.i].p])});
   items.push(pick(st[0],'가장 많이 오른 종목'),pick(st[st.length-1],'가장 많이 내린 종목'));
   $('mGrid').innerHTML=items.map(x=>`<div class="mi">${spark(x.s,x.chg>=0?UP:DN,true)}<div><div class="nm">${esc(x.nm)}</div><div class="v num">${esc(x.v)} <span class="c ${cls(x.chg)}">${pct(x.chg)}</span></div></div></div>`).join('');
 }
+function moreBtn(total){const b=$('more');b.hidden=!!query||total<=30;b.textContent=showAll?'접기':`나머지 ${total-30}개 종목 더 보기`}
 function renderTable(){
-  const ids=G.stocks.map((s,i)=>i).filter(i=>(fSec==='all'||DEF[i][7]===fSec)&&(!query||(DEF[i][0]+DEF[i][1]).toLowerCase().includes(query)));
-  const key=ids.join(',')+fSort+fSec+query;
+  const ids=G.stocks.map((s,i)=>i).filter(i=>(fSec==='all'||DEF[i][6]===fSec)&&(!query||(DEF[i][0]+DEF[i][1]).toLowerCase().includes(query)));
+  const key=ids.join(',')+fSort+fSec+query+showAll;
   if(G.tick-lastSort>=5||key!==orderSig){
     const chg=i=>G.stocks[i].p/G.stocks[i].ref-1;
-    ids.sort((a,b)=>fSort==='chg'?chg(b)-chg(a):fSort==='fall'?chg(a)-chg(b):G.stocks[b].p-G.stocks[a].p);
-    orderSig=key;lastSort=G.tick;
+    ids.sort((a,b)=>fSort==='abs'?Math.abs(chg(b))-Math.abs(chg(a)):fSort==='rise'?chg(b)-chg(a):fSort==='fall'?chg(a)-chg(b):G.stocks[b].p-G.stocks[a].p);
+    ids.total=ids.length;if(!showAll&&!query)ids.splice(30);
+    orderSig=key;lastSort=G.tick;moreBtn(ids.total);
     $('tbody').innerHTML=ids.length?ids.map((i,r)=>`<tr data-i="${i}" tabindex="0"><td class="rk">${r+1}</td><td class="l"><span class="who">${logo(i)}<span><b>${esc(DEF[i][1])}</b><small>${esc(DEF[i][0])}</small></span></span></td><td class="num p"></td><td class="num"><span class="pill c"></span></td><td class="hide-s sp"></td><td class="hide-s"><span class="bar" title="변동성"><i><b style="width:${Math.min(100,DEF[i][4]/.04*100)}%"></b></i></span></td><td class="l hide-s"><span class="sec">${esc(DEF[i][2])}</span></td><td class="num hide-s h"></td></tr>`).join('')
       :'<tr><td colspan="8" class="empty">찾는 종목이 없어요</td></tr>';
   }
@@ -478,7 +592,7 @@ function renderLog(){
 }
 function renderDetail(){
   const i=G.sel,s=G.stocks[i],c=s.p/s.ref-1,h=G.hold[i];
-  const lg=$('pLogo');lg.textContent=s.t.slice(0,4);lg.style.background=DEF[i][6];
+  const lg=$('pLogo');lg.textContent=s.t.slice(0,4);lg.style.background=color(i);
   $('pName').textContent=s.name;$('pSub').textContent=`${s.t} · ${s.sec}`;
   $('pPrice').innerHTML=esc(usd(s.p))+(s.real?`<span class="real">실제 ${esc(s.real.day)} 반영</span>`:'');
   $('pChg').textContent=`${s.real?'전일 종가':'시작가'}보다 ${sgn(s.p-s.ref)} (${pct(c)})`;$('pChg').className='pchg num '+cls(c);
@@ -531,6 +645,7 @@ const grp=(id,attr,set)=>$(id).addEventListener('click',e=>{const b=e.target.clo
 grp('fSec','f',v=>fSec=v);grp('fSort','o',v=>fSort=v);
 document.querySelectorAll('.rtabs button').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('.rtabs button').forEach(o=>o.classList.toggle('on',o===b));
   $('vChart').hidden=b.dataset.v!=='chart';$('vLog').hidden=b.dataset.v!=='log';render()}));
+$('more').addEventListener('click',()=>{showAll=!showAll;lastSort=-99;render()});
 $('search').addEventListener('input',e=>{query=e.target.value.trim().toLowerCase();lastSort=-99;render()});
 document.querySelectorAll('[data-c]').forEach(b=>b.addEventListener('click',()=>{chartType=b.dataset.c;document.querySelectorAll('[data-c]').forEach(o=>o.classList.toggle('on',o===b));draw()}));
 $('openBuy').addEventListener('click',()=>openSheet(true));
@@ -551,9 +666,6 @@ $('goHome').addEventListener('click',()=>scrollTo({top:0,behavior:'smooth'}));
 $('goRank').addEventListener('click',()=>$('rank').scrollIntoView({behavior:'smooth'}));
 $('goMine').addEventListener('click',()=>$('side').scrollIntoView({behavior:'smooth'}));
 $('addBtn').addEventListener('click',()=>$('rank').scrollIntoView({behavior:'smooth'}));
-let confirmReset=0;
-$('reset').addEventListener('click',()=>{if(!confirmReset){confirmReset=1;$('reset').textContent='한 번 더 누르면 초기화돼요';setTimeout(()=>{confirmReset=0;$('reset').textContent='처음부터 다시'},2500);return}
-  confirmReset=0;$('reset').textContent='처음부터 다시';newGame();start();pushCloud(true);toast('$100,000로 새로 시작해요')});
 document.addEventListener('keydown',e=>{
   if(e.key==='Escape'){if(sheet)closeSheet();else if(detailOpen)closeDetail();else closeMail();return}
   if(e.key==='Enter'&&sheet&&e.target===$('q')){$('shGo').click();return}
@@ -580,11 +692,12 @@ async function fetchQuote(sym,retried){
 }
 $('syncAll').addEventListener('click',async()=>{
   if(!mcp||busy)return;busy=true;$('syncAll').disabled=true;let ok=0;
-  for(let k=0;k<G.stocks.length;k++){$('syncMsg').textContent=`${G.stocks[k].name} 받는 중 (${k+1}/12)`;
+  const list=[...new Set([G.sel,...Object.keys(G.hold).map(Number)])].slice(0,20);
+  for(let n=0;n<list.length;n++){const k=list[n];$('syncMsg').textContent=`${G.stocks[k].name} 받는 중 (${n+1}/${list.length})`;
     try{const r=await fetchQuote(G.stocks[k].t);if(r.limit){$('syncMsg').textContent=`조회 한도에 걸려 ${ok}개만 반영했어요`;break}
       if(!r.none){const s=G.stocks[k];s.p=r2(r.price);s.ref=r2(r.prev);s.real={day:r.day};const c=s.cur;c.c=s.p;c.h=Math.max(c.h,s.p);c.l=Math.min(c.l,s.p);ok++;render();save()}}
     catch(e){$('syncMsg').textContent=errText(e);break}
-    if(k<G.stocks.length-1)await wait(1300);else $('syncMsg').textContent=`${ok}개 종목에 실제 시세를 반영했어요`}
+    if(n<list.length-1)await wait(1300);else $('syncMsg').textContent=`${ok}개 종목에 실제 시세를 반영했어요`}
   busy=false;$('syncAll').disabled=false;showQuota()});
 (async()=>{try{mcp=window.claude?await claude.use('mcp'):null}catch(e){mcp=null}if(!mcp)return;$('syncBox').hidden=false;showQuota()})();
 
@@ -619,7 +732,7 @@ $('guest').addEventListener('click',()=>{gate.classList.remove('show');$('me').t
 $('logout').addEventListener('click',async()=>{if(user&&fb){await pushCloud(true);await fb.a.signOut(fb.auth)}else{gateMode(false);gate.classList.add('show')}});
 async function pushCloud(force){
   if(!fb||!user||!cloudReady||(!cloudDirty&&!force))return;cloudDirty=false;
-  try{await fb.f.setDoc(fb.f.doc(fb.db,'users',user.uid),{state:JSON.stringify(G),name:(user.email||'').replace(DOMAIN,''),worth:Math.round(worth()*100)/100,updatedAt:fb.f.serverTimestamp()})}catch(e){cloudDirty=true}
+  try{await fb.f.setDoc(fb.f.doc(fb.db,'users',user.uid),{state:JSON.stringify({...G,stocks:G.stocks.map(x=>({...x,c:x.c.slice(-40)}))}),name:(user.email||'').replace(DOMAIN,''),worth:Math.round(worth()*100)/100,updatedAt:fb.f.serverTimestamp()})}catch(e){cloudDirty=true}
 }
 setInterval(pushCloud,15000);
 document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='hidden')pushCloud()});
@@ -632,7 +745,7 @@ async function onUser(u){
   UKEY=KEY+'-'+u.uid;
   try{const snap=await fb.f.getDoc(fb.f.doc(fb.db,'users',u.uid));let s=null;
     if(snap.exists()){try{s=JSON.parse(snap.data().state)}catch(e){}}
-    if(s&&s.stocks&&s.stocks.length===DEF.length){G=s;lastSort=-99;save()}else if(!load())newGame();
+    s=migrate(s);if(s){G=s;lastSort=-99;save()}else if(!load())newGame();
   }catch(e){if(!load())newGame();toast('저장된 잔고를 불러오지 못해 이 기기 저장본으로 시작해요')}
   render();cloudReady=true;pushCloud(true);startMail(u);
 }
@@ -644,7 +757,7 @@ const ENV='<svg viewBox="0 0 24 24" fill="none" stroke="#3182f6" stroke-width="2
 const when=m=>{const t=m.createdAt&&m.createdAt.toDate?m.createdAt.toDate():new Date();return t.toLocaleString('ko-KR',{month:'numeric',day:'numeric',hour:'2-digit',minute:'2-digit'})};
 const ms=m=>m.createdAt&&m.createdAt.toMillis?m.createdAt.toMillis():Date.now();
 function claimed(){if(!Array.isArray(G.claimed))G.claimed=[];return G.claimed}
-function unread(){return mails.filter(m=>!claimed().includes(m.id)).length}
+function unread(){return newMail}
 function badge(){const n=user?unread():0;$('badge').hidden=!n;$('badge').textContent=n>99?'99+':n}
 function stopMail(){if(unsubIn)unsubIn();if(unsubSent)unsubSent();unsubIn=unsubSent=null;mails=[];sent=[];firstMail=true;$('adminTab').hidden=true;badge()}
 function startMail(u){
@@ -652,14 +765,15 @@ function startMail(u){
   unsubIn=f.onSnapshot(f.query(col,f.where('to','in',['all',u.email])),snap=>{
     const before=unread();
     mails=snap.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=>ms(b)-ms(a));
-    if(!firstMail&&unread()>before)toast('새 우편이 도착했어요');
-    if(firstMail&&unread())toast(`받지 않은 우편이 ${unread()}개 있어요`);
-    firstMail=false;badge();renderMail();
+    autoClaim();firstMail=false;badge();renderMail();
   },()=>{mails=[];badge()});
   if(ADMINS.includes(u.email)){$('adminTab').hidden=false;
     unsubSent=f.onSnapshot(col,snap=>{sent=snap.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=>ms(b)-ms(a));renderSent()},()=>{})}
 }
-function claim(m){
+function autoClaim(){let tot=0,n=0;for(const m of mails){if(claimed().includes(m.id))continue;const a=Number(m.amount);if(a>0&&a<=1e9){claim(m,true);tot+=a;n++}}
+  if(n){newMail+=n;badge();toast(`운영자가 보낸 ${usd(tot)}가 내 계좌에 들어왔어요`)}}
+let newMail=0;
+function claim(m,quiet){
   if(claimed().includes(m.id))return;const amt=Number(m.amount);if(!(amt>0&&amt<=1e9))return;
   G.cash+=amt;claimed().push(m.id);
   G.log.unshift({t:`우편 수령 · ${String(m.title||'').slice(0,40)}`,d:`+${usd(amt)}`,c:'up',at:G.tick});
@@ -669,10 +783,10 @@ function renderMail(){
   if(!$('mdim').classList.contains('show'))return;
   const n=unread(),sum=mails.filter(m=>!claimed().includes(m.id)).reduce((a,m)=>a+Number(m.amount||0),0);
   if(!user){$('mTop').innerHTML='';$('mList').innerHTML='<li style="display:block" class="mute">로그인하면 운영자가 보낸 우편을 받을 수 있어요.</li>';return}
-  $('mTop').innerHTML=n?`<span>받을 수 있는 돈 <b class="up num">${esc(usd(sum))}</b></span><button class="pri" id="claimAll" style="min-height:36px">모두 받기</button>`:'';
+  const got=mails.reduce((a,m)=>a+(Number(m.amount)||0),0);$('mTop').innerHTML=mails.length?`<span class="mute">지금까지 받은 돈 <b class="up num">${esc(usd(got))}</b> · 운영자가 보내면 자동으로 계좌에 들어와요</span>`:'';
   $('mList').innerHTML=mails.length?mails.map(m=>{const done=claimed().includes(m.id);
     return `<li class="${done?'done':''}"><span class="env">${ENV}</span><span><b>${esc(m.title||'우편')}</b>${m.body?`<p>${esc(m.body)}</p>`:''}<small>운영자 · ${esc(when(m))}${m.to==='all'?' · 전체 발송':''}</small></span>
-      <span><span class="amt num">+${esc(usd(Number(m.amount)||0))}</span>${done?'<span class="got">받음</span>':`<button class="get" data-claim="${esc(m.id)}">받기</button>`}</span></li>`}).join('')
+      <span><span class="amt num">+${esc(usd(Number(m.amount)||0))}</span><span class="got">${done?'계좌에 들어옴':'처리 중'}</span></span></li>`}).join('')
     :'<li style="display:block" class="mute">아직 받은 우편이 없어요.</li>';
 }
 function renderSent(){
@@ -686,13 +800,11 @@ async function loadUsers(){
     $('uList').innerHTML=us.length?us.map(u=>`<button type="button" data-uid="${esc(u.name)}"><span>${esc(u.name)}</span><span class="mute num">${esc(usd(Number(u.worth)||0))}</span></button>`).join(''):'<div class="mute" style="padding:10px 12px;font-size:13px">아직 가입한 사람이 없어요</div>';
   }catch(e){$('uList').innerHTML='<div class="mute" style="padding:10px 12px;font-size:13px">사용자 목록을 불러오지 못했어요</div>'}
 }
-function openMail(){$('mdim').classList.add('show');renderMail();renderSent();setTimeout(()=>$('mClose').focus(),30)}
+function openMail(){newMail=0;badge();$('mdim').classList.add('show');renderMail();renderSent();setTimeout(()=>$('mClose').focus(),30)}
 function closeMail(){$('mdim').classList.remove('show')}
 $('goMail').addEventListener('click',openMail);
 $('mClose').addEventListener('click',closeMail);
 $('mdim').addEventListener('click',e=>{if(e.target===$('mdim'))closeMail()});
-$('mList').addEventListener('click',e=>{const b=e.target.closest('[data-claim]');if(b){const m=mails.find(x=>x.id===b.dataset.claim);if(m){claim(m);toast(`${usd(Number(m.amount))}를 받았어요`)}}});
-$('mTop').addEventListener('click',e=>{if(!e.target.closest('#claimAll'))return;let tot=0;for(const m of mails.filter(x=>!claimed().includes(x.id))){tot+=Number(m.amount)||0;claim(m)}toast(`${usd(tot)}를 받았어요`)});
 $('mTabs').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;$('mTabs').querySelectorAll('button').forEach(o=>o.classList.toggle('on',o===b));
   $('mIn').hidden=b.dataset.m!=='in';$('mAdmin').hidden=b.dataset.m!=='admin';if(b.dataset.m==='admin')loadUsers()});
 $('sTo').addEventListener('change',()=>{$('sIdWrap').hidden=$('sTo').value!=='one'});
