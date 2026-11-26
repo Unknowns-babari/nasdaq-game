@@ -78,6 +78,18 @@ td button{min-height:32px;padding:0 4px;font-size:13px;border:0;background:none;
 .side{display:grid;gap:16px;align-content:start}
 .side>section{margin:0}
 .help{font-size:13px;color:var(--mute);margin:8px 0 0}
+.me{color:#b9bcc3;font-size:14px;align-self:center}
+.gate{position:fixed;inset:0;z-index:20;background:var(--board);display:none;align-items:center;justify-content:center;padding:16px;overflow:auto}
+.gate.show{display:flex}
+.gcard{background:var(--bg);color:var(--ink);border-radius:16px;padding:28px;width:100%;max-width:380px}
+.gcard h2{font:400 32px/1.1 "Black Han Sans",sans-serif;margin:0 0 6px}
+.gtabs{display:flex;gap:6px;margin:16px 0}
+.gtabs button{flex:1}.gtabs button.on{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.gcard label{display:block;font-size:14px;font-weight:500;margin:12px 0 4px}
+.gcard input{width:100%;font:16px "IBM Plex Sans KR",sans-serif;min-height:44px;padding:0 12px;border:1px solid var(--line);border-radius:8px;background:var(--sel);color:var(--ink)}
+.gcard .go{width:100%;margin-top:18px;background:var(--up);color:#fff;border-color:var(--up)}
+.gcard .guest{width:100%;margin-top:8px;background:none}
+.gerr{color:var(--up);font-size:14px;min-height:22px;margin-top:8px}
 .toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 18px;border-radius:8px;font-size:15px;opacity:0;transition:opacity .2s;pointer-events:none;max-width:90vw}
 .toast.show{opacity:1}
 @media(max-width:1080px){main{grid-template-columns:230px minmax(0,1fr)}.side{grid-column:1/-1;grid-template-columns:repeat(auto-fit,minmax(280px,1fr))}}
@@ -96,6 +108,7 @@ td button{min-height:32px;padding:0 4px;font-size:13px;border:0;background:none;
     <button id="pause">일시정지</button>
     <button data-s="1" class="on">1배속</button><button data-s="4">4배속</button><button data-s="15">15배속</button>
     <button id="reset">새 게임</button>
+    <span class="me" id="me"></span><button id="logout" hidden>로그아웃</button>
   </div>
 </div></header>
 <div class="tape" aria-hidden="true"><div id="tape"></div></div>
@@ -123,6 +136,18 @@ td button{min-height:32px;padding:0 4px;font-size:13px;border:0;background:none;
     <section><h2>거래 내역</h2><ul class="news" id="log" style="max-height:200px"></ul></section>
   </div>
 </main>
+<div class="gate" id="gate"><form class="gcard" id="gform" autocomplete="on">
+  <h2>나스닥 실시간 모의투자</h2>
+  <div class="est">아이디와 비밀번호만 있으면 어느 기기에서든 내 잔고가 이어집니다.</div>
+  <div class="gtabs"><button type="button" id="tabIn" class="on">로그인</button><button type="button" id="tabUp">회원가입</button></div>
+  <label for="uid">아이디</label><input id="uid" name="username" autocomplete="username" autocapitalize="off" spellcheck="false" required>
+  <label for="pw">비밀번호</label><input id="pw" name="password" type="password" autocomplete="current-password" required>
+  <div id="pw2wrap" hidden><label for="pw2">비밀번호 확인</label><input id="pw2" type="password" autocomplete="new-password"></div>
+  <div class="help" id="ghelp">아이디는 영문 소문자·숫자·밑줄 3~20자, 비밀번호는 6자 이상</div>
+  <div class="gerr" id="gerr" role="alert"></div>
+  <button class="go" id="gogo" type="submit">로그인</button>
+  <button class="guest" id="guest" type="button">로그인 없이 체험하기 (이 기기에만 저장)</button>
+</form></div>
 <div class="toast" id="toast"></div>
 <span id="probe" style="display:none"></span>
 <script>
@@ -182,8 +207,9 @@ function newGame(){
     const f=s.ref/p;s.c=arr.map(b=>({o:r2(b.o*f),h:r2(b.h*f),l:r2(b.l*f),c:r2(b.c*f)}));s.p=s.ref;s.cur={o:s.p,h:s.p,l:s.p,c:s.p,n:0}});
   save();buildList();render();
 }
-function save(){try{localStorage.setItem(KEY,JSON.stringify(G))}catch(e){}}
-function load(){try{const s=JSON.parse(localStorage.getItem(KEY));if(s&&s.stocks&&s.stocks.length===DEF.length){G=s;return true}}catch(e){}return false}
+let UKEY=KEY,cloudDirty=false;
+function save(){cloudDirty=true;try{localStorage.setItem(UKEY,JSON.stringify(G))}catch(e){}}
+function load(){try{const s=JSON.parse(localStorage.getItem(UKEY));if(s&&s.stocks&&s.stocks.length===DEF.length){G=s;return true}}catch(e){}return false}
 
 function loop(){for(let k=0;k<speed;k++)tickOnce();if(G.tick%5<speed)save();render()}
 function start(){clearInterval(timer);timer=setInterval(loop,1000);paused=false;$('pause').textContent='일시정지';$('dot').classList.remove('off');$('status').textContent='장 진행 중 · '+speed+'배속'}
@@ -202,7 +228,7 @@ function trade(buy){
     const pl=amt-fee-h.a*q;G.cash+=amt-fee;h.q-=q;if(!h.q)delete G.hold[i];
     G.log.unshift({t:`${s.t} ${ip(q)}주 매도 @${usd(p)} · 실현손익 ${pl>=0?'+':'-'}${usd(Math.abs(pl))}`,c:'dn'});toast(`${s.name} ${ip(q)}주 매도 체결`);
   }
-  if(G.log.length>50)G.log.length=50;save();render();
+  if(G.log.length>50)G.log.length=50;save();render();pushCloud();
 }
 function maxBuy(){return Math.floor(G.cash/(G.stocks[G.sel].p*(1+FEE)))}
 let tt;function toast(m){const t=$('toast');t.textContent=m;t.classList.add('show');clearTimeout(tt);tt=setTimeout(()=>t.classList.remove('show'),1800)}
@@ -356,6 +382,65 @@ showQuota();
   const n=G.stocks.filter(s=>s.real).length;
   msg(n?`실제 시세가 반영된 종목 ${n}개 · 버튼을 눌러 최신 시세로 갱신하세요.`:'Alpha Vantage 연결됨 · 버튼을 눌러 실제 시세를 받아오세요.',true);
   setBtns(true);
+})();
+
+// ---- 로그인 (Firebase) ----
+// Firebase 콘솔 > 프로젝트 설정 > 내 앱(웹)의 firebaseConfig 값을 넣으세요. 이 값은 공개되어도 괜찮은 값입니다.
+const FIREBASE_CONFIG={apiKey:"AIzaSyAro1qM9-rWiX4L4tYBurnoWO556fqCg44",authDomain:"nasdaq-game.firebaseapp.com",projectId:"nasdaq-game",
+  storageBucket:"nasdaq-game.firebasestorage.app",messagingSenderId:"742933572510",appId:"1:742933572510:web:9716a4ae9cda62b03f848f"};
+const FBV='10.12.2',DOMAIN='@nasdaq-game.app';
+let fb=null,user=null,signup=false,cloudReady=false;
+const gate=$('gate');
+function gateMode(up){signup=up;$('tabIn').classList.toggle('on',!up);$('tabUp').classList.toggle('on',up);
+  $('pw2wrap').hidden=!up;$('pw').autocomplete=up?'new-password':'current-password';$('gogo').textContent=up?'가입하고 시작':'로그인';$('gerr').textContent=''}
+$('tabIn').addEventListener('click',()=>gateMode(false));
+$('tabUp').addEventListener('click',()=>gateMode(true));
+function authErr(c){return({'auth/invalid-credential':'아이디 또는 비밀번호가 틀렸어요.','auth/wrong-password':'아이디 또는 비밀번호가 틀렸어요.','auth/user-not-found':'없는 아이디예요. 회원가입을 해주세요.',
+  'auth/email-already-in-use':'이미 사용 중인 아이디예요.','auth/weak-password':'비밀번호는 6자 이상이어야 해요.','auth/too-many-requests':'시도가 너무 많아요. 잠시 후 다시 해주세요.',
+  'auth/network-request-failed':'인터넷 연결을 확인해 주세요.','auth/operation-not-allowed':'로그인 기능이 아직 켜지지 않았어요.'})[c]||('로그인 오류 ('+c+')')}
+$('gform').addEventListener('submit',async e=>{
+  e.preventDefault();const id=$('uid').value.trim().toLowerCase(),pw=$('pw').value;
+  if(!/^[a-z0-9_]{3,20}$/.test(id))return $('gerr').textContent='아이디는 영문 소문자·숫자·밑줄 3~20자로 해주세요.';
+  if(pw.length<6)return $('gerr').textContent='비밀번호는 6자 이상이어야 해요.';
+  if(signup&&pw!==$('pw2').value)return $('gerr').textContent='비밀번호 확인이 일치하지 않아요.';
+  if(!fb)return $('gerr').textContent='로그인 기능을 준비하는 중이에요. 잠시 후 다시 시도하거나 체험하기를 눌러주세요.';
+  $('gogo').disabled=true;$('gerr').textContent='';
+  try{await (signup?fb.a.createUserWithEmailAndPassword:fb.a.signInWithEmailAndPassword)(fb.auth,id+DOMAIN,pw)}
+  catch(err){$('gerr').textContent=authErr(err&&err.code)}
+  $('gogo').disabled=false;
+});
+$('guest').addEventListener('click',()=>{gate.classList.remove('show');$('me').textContent='체험 모드';$('logout').hidden=false;$('logout').textContent='로그인'});
+$('logout').addEventListener('click',async()=>{
+  if(user&&fb){await pushCloud(true);await fb.a.signOut(fb.auth)}else{gateMode(false);gate.classList.add('show')}});
+async function pushCloud(force){
+  if(!fb||!user||!cloudReady||(!cloudDirty&&!force))return;cloudDirty=false;
+  try{await fb.f.setDoc(fb.f.doc(fb.db,'users',user.uid),{state:JSON.stringify(G),updatedAt:fb.f.serverTimestamp()})}catch(e){cloudDirty=true}
+}
+setInterval(pushCloud,15000);
+document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='hidden')pushCloud()});
+async function onUser(u){
+  user=u;cloudReady=false;
+  if(!u){UKEY=KEY;if(!load())newGame();buildList();render();$('me').textContent='';$('logout').hidden=true;gateMode(false);gate.classList.add('show');return}
+  gate.classList.remove('show');
+  const name=(u.email||'').replace(DOMAIN,'');$('me').textContent=name+' 님';$('logout').hidden=false;$('logout').textContent='로그아웃';
+  UKEY=KEY+'-'+u.uid;
+  try{const snap=await fb.f.getDoc(fb.f.doc(fb.db,'users',u.uid));
+    let s=null;if(snap.exists()){try{s=JSON.parse(snap.data().state)}catch(e){}}
+    if(s&&s.stocks&&s.stocks.length===DEF.length){G=s;save()}else if(!load()){newGame()}
+  }catch(e){if(!load())newGame();toast('클라우드 저장을 불러오지 못해 이 기기 저장본으로 시작해요')}
+  buildList();render();cloudReady=true;pushCloud(true);
+}
+(async()=>{
+  if(!FIREBASE_CONFIG){$('ghelp').textContent='로그인 기능 설정 전이에요. 지금은 체험하기로 플레이해 주세요.';gate.classList.add('show');return}
+  gate.classList.add('show');
+  try{
+    const base='https://www.gstatic.com/firebasejs/'+FBV+'/';
+    const [app,a,f]=await Promise.all([import(base+'firebase-app.js'),import(base+'firebase-auth.js'),import(base+'firebase-firestore.js')]);
+    const fapp=app.initializeApp(FIREBASE_CONFIG);
+    fb={a,f,auth:a.getAuth(fapp),db:f.getFirestore(fapp)};
+    await a.setPersistence(fb.auth,a.browserLocalPersistence);
+    a.onAuthStateChanged(fb.auth,onUser);
+  }catch(e){$('ghelp').textContent='이 화면에서는 로그인을 쓸 수 없어요. 체험하기로 플레이해 주세요.'}
 })();
 
 if(!load())newGame();else{buildList();render()}
