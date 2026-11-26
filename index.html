@@ -1439,7 +1439,7 @@ setTimeout(syncPrices,1500);
 
 // ---- 실제 시세 연결 ----
 // REAL[i]={p,t,src}: 실제 시세가 들어온 종목은 그 가격을 그대로 따름 (레버리지·연동 ETF는 기초자산 움직임을 따라감)
-function setReal(i,p,src,ref,t){if(!(p>0)||i<0)return;const s=G.stocks[i];REAL[i]={p,t:t||Date.now(),src};if(ref>0)s.ref=ref;
+function setReal(i,p,src,ref,t){if(!(p>0)||i<0)return;const s=G.stocks[i];if(!REAL[i]){s.p=p;s.lr=0;s.cur={o:p,h:p,l:p,c:p,n:0}}REAL[i]={p,t:t||Date.now(),src};if(ref>0)s.ref=ref;
   if(BR[i])delete BR[i]}
 // 비트코인: 키 없는 공개 시세 (바이낸스 → 안 되면 코인베이스)
 function startBTC(){let got=false,ws;
