@@ -93,17 +93,24 @@ td svg{width:90px;height:26px;display:block;margin-left:auto}
 .acc{background:var(--page);border-radius:14px;padding:14px 16px;margin-bottom:18px}
 .acc .t{font-size:13px;color:var(--sub)}.acc .v{font-size:22px;font-weight:800;margin:2px 0 0;letter-spacing:-.02em}
 .acc .pl{font-size:13px;font-weight:600}
+.cashbox{background:var(--bg);border-radius:12px;padding:10px 12px;margin-top:12px}
+.cashbox span{display:block;font-size:13px;color:var(--sub)}.cashbox b{display:block;font-size:20px;font-weight:800;color:var(--blue);letter-spacing:-.02em}
+.cashbox small{font-size:12px;color:var(--sub)}
 .acc .row2{display:flex;justify-content:space-between;font-size:13px;margin-top:10px;padding-top:10px;border-top:1px solid var(--line)}
 .acc .reset{font-size:12px;color:var(--sub);min-height:28px;padding:0 6px;margin-top:6px}
 .sh{display:flex;align-items:baseline;justify-content:space-between}
 .sh h3{font-size:15px;font-weight:700;margin:0}.sh small{font-size:12px;color:var(--sub)}
 .mine{list-style:none;margin:8px 0 0;padding:0}
-.mine li{display:grid;grid-template-columns:32px minmax(0,1fr) auto auto;align-items:center;gap:10px;padding:9px 4px;border-radius:12px}
+.mine li{display:grid;grid-template-columns:32px minmax(0,1fr) auto;align-items:center;gap:4px 10px;padding:10px 4px;border-radius:12px}
+.mine li>span{min-width:0}
+.mine .q{overflow:hidden;text-overflow:ellipsis}
+.mine .r{grid-column:2;display:flex;gap:8px;align-items:baseline;flex-wrap:wrap;text-align:left!important}
+.mine .sellbtn{grid-column:3;grid-row:1/3}
 .mine li:hover{background:var(--page)}
 .mine .logo{width:32px;height:32px}
 .mine .nm{font-size:14px;font-weight:600;cursor:pointer;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;display:block;text-align:left;min-height:0;padding:0;border-radius:4px;max-width:100%}
 .mine .q{font-size:12px;color:var(--sub);display:block}
-.mine .r{text-align:right;font-size:14px;font-weight:600}.mine .r small{display:block;font-size:12px;font-weight:500}
+.mine .r{font-size:14px;font-weight:600}.mine .r small{font-size:12px;font-weight:600}
 .sellbtn{background:var(--dnbg);color:var(--dn);font-weight:700;font-size:13px;padding:0 10px;min-height:32px}
 .sellbtn:hover{background:var(--dn);color:#fff}
 .add{display:flex;align-items:center;gap:10px;color:var(--ink2);font-size:14px;padding:8px 4px;width:100%;min-height:44px}
@@ -131,6 +138,7 @@ td svg{width:90px;height:26px;display:block;margin-left:auto}
 .pos span{display:block;font-size:12px;color:var(--sub)}.pos b{font-size:16px;font-weight:700}
 .act{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:14px}
 .act button{min-height:52px;font-size:16px;font-weight:700;border-radius:14px;color:#fff}
+.optbtn{width:100%;margin-top:8px;min-height:48px;border-radius:14px;background:var(--soft);font-weight:700;font-size:15px}
 .sell{background:var(--dn)}.buy{background:var(--up)}.sell:hover,.buy:hover{filter:brightness(.93)}
 /* 우편함 */
 .mailbtn{position:relative}
@@ -160,6 +168,18 @@ td svg{width:90px;height:26px;display:block;margin-left:auto}
 .ulist button{display:flex;justify-content:space-between;width:100%;padding:8px 12px;border-radius:0;font-size:14px;min-height:40px;border-bottom:1px solid var(--line)}
 .ulist button:hover{background:var(--page)}
 .sect{font-size:14px;font-weight:700;margin:20px 0 4px}
+/* 옵션 */
+.osheet{max-width:620px;max-height:calc(100vh - 32px);overflow:auto}
+.otabs{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0 10px}
+.oqty{display:flex;align-items:center;gap:8px;margin:8px 0;font-size:14px;font-weight:600}
+.oqty button{width:36px;height:36px;min-height:36px;border-radius:50%;background:var(--soft);font-size:18px}
+.oqty input{width:70px;font:inherit;font-size:16px;text-align:center;border:1px solid var(--soft);border-radius:10px;padding:6px;background:var(--page);color:var(--ink)}
+.otable td,.otable th{padding:8px 6px}
+.otable tr.atm td{background:var(--page)}
+.obuy{background:var(--up);color:#fff;font-weight:700;font-size:13px;padding:0 12px;min-height:32px}
+.obuy.put{background:var(--dn)}
+.okind{font-size:11px;font-weight:700;padding:1px 6px;border-radius:5px;margin-left:4px}
+.okind.C{background:var(--upbg);color:var(--up)}.okind.P{background:var(--dnbg);color:var(--dn)}
 /* 주문 시트 */
 .sheetdim{z-index:35}
 .sheet{background:var(--card);width:100%;max-width:440px;border-radius:22px;padding:24px 22px}
@@ -168,7 +188,9 @@ td svg{width:90px;height:26px;display:block;margin-left:auto}
 .qty button{width:46px;height:46px;border-radius:50%;background:var(--soft);font-size:22px;font-weight:600;flex:none}
 .qty input{font-weight:800;font-size:32px;line-height:1;font-family:inherit;text-align:center;border:0;background:none;color:var(--ink);width:100%;letter-spacing:-.03em}
 .qty input::-webkit-inner-spin-button{appearance:none}
-.chips{display:flex;gap:6px}.chips button{flex:1;background:var(--soft);font-size:14px;font-weight:600}
+.avail{display:flex;justify-content:space-between;align-items:baseline;background:var(--page);border-radius:12px;padding:10px 14px;margin-bottom:8px;font-size:14px}
+.avail b{font-size:17px;color:var(--blue)}
+.chips{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}.chips button{background:var(--soft);font-size:14px;font-weight:700;padding:6px 4px;line-height:1.25}.chips button small{display:block;font-size:11px;font-weight:500;color:var(--sub);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .sum{margin:16px 0;display:grid;gap:7px;font-size:15px}
 .sum div{display:flex;justify-content:space-between}
 .sum .big{font-size:16px;font-weight:700;padding-top:8px;border-top:1px solid var(--line)}
@@ -224,7 +246,7 @@ td svg{width:90px;height:26px;display:block;margin-left:auto}
     <div class="rtabs" role="tablist"><button class="on" data-v="chart">실시간 차트</button><button data-v="log">내 거래 내역</button></div>
     <div id="vChart">
       <div class="filters">
-        <div class="group" id="fSec"><button class="on" data-f="all">전체</button><button data-f="etf">ETF</button><button data-f="hot">급등·테마</button><button data-f="semi">반도체</button><button data-f="big">빅테크</button><button data-f="soft">소프트웨어</button><button data-f="bio">헬스케어</button><button data-f="cons">소비재</button><button data-f="ind">산업·에너지</button><button data-f="etc">기타</button></div>
+        <div class="group" id="fSec"><button class="on" data-f="all">전체</button><button data-f="etf">ETF</button><button data-f="hot">급등·테마</button><button data-f="lev">레버리지·인버스</button><button data-f="semi">반도체</button><button data-f="big">빅테크</button><button data-f="soft">소프트웨어</button><button data-f="bio">헬스케어</button><button data-f="cons">소비재</button><button data-f="ind">산업·에너지</button><button data-f="etc">기타</button></div>
         <div class="group" id="fSort"><button class="on" data-o="abs">변동 큰 순</button><button data-o="fall">하락률 높은 순</button><button data-o="rise">상승률 높은 순</button><button data-o="price">가격 높은 순</button></div>
       </div>
       <table><thead><tr><th class="rk">순위</th><th class="l">종목</th><th>현재가</th><th>등락률</th><th class="hide-s">최근 흐름</th><th class="hide-s">변동성</th><th class="l hide-s">산업</th><th class="hide-s">내 보유</th></tr></thead><tbody id="tbody"></tbody></table>
@@ -237,10 +259,14 @@ td svg{width:90px;height:26px;display:block;margin-left:auto}
 
 <aside class="side" id="side">
   <div class="acc"><div class="t">내 총자산</div><div class="v num" id="total"></div><div class="pl num" id="pl"></div>
-    <div class="row2"><span class="mute">주문 가능</span><b class="num" id="cash"></b></div></div>
+    <div class="cashbox"><span>주문 가능 금액</span><b class="num" id="cash"></b><small>주식·옵션을 살 때 쓸 수 있는 현금이에요</small></div>
+    <div class="row2"><span class="mute">주식 평가금액</span><b class="num" id="stockV"></b></div>
+    <div class="row2" style="margin-top:4px;padding-top:0;border:0"><span class="mute">옵션 평가금액</span><b class="num" id="optV"></b></div></div>
   <div class="sh"><h3>내 주식 TOP 10</h3><small>평가금액 순</small></div>
   <ul class="mine" id="mine"></ul>
   <button class="add" id="addBtn"><i>+</i>주식 사러 가기</button>
+  <div class="sh" style="margin-top:14px"><h3>내 옵션</h3><small>만기 순</small></div>
+  <ul class="mine" id="myOpts"></ul>
 </aside>
 </div>
 
@@ -253,6 +279,7 @@ td svg{width:90px;height:26px;display:block;margin-left:auto}
   <div class="ctl"><span class="mute" style="font-size:13px">1칸 = 15초 · 차트에 마우스를 올리면 가격이 보여요</span><div class="seg"><button data-c="line" class="on">라인</button><button data-c="candle">캔들</button></div></div>
   <div class="pos" id="pos"></div>
   <div class="act"><button class="sell" id="openSell">판매하기</button><button class="buy" id="openBuy">구매하기</button></div>
+  <button class="optbtn" id="openOpt">옵션 거래하기 <span class="mute">콜·풋</span></button>
 </div></div>
 
 <div class="dim" id="mdim"><div class="panel mpanel" role="dialog" aria-modal="true" aria-labelledby="mTitle">
@@ -279,11 +306,22 @@ td svg{width:90px;height:26px;display:block;margin-left:auto}
   </div>
 </div></div>
 
+<div class="dim sheetdim" id="odim"><div class="sheet osheet" role="dialog" aria-modal="true" aria-labelledby="oTitle">
+  <div class="phead" style="margin-bottom:4px"><div><h2 id="oTitle" style="margin:0"></h2><div class="mute num" id="oPrice" style="font-size:14px"></div></div><button class="x" id="oClose" aria-label="닫기">×</button></div>
+  <div class="otabs"><div class="seg" id="oKind"><button class="on" data-k="C">콜 · 오를 때 수익</button><button data-k="P">풋 · 내릴 때 수익</button></div>
+    <div class="seg" id="oExp"><button data-e="180" class="on">3분</button><button data-e="600">10분</button><button data-e="1800">30분</button></div></div>
+  <div class="avail"><span class="mute">주문 가능 금액</span><b class="num" id="oCash"></b></div>
+  <div class="oqty"><span>계약 수</span><button id="oMinus" aria-label="1계약 빼기">−</button><input id="oQ" type="number" min="1" value="1" inputmode="numeric" aria-label="계약 수"><button id="oPlus" aria-label="1계약 더하기">+</button><small class="mute">1계약 = 100주</small></div>
+  <table class="otable"><thead><tr><th class="l">행사가</th><th>1계약 가격</th><th class="hide-s">손익분기</th><th class="hide-s">수익 조건</th><th></th></tr></thead><tbody id="oBody"></tbody></table>
+  <p class="note">옵션은 만기에 행사가보다 주가가 유리해야 가치가 남아요. 만기까지 그렇지 못하면 낸 돈을 모두 잃어요. 가격은 게임용 블랙-숄즈 계산값이고, 살 때 4%·팔 때 4% 스프레드와 계약당 수수료 $0.65가 붙어요. 만기가 되면 자동 정산돼요.</p>
+</div></div>
+
 <div class="dim sheetdim" id="sdim"><div class="sheet" role="dialog" aria-modal="true" aria-labelledby="shTitle">
   <h2 id="shTitle"></h2><div class="mute num" id="shPrice"></div>
   <div class="qty"><button id="minus" aria-label="1주 빼기">−</button><input id="q" type="number" min="1" step="1" inputmode="numeric" aria-label="수량"><button id="plus" aria-label="1주 더하기">+</button></div>
   <div class="mute" style="text-align:center;font-size:14px;margin-bottom:14px" id="shMax"></div>
-  <div class="chips"><button data-p=".1">10%</button><button data-p=".25">25%</button><button data-p=".5">50%</button><button data-p="1">최대</button></div>
+  <div class="avail" id="shAvail"></div>
+  <div class="chips" id="shChips"></div>
   <div class="sum" id="shSum"></div>
   <button class="confirm" id="shGo"></button>
   <button style="width:100%;margin-top:8px;color:var(--sub);min-height:44px" id="shClose">닫기</button>
@@ -308,7 +346,7 @@ td svg{width:90px;height:26px;display:block;margin-left:auto}
 <script>
 {
 const START=100000,FEE=.001,KEY='nasdaqlive1',PER=15;
-// 나스닥 100 전 종목 + ETF + 급등·테마주: 티커, 이름, 업종, 시작가(2026-11-26 StockAnalysis.com 조회), 일간 변동성, 베타, 그룹
+// 나스닥 100 + ETF + 급등·테마주 + 레버리지·인버스 ETF(기초자산, 배수): 티커, 이름, 업종, 시작가(2026-11-26 StockAnalysis.com 조회), 일간 변동성, 베타, 그룹
 const DEF=[
  ['AAPL','애플','IT 기기',356.27,0.02,1.15,'big'],
  ['NVDA','엔비디아','반도체',162.85,0.032,1.5,'semi'],
@@ -422,12 +460,6 @@ const DEF=[
  ['TLT','미국 장기국채 20년+','ETF·채권',79.38,0.01,-0.3,'etf'],
  ['GLD','SPDR 금','ETF·원자재',355.45,0.012,0.1,'etf'],
  ['IBIT','아이셰어즈 비트코인','ETF·코인',35.1,0.032,1.2,'etf'],
- ['TQQQ','나스닥100 3배','ETF·레버리지',41.2,0.04,3.3,'etf'],
- ['SQQQ','나스닥100 -3배','ETF·인버스',39.68,0.04,-3.3,'etf'],
- ['SOXL','반도체 3배','ETF·레버리지',30.88,0.07,4.5,'etf'],
- ['SOXS','반도체 -3배','ETF·인버스',58.4,0.07,-4.5,'etf'],
- ['TSLL','테슬라 2배','ETF·레버리지',11.17,0.075,3.6,'etf'],
- ['NVDL','엔비디아 2배','ETF·레버리지',17.83,0.06,3,'etf'],
  ['GME','게임스탑','밈주식',23.89,0.06,1.8,'hot'],
  ['AMC','AMC 엔터테인먼트','밈주식',2.89,0.06,1.8,'hot'],
  ['IONQ','아이온큐','양자컴퓨터',20.72,0.06,1.8,'hot'],
@@ -449,7 +481,61 @@ const DEF=[
  ['NIO','니오','전기차',2.9,0.06,1.8,'hot'],
  ['AKAN','아칸다','급등 소형주',5.48,0.12,1.8,'hot'],
  ['LVWR','라이브와이어','급등 소형주',1.41,0.1,1.8,'hot'],
- ['ANF','애버크롬비앤피치','급등주',176.56,0.05,1.8,'hot']];
+ ['ANF','애버크롬비앤피치','급등주',176.56,0.05,1.8,'hot'],
+ ['DIA','SPDR 다우존스','ETF·지수',481.08,0.012,1,'etf'],
+ ['XLK','기술주 섹터 ETF','ETF·섹터',164.74,0.012,1,'etf'],
+ ['XLF','금융주 섹터 ETF','ETF·섹터',54.57,0.012,1,'etf'],
+ ['XBI','바이오테크 ETF','ETF·섹터',150.55,0.012,1,'etf'],
+ ['XLE','에너지 섹터 ETF','ETF·섹터',60.51,0.012,1,'etf'],
+ ['GDX','금광주 ETF','ETF·원자재',81.64,0.012,1,'etf'],
+ ['EWY','한국 MSCI ETF','ETF·국가',137.01,0.012,1,'etf'],
+ ['QLD','나스닥100 2배','ETF·레버리지',88.03,0.026,2.0,'lev','QQQ',2.0],
+ ['TQQQ','나스닥100 3배','ETF·레버리지',41.2,0.039,3.0,'lev','QQQ',3.0],
+ ['PSQ','나스닥100 -1배','ETF·인버스',25.85,0.013,-1.0,'lev','QQQ',-1.0],
+ ['QID','나스닥100 -2배','ETF·인버스',14.55,0.026,-2.0,'lev','QQQ',-2.0],
+ ['SQQQ','나스닥100 -3배','ETF·인버스',39.68,0.039,-3.0,'lev','QQQ',-3.0],
+ ['SSO','S&P500 2배','ETF·레버리지',69.48,0.022,2.0,'lev','SPY',2.0],
+ ['UPRO','S&P500 3배','ETF·레버리지',147.05,0.033,3.0,'lev','SPY',3.0],
+ ['SPXL','S&P500 3배 (Direxion)','ETF·레버리지',281.52,0.033,3.0,'lev','SPY',3.0],
+ ['SH','S&P500 -1배','ETF·인버스',32.66,0.011,-1.0,'lev','SPY',-1.0],
+ ['SDS','S&P500 -2배','ETF·인버스',54.64,0.022,-2.0,'lev','SPY',-2.0],
+ ['SPXU','S&P500 -3배','ETF·인버스',35.41,0.033,-3.0,'lev','SPY',-3.0],
+ ['UDOW','다우 3배','ETF·레버리지',69.83,0.036,3.0,'lev','DIA',3.0],
+ ['SDOW','다우 -3배','ETF·인버스',23.91,0.036,-3.0,'lev','DIA',-3.0],
+ ['TNA','러셀2000 3배','ETF·레버리지',56.42,0.048,3.0,'lev','IWM',3.0],
+ ['URTY','러셀2000 3배 (ProShares)','ETF·레버리지',64.63,0.048,3.0,'lev','IWM',3.0],
+ ['TZA','러셀2000 -3배','ETF·인버스',48.69,0.048,-3.0,'lev','IWM',-3.0],
+ ['TECL','기술주 3배','ETF·레버리지',196.0,0.036,3.0,'lev','XLK',3.0],
+ ['TECS','기술주 -3배','ETF·인버스',62.35,0.036,-3.0,'lev','XLK',-3.0],
+ ['SOXL','반도체 3배','ETF·레버리지',30.88,0.072,3.0,'lev','SMH',3.0],
+ ['SOXS','반도체 -3배','ETF·인버스',58.4,0.072,-3.0,'lev','SMH',-3.0],
+ ['USD','반도체 2배 (ProShares)','ETF·레버리지',73.21,0.048,2.0,'lev','SMH',2.0],
+ ['FAS','금융주 3배','ETF·레버리지',160.58,0.036,3.0,'lev','XLF',3.0],
+ ['FAZ','금융주 -3배','ETF·인버스',34.58,0.036,-3.0,'lev','XLF',-3.0],
+ ['LABU','바이오 3배','ETF·레버리지',223.49,0.036,3.0,'lev','XBI',3.0],
+ ['LABD','바이오 -3배','ETF·인버스',7.62,0.036,-3.0,'lev','XBI',-3.0],
+ ['NUGT','금광주 2배','ETF·레버리지',121.08,0.024,2.0,'lev','GDX',2.0],
+ ['DUST','금광주 -2배','ETF·인버스',46.67,0.024,-2.0,'lev','GDX',-2.0],
+ ['TMF','장기국채 3배','ETF·레버리지',29.7,0.03,3.0,'lev','TLT',3.0],
+ ['TMV','장기국채 -3배','ETF·인버스',43.51,0.03,-3.0,'lev','TLT',-3.0],
+ ['ERX','에너지 2배','ETF·레버리지',127.8,0.024,2.0,'lev','XLE',2.0],
+ ['KORU','한국 3배','ETF·레버리지',10.89,0.036,3.0,'lev','EWY',3.0],
+ ['BITU','비트코인 2배','ETF·레버리지',12.51,0.064,2.0,'lev','IBIT',2.0],
+ ['NVDU','엔비디아 2배 (Direxion)','ETF·레버리지',128.59,0.064,2.0,'lev','NVDA',2.0],
+ ['NVDL','엔비디아 2배 (GraniteShares)','ETF·레버리지',17.83,0.064,2.0,'lev','NVDA',2.0],
+ ['TSLL','테슬라 2배','ETF·레버리지',11.17,0.08,2.0,'lev','TSLA',2.0],
+ ['MSFU','마이크로소프트 2배','ETF·레버리지',42.01,0.04,2.0,'lev','MSFT',2.0],
+ ['AAPU','애플 2배','ETF·레버리지',46.78,0.04,2.0,'lev','AAPL',2.0],
+ ['AMZU','아마존 2배','ETF·레버리지',33.47,0.04,2.0,'lev','AMZN',2.0],
+ ['GGLL','알파벳 2배','ETF·레버리지',83.57,0.04,2.0,'lev','GOOGL',2.0],
+ ['METU','메타 2배','ETF·레버리지',22.73,0.04,2.0,'lev','META',2.0],
+ ['AMUU','AMD 2배','ETF·레버리지',204.96,0.07,2.0,'lev','AMD',2.0],
+ ['AVL','브로드컴 2배','ETF·레버리지',30.8,0.064,2.0,'lev','AVGO',2.0],
+ ['MUU','마이크론 2배','ETF·레버리지',25.43,0.07,2.0,'lev','MU',2.0],
+ ['PLTU','팔란티어 2배','ETF·레버리지',62.28,0.09,2.0,'lev','PLTR',2.0],
+ ['CONL','코인베이스 2배','ETF·레버리지',4.06,0.1,2.0,'lev','COIN',2.0],
+ ['MSTU','스트래티지 2배','ETF·레버리지',31.37,0.11,2.0,'lev','MSTR',2.0],
+ ['LOFF','스페이스X 2배','ETF·레버리지',14.97,0.09,2.0,'lev','SPCX',2.0]];
 const POS=['{n} 목표주가 상향 리포트','{n} 신제품 반응 기대 이상','{n} 대형 고객사 계약 소식','{s} 업종 수요 증가 전망','{n} 실적 기대감에 매수세 유입'];
 const NEG=['{n} 목표주가 하향 리포트','{n} 공급망 차질 우려','{s} 업종 규제 강화 검토','{n} 대량 매도 물량 출회','{s} 업종 수요 둔화 전망'];
 const MKT=[['연준 금리 인하 기대감 확산',1],['기술주로 자금 유입 전망',1],['국채 금리 급등, 기술주 부담',-1],['경기 둔화 우려 보고서',-1]];
@@ -465,6 +551,10 @@ const r2=p=>Math.max(.01,Math.round(p*100)/100);
 const color=i=>{let h=0;for(const ch of DEF[i][0])h=(h*31+ch.charCodeAt(0))%360;return `hsl(${h},55%,40%)`};
 const logo=i=>`<span class="logo" style="background:${color(i)}">${esc(DEF[i][0].slice(0,4))}</span>`;
 const UP='#f04452',DN='#3182f6';
+const UL=DEF.map(d=>d[6]==='lev'?DEF.findIndex(x=>x[0]===d[7]):null);
+const NOLEV=DEF.map((d,i)=>d[6]==='lev'?-1:i).filter(i=>i>=0);
+const cusd=n=>{const a=Math.abs(n),sg=n<0?'-':'';return a>=1e9?sg+'$'+(a/1e9).toFixed(2)+'B':a>=1e6?sg+'$'+(a/1e6).toFixed(2)+'M':a>=1e4?sg+'$'+(a/1e3).toFixed(1)+'K':usd(n)};
+const csgn=n=>(n>0?'+':'')+cusd(n);
 let showAll=false,G,timer=null,speed=1,paused=false,chartType='line',hoverX=null,sheet=null,detailOpen=false,fSec='all',fSort='abs',query='',orderSig='',lastSort=-99;
 
 // ---- 시장 엔진 ----
@@ -473,26 +563,30 @@ function tickOnce(){
   if(Math.random()<.01)G.regime=(Math.random()-.5)*.0003;
   const zm=norm()*.0007+G.regime;
   G.stocks.forEach((s,i)=>{
+    if(UL[i]!=null)return;
     let eff=0;
     for(const e of G.pending){if(G.tick>=e.from&&G.tick<e.to&&(e.all||e.id===i||e.sec===s.sec))eff+=(e.all||e.id===i?e.v:e.v*.6)/(e.to-e.from)}
-    s.p=r2(s.p*Math.exp(s.beta*zm+s.vol*.065*norm()+eff));
-    const c=s.cur;c.h=Math.max(c.h,s.p);c.l=Math.min(c.l,s.p);c.c=s.p;c.n++;
-    if(c.n>=PER){s.c.push({o:c.o,h:c.h,l:c.l,c:c.c});if(s.c.length>100)s.c.shift();s.cur={o:s.p,h:s.p,l:s.p,c:s.p,n:0}}
+    const lr=s.beta*zm+s.vol*.065*norm()+eff;s.lr=lr;s.p=r2(s.p*Math.exp(lr));bar(s);
   });
+  G.stocks.forEach((s,i)=>{if(UL[i]==null)return;const u=G.stocks[UL[i]];s.p=r2(s.p*Math.exp(DEF[i][8]*(u.lr||0)));bar(s)});
+  settleOptions();
   G.pending=G.pending.filter(e=>e.to>G.tick);
   if(G.tick>=G.nextNews){makeNews();G.nextNews=G.tick+25+Math.floor(Math.random()*40)}
 }
+function bar(s){const c=s.cur;c.h=Math.max(c.h,s.p);c.l=Math.min(c.l,s.p);c.c=s.p;c.n++;
+  if(c.n>=PER){s.c.push({o:c.o,h:c.h,l:c.l,c:c.c});if(s.c.length>100)s.c.shift();s.cur={o:s.p,h:s.p,l:s.p,c:s.p,n:0}}}
 function makeNews(){
   const rumor=Math.random()<.4,p=rumor?.5:.88;let e;
   if(Math.random()<.2){const m=MKT[Math.floor(Math.random()*MKT.length)];e={all:1,v:m[1]*(.005+Math.random()*.01),t:m[0]}}
-  else{const hot=DEF.map((d,i)=>d[6]==='hot'?i:-1).filter(i=>i>=0),pickHot=Math.random()<.35,i=pickHot?hot[Math.floor(Math.random()*hot.length)]:Math.floor(Math.random()*G.stocks.length),s=G.stocks[i],good=Math.random()<.52,boost=pickHot?2.2:1;
+  else{const hot=DEF.map((d,i)=>d[6]==='hot'?i:-1).filter(i=>i>=0),pickHot=Math.random()<.35,i=pickHot?hot[Math.floor(Math.random()*hot.length)]:NOLEV[Math.floor(Math.random()*NOLEV.length)],s=G.stocks[i],good=Math.random()<.52,boost=pickHot?2.2:1;
     const tpl=(good?POS:NEG)[Math.floor(Math.random()*5)],wide=tpl.includes('{s}');
     e={id:wide?-1:i,sec:wide?s.sec:null,v:(good?1:-1)*(.015+Math.random()*.045)*boost,t:tpl.replace('{n}',s.name).replace('{s}',s.sec)}}
   if(Math.random()>p)e.v=-e.v*.4;
   e.from=G.tick+6;e.to=e.from+PER;G.pending.push(e);
   G.news.unshift({t:e.t,r:rumor,at:G.tick});if(G.news.length>40)G.news.length=40;
 }
-function worth(){return G.cash+Object.entries(G.hold).reduce((a,[i,h])=>a+h.q*G.stocks[i].p,0)}
+function stockVal(){return Object.entries(G.hold).reduce((a,[i,h])=>a+h.q*G.stocks[i].p,0)}
+function worth(){return G.cash+stockVal()+optVal()}
 function newGame(quiet){
   const keepClaimed=G&&Array.isArray(G.claimed)?G.claimed:[];
   G={tick:0,cash:START,hold:{},news:[],log:[],pending:[],regime:0,sel:1,nextNews:12,claimed:keepClaimed,
@@ -513,6 +607,7 @@ function migrate(s){
     const f=x.p/y.c[y.c.length-1].c;y.c=y.c.map(b=>({o:r2(b.o*f),h:r2(b.h*f),l:r2(b.l*f),c:r2(b.c*f)}));y.cur={o:x.p,h:x.p,l:x.p,c:x.p,n:0}});
   n.cash=s.cash;n.log=s.log||[];n.news=[];n.claimed=s.claimed||[];n.hold={};
   for(const [i,h] of Object.entries(s.hold||{}))if(map[i]!=null)n.hold[map[i]]=h;
+  n.opts=(s.opts||[]).filter(o=>map[o.i]!=null).map(o=>({...o,i:map[o.i]}));
   n.sel=map[s.sel]!=null?map[s.sel]:1;return n;
 }
 function fill(x){const d=DEF.find(d=>d[0]===x.t);const base=[];let p=100;for(let k=0;k<60;k++){const o=p;let h=o,l=o;for(let j=0;j<PER;j++){p*=Math.exp(x.vol*.065*norm());h=Math.max(h,p);l=Math.min(l,p)}base.push({o,h,l,c:p})}
@@ -553,6 +648,9 @@ function renderSheet(){
   $('shTitle').textContent=`${s.name} ${buy?'구매하기':'판매하기'}`;
   $('shPrice').textContent=`현재가 ${usd(s.p)} · 실시간으로 바뀌어요`;
   $('shMax').textContent=buy?`최대 ${ip(maxBuy())}주 살 수 있어요`:`${ip(h?h.q:0)}주 갖고 있어요 · 평균 ${h?usd(h.a):'-'}`;
+  $('shAvail').innerHTML=buy?`<span class="mute">주문 가능 금액</span><b class="num">${esc(usd(G.cash))}</b>`:`<span class="mute">판매 가능 수량</span><b class="num">${ip(h?h.q:0)}주</b>`;
+  $('shChips').innerHTML=[[.1,'10%'],[.25,'25%'],[.5,'50%'],[1,'최대']].map(([p,l])=>{const n=chipQty(p);
+    return `<button data-p="${p}">${l}<small>${buy?esc(cusd(G.cash*p))+' · ':''}${ip(n)}주</small></button>`}).join('');
   const rows=buy?[['주문 금액',usd(amt)],['수수료',usd(fee)],['총 결제 금액',usd(amt+fee),1]]
     :[['판매 금액',usd(amt)],['수수료',usd(fee)],['예상 손익',h?sgn(amt-fee-h.a*n):'-',0,h?cls(amt-fee-h.a*n):''],['받을 금액',usd(amt-fee),1]];
   $('shSum').innerHTML=rows.map(r=>`<div class="${r[2]?'big':''}"><span class="mute">${r[0]}</span><span class="num ${r[3]||''}">${r[1]}</span></div>`).join('');
@@ -577,9 +675,9 @@ function spark(v,color,fill){
 function ago(at){const sec=Math.max(0,G.tick-at);return sec<60?sec+'초 전':Math.floor(sec/60)+'분 전'}
 function render(){
   const w=worth(),pl=w-START;
-  $('total').textContent=usd(w);$('pl').textContent=`${sgn(pl)} (${pct(pl/START)})`;$('pl').className='pl num '+cls(pl);$('cash').textContent=usd(G.cash);
+  $('total').textContent=usd(w);$('stockV').textContent=usd(stockVal());$('optV').textContent=usd(optVal());$('pl').textContent=`${sgn(pl)} (${pct(pl/START)})`;$('pl').className='pl num '+cls(pl);$('cash').textContent=usd(G.cash);
   $('clock').textContent=new Date().toLocaleTimeString('ko-KR',{hour:'2-digit',minute:'2-digit',second:'2-digit'})+' 기준';
-  renderMarket();renderTable();renderMine();renderTicker();
+  renderMarket();renderTable();renderMine();renderMyOpts();renderTicker();renderOptSheet();
   if(!$('vLog').hidden)renderLog();
   $('news').innerHTML=G.news.length?G.news.slice(0,5).map(n=>`<li><span class="tag ${n.r?'r':'f'}">${n.r?'루머':'속보'}</span><span>${esc(n.t)} <span class="mute">${ago(n.at)}</span></span></li>`).join(''):'<li class="mute">곧 첫 뉴스가 들어와요</li>';
   if(detailOpen)renderDetail();renderSheet();
@@ -618,8 +716,8 @@ function renderMine(){
     ul.innerHTML=hs.length?hs.map(x=>`<li data-i="${x.i}">${logo(x.i)}<span><button class="nm" data-open="${x.i}">${esc(DEF[x.i][1])}</button><span class="q num"></span></span><span class="r num"></span><button class="sellbtn" data-sell="${x.i}" aria-label="${esc(DEF[x.i][1])} 매도">매도</button></li>`).join('')
       :'<li class="minempty">아직 산 주식이 없어요.<br>실시간 차트에서 종목을 눌러 구매해 보세요.</li>'}
   for(const li of ul.children){if(!li.dataset.i)continue;const i=+li.dataset.i,h=G.hold[i];if(!h)continue;const p=G.stocks[i].p,plv=(p-h.a)*h.q;
-    li.querySelector('.q').textContent=`${ip(h.q)}주 · ${usd(h.q*p)}`;
-    li.querySelector('.r').innerHTML=`${esc(usd(p))}<small class="${cls(plv)}">${esc(sgn(plv))} (${esc(pct(p/h.a-1))})</small>`}
+    li.querySelector('.q').textContent=`${ip(h.q)}주 · 평가 ${cusd(h.q*p)}`;
+    li.querySelector('.r').innerHTML=`<span>${esc(usd(p))}</span><small class="${cls(plv)}">${esc(csgn(plv))} (${esc(pct(p/h.a-1))})</small>`}
 }
 function renderTicker(){
   const parts=[0,1,2].map(k=>{const x=idxInfo(k,1);return `<span>${IDX[k][0]}<b class="num">${x.last.toFixed(2)}</b><span class="${cls(x.chg)} num">${pct(x.chg)}</span></span>`});
@@ -676,6 +774,56 @@ cv.addEventListener('pointerleave',()=>{hoverX=null;draw()});
 const ro=new ResizeObserver(()=>G&&detailOpen&&draw());ro.observe(cv);
 const mo=new MutationObserver(()=>G&&detailOpen&&draw());mo.observe(document.documentElement,{attributes:true,attributeFilter:['data-theme']});
 
+// ---- 옵션 ----
+const OFEE=.65,SPREAD=.04;
+let oKind='C',oExp=180;
+function ncdf(x){const t=1/(1+.2316419*Math.abs(x)),d=.3989423*Math.exp(-x*x/2),p=d*t*(.3193815+t*(-.3565638+t*(1.781478+t*(-1.821256+t*1.330274))));return x>0?1-p:p}
+function oMid(i,k,K,T){const S=G.stocks[i].p;if(T<=0)return Math.max(0,k==='C'?S-K:K-S);
+  const sg=G.stocks[i].vol*.065*1.25*Math.sqrt(T),d1=(Math.log(S/K)+sg*sg/2)/sg,d2=d1-sg;
+  return k==='C'?S*ncdf(d1)-K*ncdf(d2):K*ncdf(-d2)-S*ncdf(-d1)}
+const oAsk=m=>Math.max(.01,m*(1+SPREAD)+.01),oBid=m=>Math.max(0,m*(1-SPREAD)-.01);
+function opts(){if(!Array.isArray(G.opts))G.opts=[];return G.opts}
+function optVal(){return opts().reduce((a,o)=>a+oMid(o.i,o.k,o.K,o.exp-G.tick)*100*o.q,0)}
+function strikes(S){const st=S<5?.5:S<25?1:S<100?2.5:S<250?5:S<1000?10:25,a=Math.round(S/st)*st;return [-4,-3,-2,-1,0,1,2,3,4].map(k=>+(a+k*st).toFixed(2)).filter(x=>x>0)}
+function settleOptions(){const os=opts();for(let j=os.length-1;j>=0;j--){const o=os[j];if(G.tick<o.exp)continue;
+  const S=G.stocks[o.i].p,v=Math.max(0,o.k==='C'?S-o.K:o.K-S)*100*o.q;G.cash+=v;os.splice(j,1);
+  G.log.unshift({t:`옵션 만기 · ${DEF[o.i][1]} ${o.k==='C'?'콜':'풋'} ${usd(o.K)} ${o.q}계약`,d:v>0?`${usd(v)} 받음 · 손익 ${sgn(v-o.cost)}`:`가치 없이 소멸 · 손익 ${sgn(-o.cost)}`,c:v>o.cost?'up':'dn',at:G.tick});
+  toast(v>0?`${DEF[o.i][1]} 옵션 만기: ${usd(v)}를 받았어요`:`${DEF[o.i][1]} 옵션이 가치 없이 만기됐어요`)}}
+function buyOpt(K){const n=Math.floor(+$('oQ').value);if(!(n>=1))return toast('계약 수를 1 이상으로 해주세요');
+  const ask=oAsk(oMid(G.sel,oKind,K,oExp)),cost=ask*100*n+OFEE*n;
+  if(cost>G.cash)return toast(`주문 가능 금액이 부족해요 (필요 ${usd(cost)})`);
+  G.cash-=cost;opts().push({id:Date.now()+Math.random(),i:G.sel,k:oKind,K,exp:G.tick+oExp,q:n,cost});
+  G.log.unshift({t:`옵션 매수 · ${DEF[G.sel][1]} ${oKind==='C'?'콜':'풋'} ${usd(K)} ${n}계약`,d:`계약당 ${usd(ask*100)} · 총 ${usd(cost)}`,c:'up',at:G.tick});
+  toast(`${DEF[G.sel][1]} ${oKind==='C'?'콜':'풋'} 옵션 ${n}계약을 샀어요`);save();render();pushCloud()}
+function closeOpt(id){const os=opts(),j=os.findIndex(o=>o.id===id);if(j<0)return;const o=os[j],v=Math.max(0,oBid(oMid(o.i,o.k,o.K,o.exp-G.tick))*100*o.q-OFEE*o.q);
+  G.cash+=v;os.splice(j,1);G.log.unshift({t:`옵션 청산 · ${DEF[o.i][1]} ${o.k==='C'?'콜':'풋'} ${usd(o.K)} ${o.q}계약`,d:`${usd(v)} 받음 · 손익 ${sgn(v-o.cost)}`,c:'dn',at:G.tick});
+  toast(`옵션을 청산했어요 (${sgn(v-o.cost)})`);save();render();pushCloud()}
+const left=t=>{t=Math.max(0,t);return t>=60?`${Math.floor(t/60)}분 ${t%60}초`:`${t}초`};
+function renderOptSheet(){if(!$('odim').classList.contains('show'))return;const i=G.sel,S=G.stocks[i].p;
+  $('oTitle').textContent=`${DEF[i][1]} 옵션`;$('oPrice').textContent=`현재가 ${usd(S)} · 만기 ${left(oExp)} 후`;$('oCash').textContent=usd(G.cash);
+  const ks=strikes(S),atm=ks.reduce((a,k)=>Math.abs(k-S)<Math.abs(a-S)?k:a,ks[0]),n=Math.max(1,Math.floor(+$('oQ').value)||1);
+  $('oBody').innerHTML=ks.map(K=>{const ask=oAsk(oMid(i,oKind,K,oExp)),be=oKind==='C'?K+ask:K-ask;
+    return `<tr class="${K===atm?'atm':''}"><td class="l num">${esc(usd(K))}${K===atm?' <small class="mute">현재가 근처</small>':''}</td><td class="num">${esc(usd(ask*100))}</td><td class="num hide-s">${esc(usd(be))}</td><td class="hide-s mute" style="font-size:12px">${oKind==='C'?'주가 > '+esc(usd(be)):'주가 < '+esc(usd(be))}</td><td><button class="obuy ${oKind==='P'?'put':''}" data-k="${K}">${n}계약 매수</button></td></tr>`}).join('')}
+function renderMyOpts(){const os=opts().slice().sort((a,b)=>a.exp-b.exp),ul=$('myOpts');
+  const key=os.map(o=>o.id).join(',')||'none';
+  if(ul.dataset.k!==key){ul.dataset.k=key;
+    ul.innerHTML=os.length?os.map(o=>`<li data-o="${o.id}">${logo(o.i)}<span><button class="nm" data-open="${o.i}">${esc(DEF[o.i][1])}<span class="okind ${o.k}">${o.k==='C'?'콜':'풋'}</span></button><span class="q num"></span></span><span class="r num"></span><button class="sellbtn" data-close="${o.id}">청산</button></li>`).join('')
+      :'<li class="minempty">갖고 있는 옵션이 없어요. 종목 상세 화면에서 "옵션 거래하기"를 눌러보세요.</li>'}
+  for(const li of ul.children){if(!li.dataset.o)continue;const o=os.find(x=>String(x.id)===li.dataset.o);if(!o)continue;const v=oMid(o.i,o.k,o.K,o.exp-G.tick)*100*o.q;
+    li.querySelector('.q').textContent=`행사가 ${usd(o.K)} · ${o.q}계약 · ${left(o.exp-G.tick)} 남음`;
+    li.querySelector('.r').innerHTML=`<span>${esc(cusd(v))}</span><small class="${cls(v-o.cost)}">${esc(csgn(v-o.cost))} (${esc(pct(v/o.cost-1))})</small>`}}
+$('openOpt').addEventListener('click',()=>{$('odim').classList.add('show');renderOptSheet()});
+$('oClose').addEventListener('click',()=>$('odim').classList.remove('show'));
+$('odim').addEventListener('click',e=>{if(e.target===$('odim'))$('odim').classList.remove('show')});
+$('oKind').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;oKind=b.dataset.k;$('oKind').querySelectorAll('button').forEach(o=>o.classList.toggle('on',o===b));renderOptSheet()});
+$('oExp').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;oExp=+b.dataset.e;$('oExp').querySelectorAll('button').forEach(o=>o.classList.toggle('on',o===b));renderOptSheet()});
+$('oQ').addEventListener('input',renderOptSheet);
+$('oMinus').addEventListener('click',()=>{$('oQ').value=Math.max(1,(+$('oQ').value||1)-1);renderOptSheet()});
+$('oPlus').addEventListener('click',()=>{$('oQ').value=(+$('oQ').value||0)+1;renderOptSheet()});
+$('oBody').addEventListener('click',e=>{const b=e.target.closest('[data-k]');if(b)buyOpt(+b.dataset.k)});
+$('myOpts').addEventListener('click',e=>{const c=e.target.closest('[data-close]');if(c){if(c.dataset.sure!=='1'){c.dataset.sure='1';c.textContent='확인';setTimeout(()=>{c.dataset.sure='';c.textContent='청산'},2500);return}return closeOpt(+c.dataset.close)}
+  const o=e.target.closest('[data-open]');if(o)openDetail(+o.dataset.open)});
+
 // ---- 이벤트 ----
 $('tbody').addEventListener('click',e=>{const tr=e.target.closest('tr[data-i]');if(tr)openDetail(+tr.dataset.i)});
 $('tbody').addEventListener('keydown',e=>{const tr=e.target.closest('tr[data-i]');if(tr&&(e.key==='Enter'||e.key===' ')){e.preventDefault();openDetail(+tr.dataset.i)}});
@@ -696,8 +844,8 @@ $('sdim').addEventListener('click',e=>{if(e.target===$('sdim'))closeSheet()});
 $('q').addEventListener('input',renderSheet);
 $('minus').addEventListener('click',()=>{$('q').value=Math.max(1,(+$('q').value||1)-1);renderSheet()});
 $('plus').addEventListener('click',()=>{$('q').value=(+$('q').value||0)+1;renderSheet()});
-document.querySelectorAll('.chips button').forEach(b=>b.addEventListener('click',()=>{const p=+b.dataset.p,h=G.hold[G.sel];
-  const base=sheet==='buy'?maxBuy():(h?h.q:0);$('q').value=Math.max(1,Math.floor(base*p));renderSheet()}));
+function chipQty(p){const h=G.hold[G.sel];if(sheet==='buy')return Math.floor(G.cash*p/(G.stocks[G.sel].p*(1+FEE)));return Math.floor((h?h.q:0)*p)}
+$('shChips').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;$('q').value=Math.max(1,chipQty(+b.dataset.p));renderSheet()});
 $('shGo').addEventListener('click',()=>{if(trade(sheet==='buy',Math.floor(+$('q').value)))closeSheet()});
 $('pause').addEventListener('click',()=>paused?start():stop());
 document.querySelectorAll('[data-s]').forEach(b=>b.addEventListener('click',()=>{speed=+b.dataset.s;document.querySelectorAll('[data-s]').forEach(o=>o.classList.toggle('on',o===b));start()}));
@@ -706,7 +854,7 @@ $('goRank').addEventListener('click',()=>$('rank').scrollIntoView({behavior:'smo
 $('goMine').addEventListener('click',()=>$('side').scrollIntoView({behavior:'smooth'}));
 $('addBtn').addEventListener('click',()=>$('rank').scrollIntoView({behavior:'smooth'}));
 document.addEventListener('keydown',e=>{
-  if(e.key==='Escape'){if(sheet)closeSheet();else if(detailOpen)closeDetail();else closeMail();return}
+  if(e.key==='Escape'){if($('odim').classList.contains('show')){$('odim').classList.remove('show');return}if(sheet)closeSheet();else if(detailOpen)closeDetail();else closeMail();return}
   if(e.key==='Enter'&&sheet&&e.target===$('q')){$('shGo').click();return}
   if(e.key==='/'&&!['INPUT','TEXTAREA'].includes(e.target.tagName)&&!$('gate').classList.contains('show')){e.preventDefault();$('search').focus()}});
 
