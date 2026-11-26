@@ -6,8 +6,8 @@ ROW = re.compile(r"\['([^']+)','[^']*','[^']*',[-\d.]+,[^,\]]+,[^,\]]+,'(\w+)'(?
 SUF = {'kospi': '.KS', 'kosdaq': '.KQ', 'nikkei': '.T'}
 syms = {}
 for t, g, under in ROW.findall(html):
-    if under or g in ('bond', 'coin'):
-        continue  # 레버리지·연동 ETF는 기초자산을 따라가고, 국채·코인은 따로 처리
+    if g in ('bond', 'coin'):
+        continue  # 국채·코인은 따로 처리 (레버리지 ETF는 받아 온 가격을 기준으로 기초자산을 따라감)
     syms[t] = t + SUF[g] if g in SUF else t.replace('.', '-')
 syms['_KRW'] = 'KRW=X'
 syms['_JPY'] = 'JPY=X'
