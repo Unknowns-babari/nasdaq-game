@@ -328,6 +328,10 @@ td.hc{padding:0 0 0 4px!important;width:30px}
     <div class="sect">공지 띠</div>
     <div class="form" style="margin-top:4px"><label>모든 사용자 화면 위에 보일 공지<textarea id="nText" maxlength="120" placeholder="예: 오늘 밤 10시 시즌 마감!"></textarea></label>
       <div style="display:flex;gap:8px"><button class="pri" style="flex:1;min-height:42px;border-radius:12px" id="nPost" type="button">공지 올리기</button><button class="chip" style="min-height:42px" id="nOff" type="button">공지 내리기</button></div><div class="mute" id="nMsg" style="font-size:13px"></div></div>
+    <div class="sect">실시간 시세 (Finnhub)</div>
+    <div class="form" style="margin-top:4px"><label>Finnhub API 키<input id="fhKey" autocomplete="off" spellcheck="false" placeholder="finnhub.io 대시보드의 API Key"></label>
+      <div class="mute" style="font-size:13px">넣으면 미국 주요 50종목이 실제 체결가로 움직여요. 키는 접속한 모든 사람의 브라우저에서 쓰이니 무료 키만 넣어 주세요.</div>
+      <div style="display:flex;gap:8px"><button class="pri" style="flex:1;min-height:42px;border-radius:12px" id="fhSave" type="button">저장</button><button class="chip" style="min-height:42px" id="fhOff" type="button">끄기</button></div><div class="mute" id="fhMsg" style="font-size:13px"></div></div>
     <div class="sect">가입한 사용자 <button class="chip" style="min-height:28px;font-size:12px;margin-left:6px" id="uRefresh">새로고침</button></div>
     <div class="ulist" id="uList"></div>
     <div class="sect">보낸 우편</div>
@@ -805,7 +809,7 @@ function yieldOf(i){const t=DEF[i][0];if(BOND[t])return G.stocks[i].y!=null?G.st
 const NOLEV=DEF.map((d,i)=>d[7]||d[6]==='bond'?-1:i).filter(i=>i>=0);
 const cusd=n=>{const a=Math.abs(n),sg=n<0?'-':'';return a>=1e9?sg+'$'+(a/1e9).toFixed(2)+'B':a>=1e6?sg+'$'+(a/1e6).toFixed(2)+'M':a>=1e4?sg+'$'+(a/1e3).toFixed(1)+'K':usd(n)};
 const csgn=n=>(n>0?'+':'')+cusd(n);
-let showAll=false,G,timer=null,speed=1,paused=false,chartType='line',hoverX=null,sheet=null,detailOpen=false,fSec='all',fSort='abs',query='',orderSig='',lastSort=-99;
+const REAL={};let showAll=false,G,timer=null,speed=1,paused=false,chartType='line',hoverX=null,sheet=null,detailOpen=false,fSec='all',fSort='abs',query='',orderSig='',lastSort=-99;
 
 // ---- 시장 엔진 ----
 function tickOnce(){
@@ -818,6 +822,7 @@ function tickOnce(){
   const zk=zm*.4+norm()*.0008,zj=zm*.4+norm()*.0007;
   G.stocks.forEach((s,i)=>{
     if(UL[i]!=null)return;
+    if(REAL[i]){const p=REAL[i].p;s.lr=Math.log(p/s.p);s.p=p;bar(s);return}
     if(BR[i]){if(bridged(i)){bridgeTick(i,s);return}}
     let eff=0;
     for(const e of G.pending){if(G.tick>=e.from&&G.tick<e.to&&(e.all||e.id===i||e.sec===s.sec))eff+=(e.all||e.id===i?e.v:e.v*.6)/(e.to-e.from)}
@@ -836,7 +841,7 @@ function bar(s){const c=s.cur;c.h=Math.max(c.h,s.p);c.l=Math.min(c.l,s.p);c.c=s.
 function makeNews(){
   const rumor=Math.random()<.4,p=rumor?.5:.88;let e;
   if(Math.random()<.2){const m=MKT[Math.floor(Math.random()*MKT.length)];e={all:1,v:m[1]*(.005+Math.random()*.01),t:m[0]}}
-  else{const hot=DEF.map((d,i)=>d[6]==='hot'?i:-1).filter(i=>i>=0),pickHot=Math.random()<.35,i=(()=>{for(let t=0;t<10;t++){const c=pickHot?hot[Math.floor(Math.random()*hot.length)]:NOLEV[Math.floor(Math.random()*NOLEV.length)];if(!bridged(c))return c}return NOLEV[0]})(),s=G.stocks[i],good=Math.random()<.52,boost=pickHot?2.2:1;
+  else{const hot=DEF.map((d,i)=>d[6]==='hot'?i:-1).filter(i=>i>=0),pickHot=Math.random()<.35,i=(()=>{for(let t=0;t<10;t++){const c=pickHot?hot[Math.floor(Math.random()*hot.length)]:NOLEV[Math.floor(Math.random()*NOLEV.length)];if(!bridged(c)&&!REAL[c])return c}return NOLEV[0]})(),s=G.stocks[i],good=Math.random()<.52,boost=pickHot?2.2:1;
     const tpl=(good?POS:NEG)[Math.floor(Math.random()*5)],wide=tpl.includes('{s}');
     e={id:wide?-1:i,sec:wide?s.sec:null,v:(good?1:-1)*(.015+Math.random()*.045)*boost,t:tpl.replace('{n}',s.name).replace('{s}',s.sec)}}
   if(Math.random()>p)e.v=-e.v*.4;
@@ -951,7 +956,7 @@ let bigMode='ndx';
 function btcInfo(n){const s=G.stocks[BTC],v=s.c.slice(-n).map(b=>b.c).concat([s.p]);return{v,last:s.p,chg:s.p/s.ref-1}}
 function renderMarket(){
   const a=idxInfo(0,40);
-  if(bigMode==='btc'){const b=btcInfo(40);$('mBig').innerHTML=`<div class="nm">비트코인 <span class="mute" style="font-size:12px">BTC/USD</span></div><div class="v num">${esc(usd(b.last))} <span class="${cls(b.chg)}" style="font-size:14px;font-weight:600">${pct(b.chg)}</span></div>${spark(b.v,b.chg>=0?UP:DN,true)}<div class="mute" style="font-size:12px">시작가 $60,486.93 (Alpha Vantage, 11/26) · 최근 10분 · 눌러서 거래</div>`}
+  if(bigMode==='btc'){const b=btcInfo(40);$('mBig').innerHTML=`<div class="nm">비트코인 <span class="mute" style="font-size:12px">BTC/USD</span></div><div class="v num">${esc(usd(b.last))} <span class="${cls(b.chg)}" style="font-size:14px;font-weight:600">${pct(b.chg)}</span></div>${spark(b.v,b.chg>=0?UP:DN,true)}<div class="mute" style="font-size:12px">${REAL[BTC]?'실시간 체결가 · 24시간 변동':'시세 연결 중'} · 최근 10분 · 눌러서 거래</div>`}
   else if(bigMode[0]==='k'){const k=+bigMode[1],x=idxInfo(k,40);$('mBig').innerHTML=`<div class="nm">${IDX[k][0]} <span class="mute" style="font-size:12px">게임 지수</span></div><div class="v num">${x.last.toFixed(2)} <span class="${cls(x.chg)}" style="font-size:14px;font-weight:600">${pct(x.chg)}</span></div>${spark(x.v,x.chg>=0?UP:DN,true)}<div class="mute" style="font-size:12px">${IDX[k][1].length}종목 시작가 = 1,000 기준 · 최근 10분 · ${k===5?'엔화':'원화'} 거래</div>`}
   else $('mBig').innerHTML=`<div class="nm">${IDX[0][0]} <span class="mute" style="font-size:12px">게임 지수</span></div><div class="v num">${a.last.toFixed(2)} <span class="${cls(a.chg)}" style="font-size:14px;font-weight:600">${pct(a.chg)}</span></div>${spark(a.v,a.chg>=0?UP:DN,true)}<div class="mute" style="font-size:12px">나스닥 100 종목 시작가 = 1,000 기준 · 최근 10분</div>`;
   const bt=btcInfo(30);
@@ -1010,8 +1015,8 @@ function renderDetail(){
   const i=G.sel,s=G.stocks[i],c=s.p/s.ref-1,h=G.hold[i];
   const lg=$('pLogo');lg.textContent=s.t.slice(0,4);lg.style.background=color(i);
   $('pName').textContent=s.name;$('openOpt').hidden=CUR(i)!=='USD';{const y=yieldOf(i),cc=CUR(i);$('pYield').textContent=cc!=='USD'?`${curName(cc)}로 거래 · ≈ ${usd(s.p/rateOf(cc))} · ${DEF[i][6]==='kospi'?'코스피':DEF[i][6]==='kosdaq'?'코스닥':'도쿄증권거래소'}`:isBond(i)?`현재 금리 ${y.toFixed(3)}% · 1좌 = 액면 $100 · 10분마다 이자 지급`:y?`연 배당률 ${y}% · 10분마다 배당 지급(게임용)`:''}$('pHeart').classList.toggle('on',isW(i));$('pHeart').setAttribute('aria-pressed',isW(i));$('pSub').textContent=`${s.t} · ${s.sec}`;
-  $('pPrice').innerHTML=esc(fp(i,s.p))+(bridged(i)?`<span class="real">${esc(PJ.date.slice(5).replace('-','/'))} 실제 시가·종가 고정</span>`:s.real?`<span class="real">실제 ${esc(s.real.day)} 반영</span>`:'');
-  $('pChg').textContent=`${s.real?'전일 종가':'시작가'}보다 ${fsg(i,s.p-s.ref)} (${pct(c)})`+(bridged(i)?` · 오늘 밤 12시에 실제 종가 ${fp(i,BR[i].c)} 도달`:'');$('pChg').className='pchg num '+cls(c);
+  $('pPrice').innerHTML=esc(fp(i,s.p))+(REAL[i]?`<span class="real">${Date.now()-REAL[i].t<90e3?'실시간 체결가':'실제 가격 · 장 마감'}</span>`:bridged(i)?`<span class="real">${esc(PJ.date.slice(5).replace('-','/'))} 실제 시가·종가 고정</span>`:s.real?`<span class="real">실제 ${esc(s.real.day)} 반영</span>`:'');
+  $('pChg').textContent=`${s.real?'전일 종가':'시작가'}보다 ${fsg(i,s.p-s.ref)} (${pct(c)})`+(REAL[i]?(REAL[i].src==='btc'?' · 24시간 기준':''):bridged(i)?` · 오늘 밤 12시에 실제 종가 ${fp(i,BR[i].c)} 도달`:'');$('pChg').className='pchg num '+cls(c);
   $('pos').innerHTML=h?`<div><span>보유 수량</span><b class="num">${ip(h.q)}주</b></div><div><span>평균 단가</span><b class="num">${fp(i,h.a)}</b></div><div><span>수익</span><b class="num ${cls(s.p-h.a)}">${fsg(i,(s.p-h.a)*h.q)}</b></div>`
     :`<div><span>보유 수량</span><b>0주</b></div><div><span>살 수 있는 수량</span><b class="num">${ip(maxBuy())}주</b></div><div><span>변동성</span><b>${s.vol>=.03?'높음':s.vol>=.018?'보통':'낮음'}</b></div>`;
   draw();
@@ -1286,6 +1291,9 @@ async function onUser(u){
 $('noticeX').addEventListener('click',()=>{$('notice').hidden=true;try{sessionStorage.setItem('noticeX',$('noticeTx').textContent)}catch(e){}});
 async function setNotice(on){if(!isAdmin())return;const text=$('nText').value.trim();if(on&&!text)return $('nMsg').textContent='공지 내용을 적어주세요.';
   try{await fb.f.setDoc(fb.f.doc(fb.db,'config','notice'),{text,on,updatedAt:fb.f.serverTimestamp()});$('nMsg').textContent=on?'공지를 올렸어요.':'공지를 내렸어요.'}catch(e){$('nMsg').textContent='저장하지 못했어요 ('+(e&&e.code||'오류')+')'}}
+async function setFeed(on){if(!isAdmin())return;const k=on?$('fhKey').value.trim():'';if(on&&!/^[A-Za-z0-9]{10,64}$/.test(k))return $('fhMsg').textContent='키 형식이 이상해요. 대시보드의 API Key를 그대로 붙여 주세요.';
+  try{await fb.f.setDoc(fb.f.doc(fb.db,'config','feed'),{finnhub:k,updatedAt:fb.f.serverTimestamp()});$('fhMsg').textContent=on?'저장했어요. 잠시 후 실시간 시세가 들어와요.':'실시간 시세를 껐어요.'}catch(e){$('fhMsg').textContent='저장하지 못했어요 ('+(e&&e.code||'오류')+')'}}
+$('fhSave').addEventListener('click',()=>setFeed(true));$('fhOff').addEventListener('click',()=>setFeed(false));
 $('nPost').addEventListener('click',()=>setNotice(true));$('nOff').addEventListener('click',()=>setNotice(false));
 $('me').addEventListener('click',()=>{if(!user)return;$('aId').textContent='아이디: '+(user.email||'').replace(DOMAIN,'');$('pwMsg').textContent='';$('delMsg').textContent='';$('adim').classList.add('show')});
 $('aClose').addEventListener('click',()=>$('adim').classList.remove('show'));
@@ -1394,6 +1402,7 @@ $('sentList').addEventListener('click',async e=>{const b=e.target.closest('[data
     f.onSnapshot(f.doc(fb.db,'config','notice'),d=>{const n=d.exists()?d.data():null,tx=n&&n.on?String(n.text||''):'';
       let closed='';try{closed=sessionStorage.getItem('noticeX')||''}catch(e){}
       $('noticeTx').textContent=tx;$('notice').hidden=!tx||closed===tx;if(isAdmin()&&n)$('nText').value=n.text||''},()=>{});
+    f.onSnapshot(f.doc(fb.db,'config','feed'),d=>{const k=d.exists()&&d.data().finnhub||'';if(isAdmin())$('fhKey').value=k;startFinnhub(k)},()=>{});
   }catch(e){$('gerr').textContent='이 화면에서는 로그인을 쓸 수 없어요. 둘러보기로 플레이해 주세요.'}
 })();
 
@@ -1427,6 +1436,42 @@ async function syncPrices(){try{const r=await fetch('prices.json?d='+Date.now(),
   if(j.fx>0&&G.syncedDay!==j.date)G.fx=j.fx;G.syncedDay=j.date;applyBridgeHistory();save();render();
   if(n)toast(kstDate(Date.now())===addDay(j.date)?`${n}개 종목이 ${j.date.slice(5).replace('-','/')} 실제 시가→종가 경로를 따라요`:`${n}개 종목을 ${j.date.slice(5).replace('-','/')} 실제 종가로 맞췄어요`)}catch(e){}}
 setTimeout(syncPrices,1500);
+
+// ---- 실제 시세 연결 ----
+// REAL[i]={p,t,src}: 실제 시세가 들어온 종목은 그 가격을 그대로 따름 (레버리지·연동 ETF는 기초자산 움직임을 따라감)
+function setReal(i,p,src,ref,t){if(!(p>0)||i<0)return;const s=G.stocks[i];REAL[i]={p,t:t||Date.now(),src};if(ref>0)s.ref=ref;
+  if(BR[i])delete BR[i]}
+// 비트코인: 키 없는 공개 시세 (바이낸스 → 안 되면 코인베이스)
+function startBTC(){let got=false,ws;
+  const coinbase=()=>{try{ws=new WebSocket('wss://ws-feed.exchange.coinbase.com');
+    ws.onopen=()=>ws.send(JSON.stringify({type:'subscribe',product_ids:['BTC-USD'],channels:['ticker']}));
+    ws.onmessage=e=>{const m=JSON.parse(e.data);if(m.type==='ticker')setReal(BTC,+m.price,'btc',+m.open_24h)};
+    ws.onclose=()=>setTimeout(startBTC,15e3)}catch(e){}};
+  try{ws=new WebSocket('wss://stream.binance.com:9443/ws/btcusdt@ticker');
+    ws.onmessage=e=>{got=true;const m=JSON.parse(e.data);setReal(BTC,+m.c,'btc',+m.o)};
+    ws.onclose=()=>{if(got)setTimeout(startBTC,5e3);else coinbase()};
+    setTimeout(()=>{if(!got){try{ws.onclose=null;ws.close()}catch(e){}coinbase()}},8e3)}catch(e){coinbase()}}
+startBTC();
+// 미국 주식: Finnhub (운영자가 넣은 무료 키). 웹소켓은 최대 50종목.
+const FHSYM=(()=>{const out=[],add=i=>{if(i>=0&&!out.includes(i)&&CUR(i)==='USD'&&UL[i]==null&&!BOND[DEF[i][0]]&&i!==BTC&&out.length<50)out.push(i)};
+  DEF.forEach(d=>{if(d[7])add(DEF.findIndex(x=>x[0]===d[7]))});
+  ['big','semi','etf','soft','hot','cons','bio','ind','etc'].forEach(g=>DEF.forEach((d,i)=>{if(d[6]===g)add(i)}));return out})();
+let fh={key:'',ws:null,timer:null,q:0};
+function startFinnhub(key){if(key===fh.key)return;fh.key=key;try{fh.ws&&(fh.ws.onclose=null,fh.ws.close())}catch(e){}clearTimeout(fh.timer);fh.ws=null;
+  if(!key){FHSYM.forEach(i=>{if(REAL[i]&&REAL[i].src==='fh')delete REAL[i]});return}
+  const open=()=>{if(fh.key!==key)return;try{const ws=new WebSocket('wss://ws.finnhub.io?token='+encodeURIComponent(key));fh.ws=ws;
+    ws.onopen=()=>FHSYM.forEach(i=>ws.send(JSON.stringify({type:'subscribe',symbol:DEF[i][0]})));
+    ws.onmessage=e=>{const m=JSON.parse(e.data);if(m.type!=='trade'||!m.data)return;const last={};m.data.forEach(d=>last[d.s]=d.p);
+      for(const [t,p] of Object.entries(last)){const i=DEF.findIndex(x=>x[0]===t);if(i>=0)setReal(i,p,'fh')}};
+    ws.onclose=()=>{if(fh.key===key)fh.timer=setTimeout(open,20e3)}}catch(e){}};
+  open();
+  // 전일 종가·마지막 가격: 한 종목씩 천천히 조회 (분당 한도 보호)
+  let k=0;const poll=async()=>{if(fh.key!==key)return;const i=FHSYM[k++%FHSYM.length];let wait=k<=FHSYM.length?1300:8000;
+    try{const r=await fetch('https://finnhub.io/api/v1/quote?symbol='+DEF[i][0]+'&token='+encodeURIComponent(key));
+      if(r.status===429)wait=60e3;else if(r.ok){const q=await r.json();if(q&&q.c>0){const fresh=REAL[i]&&REAL[i].src==='fh'&&Date.now()-REAL[i].t<60e3;
+        if(fresh)G.stocks[i].ref=q.pc;else setReal(i,q.c,'fh',q.pc,q.t*1000);if(k===FHSYM.length){save();render();toast(`미국 ${FHSYM.length}종목이 실제 가격을 따라요`)}}}}catch(e){}
+    setTimeout(poll,wait)};
+  poll()}
 }
 </script>
 </body>
