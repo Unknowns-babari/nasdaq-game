@@ -256,7 +256,7 @@ td.hc{padding:0 0 0 4px!important;width:30px}
   <div class="status"><span><span class="dot" id="dot"></span><b>미국장 모의 거래</b> <span class="mute" id="stTx">실시간</span></span><span class="mute" id="clock"></span>
     <span class="sync" id="syncBox" hidden><span class="mute" id="syncMsg" style="font-size:13px"></span><button class="chip" id="syncAll">보유·선택 종목 실제 시세 받기</button><span class="mute" id="quota" style="font-size:12px"></span></span></div>
   <section class="market" aria-label="지수">
-    <div class="mbig"><div class="seg bigseg" id="bigSeg"><button class="on" data-b="ndx">나스닥 100</button><button data-b="btc">비트코인</button></div><div id="mBig"></div></div>
+    <div class="mbig"><div class="seg bigseg" id="bigSeg"><button class="on" data-b="ndx">나스닥 100</button><button data-b="k3">코스피</button><button data-b="k4">코스닥</button><button data-b="k5">닛케이</button><button data-b="btc">비트코인</button></div><div id="mBig"></div></div>
     <div class="mgrid" id="mGrid"></div>
     <div class="newsbox"><h3>실시간 뉴스</h3><ul id="news"></ul></div>
   </section>
@@ -265,7 +265,7 @@ td.hc{padding:0 0 0 4px!important;width:30px}
     <div class="rtabs" role="tablist"><button class="on" data-v="chart">실시간 차트</button><button data-v="log">내 거래 내역</button></div>
     <div id="vChart">
       <div class="filters">
-        <div class="group" id="fSec"><button class="on" data-f="all">전체</button><button data-f="watch">♥ 관심</button><button data-f="etf">ETF</button><button data-f="hot">급등·테마</button><button data-f="lev">레버리지·인버스</button><button data-f="coin">코인</button><button data-f="bond">국채</button><button data-f="semi">반도체</button><button data-f="big">빅테크</button><button data-f="soft">소프트웨어</button><button data-f="bio">헬스케어</button><button data-f="cons">소비재</button><button data-f="ind">산업·에너지</button><button data-f="etc">기타</button></div>
+        <div class="group" id="fSec"><button class="on" data-f="all">전체</button><button data-f="watch">♥ 관심</button><button data-f="etf">ETF</button><button data-f="hot">급등·테마</button><button data-f="lev">레버리지·인버스</button><button data-f="coin">코인</button><button data-f="bond">국채</button><button data-f="kospi">코스피</button><button data-f="kosdaq">코스닥</button><button data-f="nikkei">닛케이</button><button data-f="semi">반도체</button><button data-f="big">빅테크</button><button data-f="soft">소프트웨어</button><button data-f="bio">헬스케어</button><button data-f="cons">소비재</button><button data-f="ind">산업·에너지</button><button data-f="etc">기타</button></div>
         <div class="group" id="fSort"><button class="on" data-o="abs">변동 큰 순</button><button data-o="fall">하락률 높은 순</button><button data-o="rise">상승률 높은 순</button><button data-o="price">가격 높은 순</button></div>
       </div>
       <table><thead><tr><th style="width:30px"></th><th class="rk">순위</th><th class="l">종목</th><th>현재가</th><th>등락률</th><th class="hide-s">최근 흐름</th><th class="hide-s">변동성</th><th class="l hide-s">산업</th><th class="hide-s">내 보유</th></tr></thead><tbody id="tbody"></tbody></table>
@@ -280,7 +280,7 @@ td.hc{padding:0 0 0 4px!important;width:30px}
   <div class="acc"><div class="t">내 총자산</div><div class="v num" id="total"></div><div class="pl num" id="pl"></div>
     <div class="mute num" style="font-size:13px" id="totalKrw"></div>
     <div class="cashbox"><span>주문 가능 금액 (달러)</span><b class="num" id="cash"></b><small>주식·옵션·국채를 살 때 쓸 수 있는 현금이에요</small></div>
-    <div class="cashbox krwbox"><span>원화 예수금</span><b class="num" id="krwBal"></b><button class="chip" id="openFx" style="min-height:32px;margin-top:6px">환전하기 · <span id="fxNow"></span></button></div>
+    <div class="cashbox krwbox"><span>원화 예수금 · 한국 주식용</span><b class="num" id="krwBal"></b><span style="margin-top:6px">엔화 예수금 · 일본 주식용</span><b class="num" id="jpyBal"></b><button class="chip" id="openFx" style="min-height:32px;margin-top:6px">환전하기 · <span id="fxNow"></span></button></div>
     <div class="row2"><span class="mute">주식 평가금액</span><b class="num" id="stockV"></b></div>
     <div class="row2" style="margin-top:4px;padding-top:0;border:0"><span class="mute">옵션 평가금액</span><b class="num" id="optV"></b></div></div>
   <div class="sh"><h3>관심 종목</h3><small id="wCount"></small></div>
@@ -347,13 +347,13 @@ td.hc{padding:0 0 0 4px!important;width:30px}
 
 <div class="dim sheetdim" id="xdim"><div class="sheet" role="dialog" aria-modal="true" aria-labelledby="xTitle">
   <div class="phead" style="margin-bottom:6px"><h2 id="xTitle" style="margin:0">환전하기</h2><button class="x" id="xClose" aria-label="닫기">×</button></div>
-  <div class="seg" id="xDir" style="margin:8px 0 12px"><button class="on" data-d="u2k">달러 → 원화</button><button data-d="k2u">원화 → 달러</button></div>
+  <div class="seg" id="xDir" style="margin:8px 0 12px;flex-wrap:wrap"><button class="on" data-d="USD-KRW">달러 → 원화</button><button data-d="KRW-USD">원화 → 달러</button><button data-d="USD-JPY">달러 → 엔화</button><button data-d="JPY-USD">엔화 → 달러</button></div>
   <div class="avail"><span class="mute" id="xHaveL"></span><b class="num" id="xHave"></b></div>
   <div class="form" style="margin-top:6px"><label><span id="xAmtL"></span><input id="xAmt" type="number" min="0" step="any" inputmode="decimal"></label></div>
   <div class="chips" id="xChips" style="margin-top:10px"><button data-p=".1">10%</button><button data-p=".25">25%</button><button data-p=".5">50%</button><button data-p="1">전부</button></div>
   <div class="sum" id="xSum"></div>
   <button class="confirm buy" id="xGo" style="background:var(--blue)">환전하기</button>
-  <p class="note">환율은 게임 안에서 실시간으로 조금씩 움직여요. 시작 환율은 2026년 11월 26일 실제 환율(1달러 = 1,342.68원)이고, 환전 수수료는 0.1%예요.</p>
+  <p class="note">환율은 게임 안에서 실시간으로 조금씩 움직여요. 시작 환율은 2026년 11월 26일 실제 환율(1달러 = 1,342.68원, 159.17엔)이고, 환전 수수료는 0.1%예요. 한국 주식은 원화, 일본 주식은 엔화로 사고팔아요.</p>
 </div></div>
 
 <div class="dim sheetdim" id="adim"><div class="sheet" role="dialog" aria-modal="true" aria-labelledby="aTitle">
@@ -516,6 +516,168 @@ const DEF=[
  ['TLT','미국 장기국채 20년+','ETF·채권',79.38,0.01,-0.3,'etf'],
  ['GLD','SPDR 금','ETF·원자재',355.45,0.012,0.1,'etf'],
  ['BTC','비트코인','암호화폐',60486.93,0.028,0.6,'coin'],
+ ['005930','삼성전자','반도체',170700.0,.03,1,'kospi'],
+ ['000660','SK하이닉스','반도체',1030000.0,.035,1,'kospi'],
+ ['402340','SK스퀘어','지주사',635000.0,.03,1,'kospi'],
+ ['373220','LG에너지솔루션','2차전지',308500.0,.032,1,'kospi'],
+ ['005380','현대차','자동차',269500.0,.022,1,'kospi'],
+ ['207940','삼성바이오로직스','바이오',1363000.0,.022,1,'kospi'],
+ ['009150','삼성전기','전자부품',755000.0,.03,1,'kospi'],
+ ['105560','KB금융','금융',148100.0,.018,1,'kospi'],
+ ['068270','셀트리온','바이오',217000.0,.024,1,'kospi'],
+ ['055550','신한지주','금융',85100.0,.017,1,'kospi'],
+ ['032830','삼성생명','보험',220000.0,.018,1,'kospi'],
+ ['028260','삼성물산','지주사',243500.0,.02,1,'kospi'],
+ ['000270','기아','자동차',96000.0,.02,1,'kospi'],
+ ['012450','한화에어로스페이스','방산',633000.0,.032,1,'kospi'],
+ ['006400','삼성SDI','2차전지',418000.0,.033,1,'kospi'],
+ ['086790','하나금융지주','금융',120900.0,.018,1,'kospi'],
+ ['012330','현대모비스','자동차부품',349500.0,.019,1,'kospi'],
+ ['034020','두산에너빌리티','원전·발전',40000.0,.03,1,'kospi'],
+ ['329180','HD현대중공업','조선',243500.0,.03,1,'kospi'],
+ ['035420','NAVER','인터넷',159000.0,.022,1,'kospi'],
+ ['034730','SK','지주사',428500.0,.022,1,'kospi'],
+ ['066570','LG전자','가전',137000.0,.02,1,'kospi'],
+ ['316140','우리금융지주','금융',31400.0,.017,1,'kospi'],
+ ['000810','삼성화재','보험',514000.0,.016,1,'kospi'],
+ ['011200','HMM','해운',22150.0,.025,1,'kospi'],
+ ['138040','메리츠금융지주','금융',123800.0,.02,1,'kospi'],
+ ['005490','POSCO홀딩스','철강',251500.0,.024,1,'kospi'],
+ ['033780','KT&G','담배',183200.0,.012,1,'kospi'],
+ ['010120','LS ELECTRIC','전력기기',114300.0,.03,1,'kospi'],
+ ['180640','한진칼','지주사',246000.0,.025,1,'kospi'],
+ ['015760','한국전력','전력',25250.0,.018,1,'kospi'],
+ ['010130','고려아연','비철금속',767000.0,.03,1,'kospi'],
+ ['009540','HD한국조선해양','조선',221000.0,.028,1,'kospi'],
+ ['086280','현대글로비스','물류',205000.0,.018,1,'kospi'],
+ ['051910','LG화학','화학',207000.0,.027,1,'kospi'],
+ ['096770','SK이노베이션','정유',90000.0,.025,1,'kospi'],
+ ['298040','효성중공업','전력기기',1608000.0,.035,1,'kospi'],
+ ['024110','기업은행','은행',18770.0,.014,1,'kospi'],
+ ['018260','삼성SDS','IT서비스',192500.0,.018,1,'kospi'],
+ ['003670','포스코퓨처엠','2차전지소재',163700.0,.035,1,'kospi'],
+ ['017670','SK텔레콤','통신',66500.0,.012,1,'kospi'],
+ ['042700','한미반도체','반도체장비',147300.0,.04,1,'kospi'],
+ ['003550','LG','지주사',90700.0,.017,1,'kospi'],
+ ['267260','HD현대일렉트릭','전력기기',383000.0,.033,1,'kospi'],
+ ['035720','카카오','인터넷',31000.0,.025,1,'kospi'],
+ ['042660','한화오션','조선',42450.0,.032,1,'kospi'],
+ ['010140','삼성중공업','조선',14160.0,.03,1,'kospi'],
+ ['003490','대한항공','항공',31650.0,.018,1,'kospi'],
+ ['028050','삼성E&A','건설',59400.0,.025,1,'kospi'],
+ ['010950','S-Oil','정유',96300.0,.02,1,'kospi'],
+ ['278470','에이피알','화장품',292000.0,.035,1,'kospi'],
+ ['030200','KT','통신',46000.0,.013,1,'kospi'],
+ ['323410','카카오뱅크','은행',22000.0,.022,1,'kospi'],
+ ['005830','DB손해보험','보험',166100.0,.017,1,'kospi'],
+ ['196170','알테오젠','바이오',169600.0,.04,1,'kosdaq'],
+ ['247540','에코프로비엠','2차전지',88400.0,.042,1,'kosdaq'],
+ ['277810','레인보우로보틱스','로봇',463500.0,.05,1,'kosdaq'],
+ ['036930','주성엔지니어링','반도체장비',149800.0,.04,1,'kosdaq'],
+ ['108490','로보티즈','로봇',294000.0,.055,1,'kosdaq'],
+ ['039030','이오테크닉스','반도체장비',309500.0,.035,1,'kosdaq'],
+ ['222800','심텍','반도체부품',101400.0,.04,1,'kosdaq'],
+ ['028300','HLB','바이오',28250.0,.045,1,'kosdaq'],
+ ['058470','리노공업','반도체부품',48500.0,.03,1,'kosdaq'],
+ ['240810','원익IPS','반도체장비',71600.0,.035,1,'kosdaq'],
+ ['403870','HPSP','반도체장비',41200.0,.04,1,'kosdaq'],
+ ['000250','삼천당제약','제약',151800.0,.05,1,'kosdaq'],
+ ['214450','파마리서치','의료미용',278000.0,.035,1,'kosdaq'],
+ ['319660','피에스케이','반도체장비',84100.0,.035,1,'kosdaq'],
+ ['030530','원익홀딩스','반도체장비',31350.0,.04,1,'kosdaq'],
+ ['145020','휴젤','의료미용',211500.0,.03,1,'kosdaq'],
+ ['010170','대한광통신','광통신',14860.0,.06,1,'kosdaq'],
+ ['041510','에스엠','엔터',96300.0,.03,1,'kosdaq'],
+ ['141080','리가켐바이오','바이오',53700.0,.04,1,'kosdaq'],
+ ['064760','티씨케이','반도체소재',171900.0,.032,1,'kosdaq'],
+ ['298380','에이비엘바이오','바이오',35600.0,.05,1,'kosdaq'],
+ ['437730','삼현','자동차부품',63000.0,.045,1,'kosdaq'],
+ ['310210','보로노이','바이오',106400.0,.05,1,'kosdaq'],
+ ['357780','솔브레인','반도체소재',250000.0,.03,1,'kosdaq'],
+ ['058610','에스피지','로봇부품',90900.0,.05,1,'kosdaq'],
+ ['178320','서진시스템','전자장비',29450.0,.04,1,'kosdaq'],
+ ['068760','셀트리온제약','제약',41550.0,.03,1,'kosdaq'],
+ ['095340','ISC','반도체부품',130000.0,.04,1,'kosdaq'],
+ ['226950','올릭스','바이오',79000.0,.05,1,'kosdaq'],
+ ['263750','펄어비스','게임',28600.0,.035,1,'kosdaq'],
+ ['005290','동진쎄미켐','반도체소재',33700.0,.03,1,'kosdaq'],
+ ['084370','유진테크','반도체장비',76400.0,.035,1,'kosdaq'],
+ ['257720','실리콘투','화장품유통',25800.0,.045,1,'kosdaq'],
+ ['095610','테스','반도체장비',84700.0,.035,1,'kosdaq'],
+ ['131290','티에스이','반도체부품',152300.0,.04,1,'kosdaq'],
+ ['035900','JYP Ent.','엔터',46550.0,.03,1,'kosdaq'],
+ ['098460','고영','검사장비',23300.0,.035,1,'kosdaq'],
+ ['347850','디앤디파마텍','바이오',32900.0,.055,1,'kosdaq'],
+ ['080220','제주반도체','반도체',52300.0,.05,1,'kosdaq'],
+ ['036540','SFA반도체','반도체',8930.0,.04,1,'kosdaq'],
+ ['086520','에코프로','2차전지',65700.0,.045,1,'kosdaq'],
+ ['440110','파두','반도체',28800.0,.05,1,'kosdaq'],
+ ['214150','클래시스','의료미용',21600.0,.03,1,'kosdaq'],
+ ['237690','에스티팜','제약',72300.0,.035,1,'kosdaq'],
+ ['232140','와이씨','반도체장비',16090.0,.05,1,'kosdaq'],
+ ['087010','펩트론','바이오',82600.0,.055,1,'kosdaq'],
+ ['140860','파크시스템스','측정장비',181800.0,.03,1,'kosdaq'],
+ ['241710','코스메카코리아','화장품',114500.0,.035,1,'kosdaq'],
+ ['8306','미쓰비시UFJ','금융',3544.0,.018,1,'nikkei'],
+ ['9984','소프트뱅크그룹','투자·통신',6310.0,.032,1,'nikkei'],
+ ['7203','도요타자동차','자동차',2856.5,.017,1,'nikkei'],
+ ['285A','키옥시아','메모리',19300.0,.04,1,'nikkei'],
+ ['6857','어드반테스트','반도체장비',38630.0,.035,1,'nikkei'],
+ ['8035','도쿄일렉트론','반도체장비',12100.0,.03,1,'nikkei'],
+ ['8316','미쓰이스미토모FG','금융',3321.0,.017,1,'nikkei'],
+ ['6501','히타치','전기전자',5522.0,.02,1,'nikkei'],
+ ['6098','리크루트','인력서비스',16685.0,.02,1,'nikkei'],
+ ['6758','소니그룹','전자·엔터',3753.0,.019,1,'nikkei'],
+ ['9983','패스트리테일링','의류',71770.0,.018,1,'nikkei'],
+ ['8411','미즈호FG','금융',8446.0,.018,1,'nikkei'],
+ ['6861','키엔스','센서',80270.0,.018,1,'nikkei'],
+ ['8058','미쓰비시상사','종합상사',4694.0,.017,1,'nikkei'],
+ ['6981','무라타제작소','전자부품',8467.0,.022,1,'nikkei'],
+ ['8001','이토추상사','종합상사',2175.5,.015,1,'nikkei'],
+ ['8766','도쿄해상','보험',507.4,.016,1,'nikkei'],
+ ['8031','미쓰이물산','종합상사',4902.0,.017,1,'nikkei'],
+ ['9432','NTT','통신',169.9,.01,1,'nikkei'],
+ ['7011','미쓰비시중공업','중공업·방산',3813.0,.028,1,'nikkei'],
+ ['2914','JT','담배',6830.0,.01,1,'nikkei'],
+ ['7182','유초은행','은행',3395.0,.015,1,'nikkei'],
+ ['9434','소프트뱅크','통신',237.4,.01,1,'nikkei'],
+ ['4063','신에쓰화학','화학',6030.0,.02,1,'nikkei'],
+ ['9433','KDDI','통신',2896.5,.011,1,'nikkei'],
+ ['6503','미쓰비시전기','전기전자',5264.0,.02,1,'nikkei'],
+ ['6752','파나소닉','전자',4568.0,.02,1,'nikkei'],
+ ['4519','주가이제약','제약',6032.0,.02,1,'nikkei'],
+ ['5803','후지쿠라','전선',5598.0,.035,1,'nikkei'],
+ ['7974','닌텐도','게임',7849.0,.02,1,'nikkei'],
+ ['4502','다케다약품','제약',5643.0,.014,1,'nikkei'],
+ ['8053','스미토모상사','종합상사',1728.0,.016,1,'nikkei'],
+ ['7741','HOYA','광학',24180.0,.018,1,'nikkei'],
+ ['8002','마루베니','종합상사',4725.0,.018,1,'nikkei'],
+ ['5802','스미토모전기','전선',2452.0,.028,1,'nikkei'],
+ ['6702','후지쯔','IT서비스',4069.0,.02,1,'nikkei'],
+ ['8725','MS&AD','보험',4776.0,.017,1,'nikkei'],
+ ['8015','도요타통상','상사',7264.0,.017,1,'nikkei'],
+ ['4062','이비덴','전자부품',12100.0,.035,1,'nikkei'],
+ ['6178','일본우정','우편·금융',2465.0,.012,1,'nikkei'],
+ ['6301','고마쓰','기계',7500.0,.018,1,'nikkei'],
+ ['6146','디스코','반도체장비',60290.0,.035,1,'nikkei'],
+ ['6723','르네사스','반도체',3575.0,.028,1,'nikkei'],
+ ['6701','NEC','IT서비스',4913.0,.022,1,'nikkei'],
+ ['7267','혼다','자동차',1664.5,.017,1,'nikkei'],
+ ['8750','다이이치생명','보험',1786.5,.02,1,'nikkei'],
+ ['8591','오릭스','금융',5745.0,.016,1,'nikkei'],
+ ['6762','TDK','전자부품',3198.0,.025,1,'nikkei'],
+ ['4578','오츠카HD','제약',11320.0,.015,1,'nikkei'],
+ ['8630','손보HD','보험',6523.0,.017,1,'nikkei'],
+ ['6367','다이킨','공조',20585.0,.017,1,'nikkei'],
+ ['6954','화낙','로봇',6075.0,.022,1,'nikkei'],
+ ['8308','리소나HD','은행',2474.0,.017,1,'nikkei'],
+ ['2802','아지노모토','식품',5212.0,.016,1,'nikkei'],
+ ['4568','다이이치산쿄','제약',2709.0,.025,1,'nikkei'],
+ ['8309','미쓰이스미토모트러스트','금융',1743.0,.016,1,'nikkei'],
+ ['6971','교세라','전자부품',3668.0,.018,1,'nikkei'],
+ ['5108','브리지스톤','타이어',3780.0,.014,1,'nikkei'],
+ ['4661','오리엔탈랜드','레저',2816.5,.017,1,'nikkei'],
+ ['6273','SMC','기계',73450.0,.018,1,'nikkei'],
  ['US2Y','미국 국채 2년','국채 · 미국',100,0.003,0,'bond'],['US10Y','미국 국채 10년','국채 · 미국',100,0.009,0,'bond'],
  ['KR3Y','한국 국고채 3년','국채 · 한국',100,0.003,0,'bond'],['KR10Y','한국 국고채 10년','국채 · 한국',100,0.008,0,'bond'],
  ['JP10Y','일본 국채 10년','국채 · 일본',100,0.007,0,'bond'],['DE10Y','독일 국채 10년','국채 · 독일',100,0.008,0,'bond'],
@@ -619,6 +781,17 @@ const krw=n=>'₩'+Math.round(n).toLocaleString('ko-KR');
 const ckrw=n=>{const a=Math.abs(n),sg=n<0?'-':'';return a>=1e8?sg+(a/1e8).toFixed(2)+'억원':a>=1e4?sg+Math.round(a/1e4).toLocaleString('ko-KR')+'만원':sg+Math.round(a).toLocaleString('ko-KR')+'원'};
 const UL=DEF.map(d=>d[7]?DEF.findIndex(x=>x[0]===d[7]):null);
 const BTC=DEF.findIndex(d=>d[0]==='BTC');
+// 한국(코스피·코스닥)은 원화, 일본(닛케이)은 엔화로 거래. 시작가: StockAnalysis(코스피·도쿄), Snowball Analytics(코스닥), 2026-11-26
+const MKTCUR={kospi:'KRW',kosdaq:'KRW',nikkei:'JPY'};
+const CUR=i=>MKTCUR[DEF[i][6]]||'USD';
+const JFX0=159.17; // USD/JPY: Alpha Vantage 2026-11-26 06:33 UTC
+const rateOf=c=>c==='KRW'?G.fx:c==='JPY'?G.jfx:1;
+const money=(c,v)=>c==='KRW'?(v<0?'-':'')+'₩'+Math.round(Math.abs(v)).toLocaleString('ko-KR'):c==='JPY'?(v<0?'-':'')+'¥'+Math.abs(v).toLocaleString('ja-JP',{minimumFractionDigits:Math.abs(v)<1000?1:0,maximumFractionDigits:Math.abs(v)<1000?1:0}):usd(v);
+const cmoney=(c,v)=>c==='KRW'?ckrw(v):c==='JPY'?(Math.abs(v)>=1e8?(v<0?'-':'')+(Math.abs(v)/1e8).toFixed(2)+'억엔':Math.abs(v)>=1e4?(v<0?'-':'')+Math.round(Math.abs(v)/1e4).toLocaleString('ko-KR')+'만엔':money(c,v)):cusd(v);
+const fp=(i,v)=>money(CUR(i),v),fsg=(i,v)=>(v>0?'+':'')+fp(i,v),fcp=(i,v)=>cmoney(CUR(i),v),fcsg=(i,v)=>(v>0?'+':'')+fcp(i,v);
+const wal=c=>c==='KRW'?G.krw:c==='JPY'?G.jpy:G.cash;
+function addW(c,v){if(c==='KRW')G.krw+=v;else if(c==='JPY')G.jpy+=v;else G.cash+=v}
+const curName=c=>c==='KRW'?'원화':c==='JPY'?'엔화':'달러';
 // 국채: [시작 금리 %, 듀레이션, 하루 금리 변동 폭(bp)] — 미국: Alpha Vantage(10년 11/24, 2년 10월 평균), 그 외: Investing.com 11/26
 const BOND={US2Y:[4.74,1.9,7],US10Y:[4.872,8,7],KR3Y:[3.624,2.8,5],KR10Y:[3.799,8.5,5],JP10Y:[2.632,9,4],DE10Y:[3.2188,8.5,6],UK10Y:[5.1372,7.8,8],
   FR10Y:[4.732,8.2,7],IT10Y:[4.356,8,8],CA10Y:[3.669,8.3,6],AU10Y:[4.835,8,7],BR10Y:[15.28,5.5,18]};
@@ -640,6 +813,8 @@ function tickOnce(){
   if(Math.random()<.01)G.regime=(Math.random()-.5)*.0003;
   if(Math.random()<.01)G.rr=(Math.random()-.5)*.0004;if(G.rr==null)G.rr=0;
   if(G.fx==null)G.fx=FX0;G.fx*=Math.exp(norm()*.0045*.065);if(G.krw==null)G.krw=0;
+  if(G.jfx==null)G.jfx=JFX0;G.jfx*=Math.exp(norm()*.005*.065);if(G.jpy==null)G.jpy=0;
+  const zk=zm*.4+norm()*.0008,zj=zm*.4+norm()*.0007;
   const zm=norm()*.0007+G.regime;
   G.stocks.forEach((s,i)=>{
     if(UL[i]!=null)return;
@@ -647,7 +822,7 @@ function tickOnce(){
     for(const e of G.pending){if(G.tick>=e.from&&G.tick<e.to&&(e.all||e.id===i||e.sec===s.sec))eff+=(e.all||e.id===i?e.v:e.v*.6)/(e.to-e.from)}
     let lr;const bd=BOND[DEF[i][0]];
     if(bd){const dy=norm()*bd[2]/100*.065+G.rr;s.y=Math.max(.01,(s.y!=null?s.y:bd[0])+dy);lr=-bd[1]*dy/100}
-    else lr=s.beta*zm+s.vol*.065*norm()+eff;s.lr=lr;s.p=Math.max(.01,s.p*Math.exp(lr));bar(s);
+    else{const c=CUR(i),mf=c==='KRW'?zk:c==='JPY'?zj:zm;lr=s.beta*mf+s.vol*.065*norm()+eff}s.lr=lr;s.p=Math.max(.01,s.p*Math.exp(lr));bar(s);
   });
   G.stocks.forEach((s,i)=>{if(UL[i]==null)return;const u=G.stocks[UL[i]];s.lr=DEF[i][8]*(u.lr||0);s.p=Math.max(.01,s.p*Math.exp(s.lr));bar(s)});
   settleOptions();checkOrders();
@@ -667,11 +842,11 @@ function makeNews(){
   e.from=G.tick+6;e.to=e.from+PER;G.pending.push(e);
   G.news.unshift({t:e.t,r:rumor,at:G.tick});if(G.news.length>40)G.news.length=40;
 }
-function stockVal(){return Object.entries(G.hold).reduce((a,[i,h])=>a+h.q*G.stocks[i].p,0)}
-function worth(){return G.cash+stockVal()+optVal()+(G.krw||0)/(G.fx||FX0)}
+function stockVal(){return Object.entries(G.hold).reduce((a,[i,h])=>a+h.q*G.stocks[i].p/rateOf(CUR(+i)),0)}
+function worth(){return G.cash+stockVal()+optVal()+(G.krw||0)/(G.fx||FX0)+(G.jpy||0)/(G.jfx||JFX0)}
 function newGame(quiet){
   const keepClaimed=G&&Array.isArray(G.claimed)?G.claimed:[];
-  G={fx:FX0,krw:0,rr:0,fxh:[FX0],orders:[],tick:0,cash:START,hold:{},news:[],log:[],pending:[],regime:0,sel:1,nextNews:12,claimed:keepClaimed,
+  G={fx:FX0,krw:0,jfx:JFX0,jpy:0,rr:0,fxh:[FX0],orders:[],tick:0,cash:START,hold:{},news:[],log:[],pending:[],regime:0,sel:1,nextNews:12,claimed:keepClaimed,
      stocks:DEF.map(d=>({t:d[0],name:d[1],sec:d[2],ref:d[3],vol:d[4],beta:d[5],p:d[3],c:[],cur:null}))};
   G.stocks.forEach(s=>{let p=100;const arr=[];
     for(let k=0;k<60;k++){const o=p;let h=o,l=o;for(let j=0;j<PER;j++){p*=Math.exp(s.vol*.065*norm());h=Math.max(h,p);l=Math.min(l,p)}arr.push({o,h,l,c:p})}
@@ -687,7 +862,7 @@ function migrate(s){
   const prev=G;newGame(true);const n=G;G=prev;const map={};
   s.stocks.forEach((x,i)=>{const j=DEF.findIndex(d=>d[0]===x.t);if(j<0)return;map[i]=j;const y=n.stocks[j];y.p=x.p;y.ref=x.ref;if(x.real)y.real=x.real;
     const f=x.p/y.c[y.c.length-1].c;y.c=y.c.map(b=>({o:r2(b.o*f),h:r2(b.h*f),l:r2(b.l*f),c:r2(b.c*f)}));y.cur={o:x.p,h:x.p,l:x.p,c:x.p,n:0}});
-  n.cash=s.cash;n.log=s.log||[];n.watch=s.watch||[];n.krw=s.krw||0;n.fx=s.fx;n.syncedDay=s.syncedDay;n.orders=(s.orders||[]).filter(o=>map[o.i]!=null).map(o=>({...o,i:map[o.i]}));n.news=[];n.claimed=s.claimed||[];n.hold={};
+  n.cash=s.cash;n.log=s.log||[];n.watch=s.watch||[];n.krw=s.krw||0;n.fx=s.fx;n.jpy=s.jpy||0;n.jfx=s.jfx;n.syncedDay=s.syncedDay;n.orders=(s.orders||[]).filter(o=>map[o.i]!=null).map(o=>({...o,i:map[o.i]}));n.news=[];n.claimed=s.claimed||[];n.hold={};
   for(const [i,h] of Object.entries(s.hold||{}))if(map[i]!=null)n.hold[map[i]]=h;
   n.opts=(s.opts||[]).filter(o=>map[o.i]!=null).map(o=>({...o,i:map[o.i]}));
   n.sel=map[s.sel]!=null?map[s.sel]:1;return n;
@@ -703,42 +878,43 @@ function stop(){clearInterval(timer);timer=null;paused=true;$('pause').textConte
 function trade(buy,n,i=G.sel){
   const s=G.stocks[i],p=s.p;
   if(!(n>0)){toast('수량을 1주 이상 입력해주세요');return false}
-  const amt=p*n,fee=amt*FEE;
+  const amt=p*n,fee=amt*FEE,c=CUR(i);
   if(buy){
-    if(amt+fee>G.cash){toast('주문 가능 금액이 부족해요 (최대 '+ip(Math.floor(G.cash/(p*(1+FEE))))+'주)');return false}
-    const h=G.hold[i]||{q:0,a:0};h.a=(h.a*h.q+amt)/(h.q+n);h.q+=n;G.hold[i]=h;G.cash-=amt+fee;
-    G.log.unshift({t:`${s.name} ${ip(n)}주 구매`,d:`${usd(p)} · 총 ${usd(amt+fee)}`,c:'up',at:G.tick});toast(`${s.name} ${ip(n)}주를 샀어요`);
+    if(amt+fee>wal(c)+1e-9){toast(`${curName(c)} 주문 가능 금액이 부족해요 (최대 ${ip(Math.floor(wal(c)/(p*(1+FEE))))}주)`+(c!=='USD'?' · 환전하기에서 바꿀 수 있어요':''));return false}
+    const h=G.hold[i]||{q:0,a:0};h.a=(h.a*h.q+amt)/(h.q+n);h.q+=n;G.hold[i]=h;addW(c,-(amt+fee));
+    G.log.unshift({t:`${s.name} ${ip(n)}주 구매`,d:`${fp(i,p)} · 총 ${fp(i,amt+fee)}`,c:'up',at:G.tick});toast(`${s.name} ${ip(n)}주를 샀어요`);
   }else{
     const h=G.hold[i];if(!h||h.q<n){toast('가진 주식이 부족해요 (보유 '+ip(h?h.q:0)+'주)');return false}
-    const pl=amt-fee-h.a*n;G.cash+=amt-fee;h.q-=n;if(!h.q)delete G.hold[i];
-    G.log.unshift({t:`${s.name} ${ip(n)}주 판매`,d:`${usd(p)} · 실현손익 ${sgn(pl)}`,c:'dn',at:G.tick});toast(`${s.name} ${ip(n)}주를 팔았어요`);
+    const pl=amt-fee-h.a*n;addW(c,amt-fee);h.q-=n;if(!h.q)delete G.hold[i];
+    G.log.unshift({t:`${s.name} ${ip(n)}주 판매`,d:`${fp(i,p)} · 실현손익 ${fsg(i,pl)}`,c:'dn',at:G.tick});toast(`${s.name} ${ip(n)}주를 팔았어요`);
   }
   if(G.log.length>80)G.log.length=80;save();render();pushCloud();return true;
 }
-function maxBuy(){return Math.floor(G.cash/(G.stocks[G.sel].p*(1+FEE)))}
+function maxBuy(){return Math.floor(wal(CUR(G.sel))/(G.stocks[G.sel].p*(1+FEE)))}
 let tt;function toast(m){const t=$('toast');t.textContent=m;t.classList.add('show');clearTimeout(tt);tt=setTimeout(()=>t.classList.remove('show'),2000)}
 
 let omode='mkt';
 function openSheet(buy,i){
   if(i!=null)G.sel=i;const h=G.hold[G.sel];
   if(!buy&&!h){toast('이 종목은 아직 갖고 있지 않아요');return}
-  sheet=buy?'buy':'sell';$('q').value=buy?1:h.q;setMode('mkt');$('px').value=G.stocks[G.sel].p.toFixed(2);$('stopBtn').hidden=buy;
+  sheet=buy?'buy':'sell';$('q').value=buy?1:h.q;setMode('mkt');$('px').value=CUR(G.sel)==='KRW'?Math.round(G.stocks[G.sel].p):G.stocks[G.sel].p.toFixed(CUR(G.sel)==='JPY'?1:2);$('px').step=CUR(G.sel)==='USD'?'0.01':CUR(G.sel)==='JPY'?'0.1':'1';$('stopBtn').hidden=buy;
   $('shGo').className='confirm '+(buy?'buy':'sell');$('sdim').classList.add('show');renderSheet();setTimeout(()=>$('q').select(),50);
 }
 function closeSheet(){sheet=null;$('sdim').classList.remove('show')}
 function renderSheet(){
   if(!sheet)return;const s=G.stocks[G.sel],buy=sheet==='buy',n=Math.max(0,Math.floor(+$('q').value||0)),amt=s.p*n,fee=amt*FEE,h=G.hold[G.sel];
   $('shTitle').textContent=`${s.name} ${buy?'구매하기':'판매하기'}`;
-  $('shPrice').textContent=`현재가 ${usd(s.p)} · 실시간으로 바뀌어요`;
-  $('shMax').textContent=buy?`최대 ${ip(maxBuy())}주 살 수 있어요`:`${ip(h?h.q:0)}주 갖고 있어요 · 평균 ${h?usd(h.a):'-'}`;
-  $('shAvail').innerHTML=buy?`<span class="mute">주문 가능 금액</span><b class="num">${esc(usd(G.cash))}</b>`:`<span class="mute">판매 가능 수량</span><b class="num">${ip(h?h.q:0)}주</b>`;
+  const ci=G.sel,cc=CUR(ci);
+  $('shPrice').textContent=`현재가 ${fp(ci,s.p)} · 실시간으로 바뀌어요`+(cc!=='USD'?` · ${curName(cc)}로 거래`:'');
+  $('shMax').textContent=buy?`최대 ${ip(maxBuy())}주 살 수 있어요`:`${ip(h?h.q:0)}주 갖고 있어요 · 평균 ${h?fp(ci,h.a):'-'}`;
+  $('shAvail').innerHTML=buy?`<span class="mute">${curName(cc)} 주문 가능 금액</span><b class="num">${esc(money(cc,wal(cc)))}</b>`:`<span class="mute">판매 가능 수량</span><b class="num">${ip(h?h.q:0)}주</b>`;
   $('shChips').innerHTML=[[.1,'10%'],[.25,'25%'],[.5,'50%'],[1,'최대']].map(([p,l])=>{const n=chipQty(p);
-    return `<button data-p="${p}">${l}<small>${buy?esc(cusd(G.cash*p))+' · ':''}${ip(n)}주</small></button>`}).join('');
-  const rows=buy?[['주문 금액',usd(amt)],['수수료',usd(fee)],['총 결제 금액',usd(amt+fee),1]]
-    :[['판매 금액',usd(amt)],['수수료',usd(fee)],['예상 손익',h?sgn(amt-fee-h.a*n):'-',0,h?cls(amt-fee-h.a*n):''],['받을 금액',usd(amt-fee),1]];
+    return `<button data-p="${p}">${l}<small>${buy?esc(cmoney(cc,wal(cc)*p))+' · ':''}${ip(n)}주</small></button>`}).join('');
+  const rows=buy?[['주문 금액',fp(ci,amt)],['수수료',fp(ci,fee)],['총 결제 금액',fp(ci,amt+fee),1]]
+    :[['판매 금액',fp(ci,amt)],['수수료',fp(ci,fee)],['예상 손익',h?fsg(ci,amt-fee-h.a*n):'-',0,h?cls(amt-fee-h.a*n):''],['받을 금액',fp(ci,amt-fee),1]];
   if(omode!=='mkt'){const px=+$('px').value||0,cur=s.p;
-    $('pxL').textContent=omode==='stop'?'이 가격 이하로 떨어지면 판매 ($)':buy?'이 가격 이하가 되면 구매 ($)':'이 가격 이상이 되면 판매 ($)';
-    $('pxHint').textContent=`현재가 ${usd(cur)} · 지정가 기준 ${buy?'예상 결제':'예상 수령'} ${usd(px*n*(buy?1+FEE:1-FEE))}`;}
+    const unit=cc==='KRW'?'원':cc==='JPY'?'엔':'$';$('pxL').textContent=(omode==='stop'?'이 가격 이하로 떨어지면 판매':buy?'이 가격 이하가 되면 구매':'이 가격 이상이 되면 판매')+` (${unit})`;
+    $('pxHint').textContent=`현재가 ${fp(ci,cur)} · 지정가 기준 ${buy?'예상 결제':'예상 수령'} ${fp(ci,px*n*(buy?1+FEE:1-FEE))}`;}
   $('shGo').dataset.label=omode==='mkt'?'':omode==='limit'?(buy?'지정가 구매 예약':'지정가 판매 예약'):'손절 예약';
   $('shSum').innerHTML=rows.map(r=>`<div class="${r[2]?'big':''}"><span class="mute">${r[0]}</span><span class="num ${r[3]||''}">${r[1]}</span></div>`).join('');
   $('shGo').textContent=omode==='mkt'?`${ip(n)}주 ${buy?'구매하기':'판매하기'}`:`${ip(n)}주 ${$('shGo').dataset.label}`;
@@ -747,7 +923,7 @@ function openDetail(i){G.sel=i;detailOpen=true;$('pdim').classList.add('show');h
 function closeDetail(){detailOpen=false;$('pdim').classList.remove('show')}
 
 // ---- 지수·작은 차트 ----
-const IDX=[['모의 나스닥 100',DEF.map((d,i)=>['semi','big','soft','bio','cons','ind','etc'].includes(d[6])?i:-1).filter(i=>i>=0)],['반도체 지수',DEF.map((d,i)=>d[6]==='semi'?i:-1).filter(i=>i>=0)],['빅테크 지수',DEF.map((d,i)=>d[6]==='big'?i:-1).filter(i=>i>=0)]];
+const IDX=[['모의 나스닥 100',DEF.map((d,i)=>['semi','big','soft','bio','cons','ind','etc'].includes(d[6])?i:-1).filter(i=>i>=0)],['반도체 지수',DEF.map((d,i)=>d[6]==='semi'?i:-1).filter(i=>i>=0)],['빅테크 지수',DEF.map((d,i)=>d[6]==='big'?i:-1).filter(i=>i>=0)],['모의 코스피',DEF.map((d,i)=>d[6]==='kospi'?i:-1).filter(i=>i>=0)],['모의 코스닥',DEF.map((d,i)=>d[6]==='kosdaq'?i:-1).filter(i=>i>=0)],['모의 닛케이',DEF.map((d,i)=>d[6]==='nikkei'?i:-1).filter(i=>i>=0)]];
 function series(ids,n){const len=Math.min(...G.stocks.map(s=>s.c.length)),out=[];
   for(let k=Math.max(0,len-n);k<=len;k++){let sum=0;for(const i of ids){const s=G.stocks[i],c=s.c.length-len+k;sum+=(k<len?s.c[c].c:s.p)/DEF[i][3]}out.push(1000*sum/ids.length)}return out}
 function idxInfo(k,n){const v=series(IDX[k][1],n),last=v[v.length-1];return{v,last,chg:last/1000-1}}
@@ -761,9 +937,9 @@ function spark(v,color,fill){
 // ---- 화면 ----
 function ago(at){const sec=Math.max(0,G.tick-at);return sec<60?sec+'초 전':Math.floor(sec/60)+'분 전'}
 function render(){
-  if(G.fx==null)G.fx=FX0;if(G.krw==null)G.krw=0;if(G.rr==null)G.rr=0;
+  if(G.fx==null)G.fx=FX0;if(G.krw==null)G.krw=0;if(G.rr==null)G.rr=0;if(G.jfx==null)G.jfx=JFX0;if(G.jpy==null)G.jpy=0;
   const w=worth(),pl=w-START;
-  $('total').textContent=usd(w);$('totalKrw').textContent=`≈ ${ckrw(w*G.fx)} · 환율 ${G.fx.toFixed(2)}원`;$('krwBal').textContent=krw(G.krw);$('fxNow').textContent='$1 = '+G.fx.toFixed(2)+'원';$('stockV').textContent=usd(stockVal());$('optV').textContent=usd(optVal());$('pl').textContent=`${sgn(pl)} (${pct(pl/START)})`;$('pl').className='pl num '+cls(pl);$('cash').textContent=usd(G.cash);
+  $('total').textContent=usd(w);$('totalKrw').textContent=`≈ ${ckrw(w*G.fx)} · 환율 ${G.fx.toFixed(2)}원`;$('krwBal').textContent=krw(G.krw);$('jpyBal').textContent=money('JPY',G.jpy);$('fxNow').textContent='$1 = '+G.fx.toFixed(0)+'원 · '+G.jfx.toFixed(1)+'엔';$('stockV').textContent=usd(stockVal());$('optV').textContent=usd(optVal());$('pl').textContent=`${sgn(pl)} (${pct(pl/START)})`;$('pl').className='pl num '+cls(pl);$('cash').textContent=usd(G.cash);
   $('clock').textContent=new Date().toLocaleTimeString('ko-KR',{hour:'2-digit',minute:'2-digit',second:'2-digit'})+' 기준';
   renderMarket();renderTable();renderWatch();renderMine();renderOrders();renderMyOpts();renderTicker();renderOptSheet();renderFx();
   if(!$('vLog').hidden)renderLog();
@@ -775,6 +951,7 @@ function btcInfo(n){const s=G.stocks[BTC],v=s.c.slice(-n).map(b=>b.c).concat([s.
 function renderMarket(){
   const a=idxInfo(0,40);
   if(bigMode==='btc'){const b=btcInfo(40);$('mBig').innerHTML=`<div class="nm">비트코인 <span class="mute" style="font-size:12px">BTC/USD</span></div><div class="v num">${esc(usd(b.last))} <span class="${cls(b.chg)}" style="font-size:14px;font-weight:600">${pct(b.chg)}</span></div>${spark(b.v,b.chg>=0?UP:DN,true)}<div class="mute" style="font-size:12px">시작가 $60,486.93 (Alpha Vantage, 11/26) · 최근 10분 · 눌러서 거래</div>`}
+  else if(bigMode[0]==='k'){const k=+bigMode[1],x=idxInfo(k,40);$('mBig').innerHTML=`<div class="nm">${IDX[k][0]} <span class="mute" style="font-size:12px">게임 지수</span></div><div class="v num">${x.last.toFixed(2)} <span class="${cls(x.chg)}" style="font-size:14px;font-weight:600">${pct(x.chg)}</span></div>${spark(x.v,x.chg>=0?UP:DN,true)}<div class="mute" style="font-size:12px">${IDX[k][1].length}종목 시작가 = 1,000 기준 · 최근 10분 · ${k===5?'엔화':'원화'} 거래</div>`}
   else $('mBig').innerHTML=`<div class="nm">${IDX[0][0]} <span class="mute" style="font-size:12px">게임 지수</span></div><div class="v num">${a.last.toFixed(2)} <span class="${cls(a.chg)}" style="font-size:14px;font-weight:600">${pct(a.chg)}</span></div>${spark(a.v,a.chg>=0?UP:DN,true)}<div class="mute" style="font-size:12px">나스닥 100 종목 시작가 = 1,000 기준 · 최근 10분</div>`;
   const bt=btcInfo(30);
   const items=[1,2].map(k=>{const x=idxInfo(k,40);return{nm:IDX[k][0],v:x.last.toFixed(2),chg:x.chg,s:x.v}});
@@ -794,34 +971,35 @@ function renderTable(){
   const key=ids.join(',')+fSort+fSec+query+showAll;
   if(G.tick-lastSort>=5||key!==orderSig){
     const chg=i=>G.stocks[i].p/G.stocks[i].ref-1;
-    ids.sort((a,b)=>fSort==='abs'?Math.abs(chg(b))-Math.abs(chg(a)):fSort==='rise'?chg(b)-chg(a):fSort==='fall'?chg(a)-chg(b):G.stocks[b].p-G.stocks[a].p);
+    ids.sort((a,b)=>fSort==='abs'?Math.abs(chg(b))-Math.abs(chg(a)):fSort==='rise'?chg(b)-chg(a):fSort==='fall'?chg(a)-chg(b):G.stocks[b].p/rateOf(CUR(b))-G.stocks[a].p/rateOf(CUR(a)));
     ids.total=ids.length;if(!showAll&&!query)ids.splice(30);
     orderSig=key;lastSort=G.tick;moreBtn(ids.total);
     $('tbody').innerHTML=ids.length?ids.map((i,r)=>`<tr data-i="${i}" tabindex="0"><td class="hc"><button class="heart" data-w="${i}" aria-label="${esc(DEF[i][1])} 관심 등록"></button></td><td class="rk">${r+1}</td><td class="l"><span class="who">${logo(i)}<span><b>${esc(DEF[i][1])}</b><small>${esc(DEF[i][0])}</small></span></span></td><td class="num p"></td><td class="num"><span class="pill c"></span></td><td class="hide-s sp"></td><td class="hide-s"><span class="bar" title="변동성"><i><b style="width:${Math.min(100,DEF[i][4]/.04*100)}%"></b></i></span></td><td class="l hide-s"><span class="sec">${esc(DEF[i][2])}</span><small class="mute yl" style="margin-left:6px"></small></td><td class="num hide-s h"></td></tr>`).join('')
       :`<tr><td colspan="9" class="empty">${fSec==='watch'?'아직 관심 종목이 없어요. 종목 왼쪽 하트를 눌러 담아보세요.':'찾는 종목이 없어요'}</td></tr>`;
   }
   for(const tr of $('tbody').children){if(!tr.dataset.i)continue;const i=+tr.dataset.i,s=G.stocks[i],c=s.p/s.ref-1,h=G.hold[i];
-    tr.querySelector('.p').textContent=usd(s.p);
+    tr.querySelector('.p').textContent=fp(i,s.p);
     const pc=tr.querySelector('.c');pc.textContent=pct(c);pc.className='pill c '+cls(c)+(Math.abs(c)>=.02?(c>0?' ub':' db'):'');
     tr.querySelector('.sp').innerHTML=spark(s.c.slice(-24).map(b=>b.c).concat([s.p]),c>=0?UP:DN,false);
     {const y=yieldOf(i);tr.querySelector('.yl').textContent=isBond(i)?`금리 ${y.toFixed(2)}%`:y?`배당 ${y}%`:''}
     tr.querySelector('.h').textContent=h?ip(h.q)+'주':'-';const hb=tr.querySelector('.heart');hb.classList.toggle('on',isW(i));hb.setAttribute('aria-pressed',isW(i))}
 }
 function renderMine(){
-  const hs=Object.entries(G.hold).map(([i,h])=>({i:+i,v:h.q*G.stocks[i].p})).sort((a,b)=>b.v-a.v).slice(0,10);
+  const hs=Object.entries(G.hold).map(([i,h])=>({i:+i,v:h.q*G.stocks[i].p/rateOf(CUR(+i))})).sort((a,b)=>b.v-a.v).slice(0,10);
   const key=hs.map(x=>x.i).join(',')||'none',ul=$('mine');
   if(ul.dataset.k!==key){ul.dataset.k=key;
     ul.innerHTML=hs.length?hs.map(x=>`<li data-i="${x.i}">${logo(x.i)}<span><button class="nm" data-open="${x.i}">${esc(DEF[x.i][1])}</button><span class="q num"></span></span><span class="r num"></span><button class="sellbtn" data-sell="${x.i}" aria-label="${esc(DEF[x.i][1])} 매도">매도</button></li>`).join('')
       :'<li class="minempty">아직 산 주식이 없어요.<br>실시간 차트에서 종목을 눌러 구매해 보세요.</li>'}
   for(const li of ul.children){if(!li.dataset.i)continue;const i=+li.dataset.i,h=G.hold[i];if(!h)continue;const p=G.stocks[i].p,plv=(p-h.a)*h.q;
-    li.querySelector('.q').textContent=`${ip(h.q)}주 · 평가 ${cusd(h.q*p)}`;
-    li.querySelector('.r').innerHTML=`<span>${esc(usd(p))}</span><small class="${cls(plv)}">${esc(csgn(plv))} (${esc(pct(p/h.a-1))})</small>`}
+    li.querySelector('.q').textContent=`${ip(h.q)}주 · 평가 ${fcp(i,h.q*p)}`;
+    li.querySelector('.r').innerHTML=`<span>${esc(fp(i,p))}</span><small class="${cls(plv)}">${esc(fcsg(i,plv))} (${esc(pct(p/h.a-1))})</small>`}
 }
 function renderTicker(){
-  const parts=[0,1,2].map(k=>{const x=idxInfo(k,1);return `<span>${IDX[k][0]}<b class="num">${x.last.toFixed(2)}</b><span class="${cls(x.chg)} num">${pct(x.chg)}</span></span>`});
+  const parts=[0,1,2,3,4,5].map(k=>{const x=idxInfo(k,1);return `<span>${IDX[k][0]}<b class="num">${x.last.toFixed(2)}</b><span class="${cls(x.chg)} num">${pct(x.chg)}</span></span>`});
   parts.push(`<span>달러 환율<b class="num">${G.fx.toFixed(2)}원</b><span class="${cls(G.fx/FX0-1)} num">${pct(G.fx/FX0-1)}</span></span>`);
+  parts.push(`<span>엔 환율<b class="num">${G.jfx.toFixed(2)}엔</b><span class="${cls(G.jfx/JFX0-1)} num">${pct(G.jfx/JFX0-1)}</span></span>`);
   {const b=G.stocks[BTC],c=b.p/b.ref-1;parts.push(`<span>비트코인<b class="num">${esc(usd(b.p))}</b><span class="${cls(c)} num">${pct(c)}</span></span>`)}
-  for(const s of G.stocks){const c=s.p/s.ref-1;parts.push(`<span>${esc(s.t)}<b class="num">${esc(usd(s.p))}</b><span class="${cls(c)} num">${pct(c)}</span></span>`)}
+  for(const [j,s] of G.stocks.entries()){const c=s.p/s.ref-1;parts.push(`<span>${esc(CUR(j)==='USD'?s.t:s.name)}<b class="num">${esc(fp(j,s.p))}</b><span class="${cls(c)} num">${pct(c)}</span></span>`)}
   $('tick').innerHTML=parts.join('<span style="display:inline-block;width:18px"></span>');
 }
 function renderLog(){
@@ -830,10 +1008,10 @@ function renderLog(){
 function renderDetail(){
   const i=G.sel,s=G.stocks[i],c=s.p/s.ref-1,h=G.hold[i];
   const lg=$('pLogo');lg.textContent=s.t.slice(0,4);lg.style.background=color(i);
-  $('pName').textContent=s.name;{const y=yieldOf(i);$('pYield').textContent=isBond(i)?`현재 금리 ${y.toFixed(3)}% · 1좌 = 액면 $100 · 10분마다 이자 지급`:y?`연 배당률 ${y}% · 10분마다 배당 지급(게임용)`:''}$('pHeart').classList.toggle('on',isW(i));$('pHeart').setAttribute('aria-pressed',isW(i));$('pSub').textContent=`${s.t} · ${s.sec}`;
-  $('pPrice').innerHTML=esc(usd(s.p))+(s.real?`<span class="real">실제 ${esc(s.real.day)} 반영</span>`:'');
-  $('pChg').textContent=`${s.real?'전일 종가':'시작가'}보다 ${sgn(s.p-s.ref)} (${pct(c)})`;$('pChg').className='pchg num '+cls(c);
-  $('pos').innerHTML=h?`<div><span>보유 수량</span><b class="num">${ip(h.q)}주</b></div><div><span>평균 단가</span><b class="num">${usd(h.a)}</b></div><div><span>수익</span><b class="num ${cls(s.p-h.a)}">${sgn((s.p-h.a)*h.q)}</b></div>`
+  $('pName').textContent=s.name;$('openOpt').hidden=CUR(i)!=='USD';{const y=yieldOf(i),cc=CUR(i);$('pYield').textContent=cc!=='USD'?`${curName(cc)}로 거래 · ≈ ${usd(s.p/rateOf(cc))} · ${DEF[i][6]==='kospi'?'코스피':DEF[i][6]==='kosdaq'?'코스닥':'도쿄증권거래소'}`:isBond(i)?`현재 금리 ${y.toFixed(3)}% · 1좌 = 액면 $100 · 10분마다 이자 지급`:y?`연 배당률 ${y}% · 10분마다 배당 지급(게임용)`:''}$('pHeart').classList.toggle('on',isW(i));$('pHeart').setAttribute('aria-pressed',isW(i));$('pSub').textContent=`${s.t} · ${s.sec}`;
+  $('pPrice').innerHTML=esc(fp(i,s.p))+(s.real?`<span class="real">실제 ${esc(s.real.day)} 반영</span>`:'');
+  $('pChg').textContent=`${s.real?'전일 종가':'시작가'}보다 ${fsg(i,s.p-s.ref)} (${pct(c)})`;$('pChg').className='pchg num '+cls(c);
+  $('pos').innerHTML=h?`<div><span>보유 수량</span><b class="num">${ip(h.q)}주</b></div><div><span>평균 단가</span><b class="num">${fp(i,h.a)}</b></div><div><span>수익</span><b class="num ${cls(s.p-h.a)}">${fsg(i,(s.p-h.a)*h.q)}</b></div>`
     :`<div><span>보유 수량</span><b>0주</b></div><div><span>살 수 있는 수량</span><b class="num">${ip(maxBuy())}주</b></div><div><span>변동성</span><b>${s.vol>=.03?'높음':s.vol>=.018?'보통':'낮음'}</b></div>`;
   draw();
 }
@@ -862,11 +1040,11 @@ function draw(){
   }
   const hi=d.reduce((a,b,i)=>b.c>d[a].c?i:a,0),lo=d.reduce((a,b,i)=>b.c<d[a].c?i:a,0);
   const lab=(i,t,yy)=>{const w=x.measureText(t).width;x.fillText(t,Math.min(W-w-2,Math.max(2,X(i)-w/2)),yy)};
-  x.fillStyle=sub;x.textBaseline='bottom';lab(hi,'최고 '+usd(d[hi].c),Math.max(14,Y(d[hi].c)-6));x.textBaseline='top';lab(lo,'최저 '+usd(d[lo].c),Math.min(H-14,Y(d[lo].c)+6));
-  if(h){const yy=Y(h.a);if(yy>PT&&yy<H-PB){x.strokeStyle=ink;x.globalAlpha=.35;x.setLineDash([5,4]);x.beginPath();x.moveTo(0,yy);x.lineTo(W,yy);x.stroke();x.setLineDash([]);x.globalAlpha=1;x.fillStyle=sub;x.textBaseline='bottom';x.fillText('내 평균 '+usd(h.a),4,yy-3)}}
+  x.fillStyle=sub;x.textBaseline='bottom';lab(hi,'최고 '+fp(G.sel,d[hi].c),Math.max(14,Y(d[hi].c)-6));x.textBaseline='top';lab(lo,'최저 '+fp(G.sel,d[lo].c),Math.min(H-14,Y(d[lo].c)+6));
+  if(h){const yy=Y(h.a);if(yy>PT&&yy<H-PB){x.strokeStyle=ink;x.globalAlpha=.35;x.setLineDash([5,4]);x.beginPath();x.moveTo(0,yy);x.lineTo(W,yy);x.stroke();x.setLineDash([]);x.globalAlpha=1;x.fillStyle=sub;x.textBaseline='bottom';x.fillText('내 평균 '+fp(G.sel,h.a),4,yy-3)}}
   if(hoverX!=null){const i=Math.max(0,Math.min(d.length-1,Math.round((hoverX-cw/2)/cw-(N-d.length))));const b=d[i],hx=X(i),hy=Y(b.c);
     x.strokeStyle=sub;x.lineWidth=1;x.beginPath();x.moveTo(hx,PT-8);x.lineTo(hx,H-PB);x.stroke();x.fillStyle=lc;x.beginPath();x.arc(hx,hy,4,0,7);x.fill();
-    const sec=(d.length-1-i)*15,tx=`${usd(b.c)} · ${sec?(sec>=60?Math.floor(sec/60)+'분 ':'')+(sec%60?sec%60+'초 ':'')+'전':'지금'}`;
+    const sec=(d.length-1-i)*15,tx=`${fp(G.sel,b.c)} · ${sec?(sec>=60?Math.floor(sec/60)+'분 ':'')+(sec%60?sec%60+'초 ':'')+'전':'지금'}`;
     x.font='700 13px "Pretendard Variable",sans-serif';const tw=x.measureText(tx).width;x.fillStyle=ink;x.textBaseline='top';x.fillText(tx,Math.min(W-tw-4,Math.max(4,hx-tw/2)),0)}
 }
 cv.addEventListener('pointermove',e=>{const r=cv.getBoundingClientRect();hoverX=e.clientX-r.left;draw()});
@@ -882,22 +1060,23 @@ function payDividends(){let tot=0,cnt=0;
   if(cnt){toast(`배당·이자 ${usd(tot)}가 들어왔어요`);if(G.log.length>80)G.log.length=80}}
 
 // ---- 환전 ----
-let xdir='u2k';
+let xdir='USD-KRW';
 function openFx(){$('xdim').classList.add('show');$('xAmt').value='';renderFx();setTimeout(()=>$('xAmt').focus(),50)}
-function renderFx(){if(!$('xdim').classList.contains('show'))return;const u2k=xdir==='u2k',a=+$('xAmt').value||0,r=G.fx;
-  $('xHaveL').textContent=u2k?'보유 달러':'보유 원화';$('xHave').textContent=u2k?usd(G.cash):krw(G.krw);
-  $('xAmtL').textContent=u2k?'바꿀 달러 ($)':'바꿀 원화 (원)';
-  const out=u2k?a*r*(1-FXFEE):a/r*(1-FXFEE);
-  $('xSum').innerHTML=`<div><span class="mute">적용 환율</span><span class="num">1달러 = ${r.toFixed(2)}원</span></div><div><span class="mute">수수료 0.1%</span><span class="num">${u2k?krw(a*r*FXFEE):usd(a/r*FXFEE)}</span></div><div class="big"><span class="mute">받을 금액</span><span class="num">${u2k?krw(out):usd(out)}</span></div>`}
-function doFx(){const u2k=xdir==='u2k',a=+$('xAmt').value||0;if(!(a>0))return toast('금액을 입력해 주세요');
-  if(u2k){if(a>G.cash+1e-9)return toast('달러가 부족해요');const out=a*G.fx*(1-FXFEE);G.cash-=a;G.krw+=out;G.log.unshift({t:'환전 · 달러 → 원화',d:`${usd(a)} → ${krw(out)} (1달러 ${G.fx.toFixed(2)}원)`,c:'dn',at:G.tick});toast(`${krw(out)}으로 바꿨어요`)}
-  else{if(a>G.krw+1e-6)return toast('원화가 부족해요');const out=a/G.fx*(1-FXFEE);G.krw-=a;G.cash+=out;G.log.unshift({t:'환전 · 원화 → 달러',d:`${krw(a)} → ${usd(out)} (1달러 ${G.fx.toFixed(2)}원)`,c:'up',at:G.tick});toast(`${usd(out)}로 바꿨어요`)}
+const xconv=(a,from,to)=>a/rateOf(from)*rateOf(to);
+function renderFx(){if(!$('xdim').classList.contains('show'))return;const [fr,to]=xdir.split('-'),a=+$('xAmt').value||0;
+  $('xHaveL').textContent='보유 '+curName(fr);$('xHave').textContent=money(fr,wal(fr));
+  $('xAmtL').textContent=`바꿀 ${curName(fr)} (${fr==='USD'?'$':fr==='KRW'?'원':'엔'})`;
+  const out=xconv(a,fr,to)*(1-FXFEE),r=to==='USD'?rateOf(fr):rateOf(to);
+  $('xSum').innerHTML=`<div><span class="mute">적용 환율</span><span class="num">1달러 = ${r.toFixed(2)}${(fr==='USD'?to:fr)==='KRW'?'원':'엔'}</span></div><div><span class="mute">수수료 0.1%</span><span class="num">${money(to,xconv(a,fr,to)*FXFEE)}</span></div><div class="big"><span class="mute">받을 금액</span><span class="num">${money(to,out)}</span></div>`}
+function doFx(){const [fr,to]=xdir.split('-'),a=+$('xAmt').value||0;if(!(a>0))return toast('금액을 입력해 주세요');
+  if(a>wal(fr)+1e-6)return toast(curName(fr)+'가 부족해요');const out=xconv(a,fr,to)*(1-FXFEE);addW(fr,-a);addW(to,out);
+  G.log.unshift({t:`환전 · ${curName(fr)} → ${curName(to)}`,d:`${money(fr,a)} → ${money(to,out)}`,c:to==='USD'?'up':'dn',at:G.tick});toast(`${money(to,out)}로 바꿨어요`);
   save();pushCloud(true);$('xdim').classList.remove('show');render()}
 $('openFx').addEventListener('click',openFx);
 $('xClose').addEventListener('click',()=>$('xdim').classList.remove('show'));
 $('xdim').addEventListener('click',e=>{if(e.target===$('xdim'))$('xdim').classList.remove('show')});
 $('xDir').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;xdir=b.dataset.d;$('xDir').querySelectorAll('button').forEach(o=>o.classList.toggle('on',o===b));$('xAmt').value='';renderFx()});
-$('xChips').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;const have=xdir==='u2k'?G.cash:G.krw;$('xAmt').value=xdir==='u2k'?Math.floor(have*b.dataset.p*100)/100:Math.floor(have*b.dataset.p);renderFx()});
+$('xChips').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;const fr=xdir.split('-')[0],have=wal(fr);$('xAmt').value=fr==='USD'?Math.floor(have*b.dataset.p*100)/100:Math.floor(have*b.dataset.p);renderFx()});
 $('xAmt').addEventListener('input',renderFx);
 $('xGo').addEventListener('click',doFx);
 
@@ -912,7 +1091,7 @@ function renderWatch(){const ids=watch().map(t=>DEF.findIndex(d=>d[0]===t)).filt
     ul.innerHTML=ids.length?ids.map(i=>`<li data-i="${i}">${logo(i)}<span><button class="nm" data-open="${i}">${esc(DEF[i][1])}</button><span class="q">${esc(DEF[i][0])}</span></span><span class="r num"></span><button class="heart on" data-w="${i}" aria-label="${esc(DEF[i][1])} 관심 해제"></button></li>`).join('')
       :'<li class="minempty">종목 옆 하트를 누르면 여기에 모여요.</li>'}
   for(const li of ul.children){if(!li.dataset.i)continue;const i=+li.dataset.i,s=G.stocks[i],c=s.p/s.ref-1;
-    li.querySelector('.r').innerHTML=`${esc(usd(s.p))}<small class="${cls(c)}">${esc(pct(c))}</small>`}}
+    li.querySelector('.r').innerHTML=`${esc(fp(i,s.p))}<small class="${cls(c)}">${esc(pct(c))}</small>`}}
 $('wList').addEventListener('click',e=>{const w=e.target.closest('[data-w]');if(w)return toggleW(+w.dataset.w);const o=e.target.closest('[data-open]');if(o)openDetail(+o.dataset.open)});
 $('pHeart').addEventListener('click',()=>toggleW(G.sel));
 $('mGrid').addEventListener('click',e=>{if(e.target.closest('[data-fx]'))return openFx();const m=e.target.closest('[data-i]');if(m)openDetail(+m.dataset.i)});
@@ -989,28 +1168,28 @@ $('sdim').addEventListener('click',e=>{if(e.target===$('sdim'))closeSheet()});
 $('q').addEventListener('input',renderSheet);
 $('minus').addEventListener('click',()=>{$('q').value=Math.max(1,(+$('q').value||1)-1);renderSheet()});
 $('plus').addEventListener('click',()=>{$('q').value=(+$('q').value||0)+1;renderSheet()});
-function chipQty(p){const h=G.hold[G.sel];if(sheet==='buy')return Math.floor(G.cash*p/(G.stocks[G.sel].p*(1+FEE)));return Math.floor((h?h.q:0)*p)}
+function chipQty(p){const h=G.hold[G.sel];if(sheet==='buy')return Math.floor(wal(CUR(G.sel))*p/(G.stocks[G.sel].p*(1+FEE)));return Math.floor((h?h.q:0)*p)}
 $('shChips').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;$('q').value=Math.max(1,chipQty(+b.dataset.p));renderSheet()});
 $('shGo').addEventListener('click',()=>{const n=Math.floor(+$('q').value);
   if(omode==='mkt'){if(trade(sheet==='buy',n))closeSheet();return}
-  const px=Math.round((+$('px').value||0)*100)/100;if(!(px>0))return toast('가격을 입력해 주세요');if(!(n>0))return toast('수량을 1주 이상 입력해주세요');
+  const px=CUR(G.sel)==='KRW'?Math.round(+$('px').value||0):Math.round((+$('px').value||0)*100)/100;if(!(px>0))return toast('가격을 입력해 주세요');if(!(n>0))return toast('수량을 1주 이상 입력해주세요');
   const buy=sheet==='buy';if(!buy){const h=G.hold[G.sel];if(!h||h.q<n)return toast('가진 주식보다 많이 예약할 수 없어요')}
   orders().push({id:Date.now()+Math.random(),i:G.sel,side:buy?'buy':'sell',type:omode,px,q:n,at:G.tick});
-  toast(`${DEF[G.sel][1]} ${ip(n)}주 ${omode==='stop'?'손절':'지정가'} ${buy?'구매':'판매'} 예약 · ${usd(px)}`);save();pushCloud();closeSheet();render()});
+  toast(`${DEF[G.sel][1]} ${ip(n)}주 ${omode==='stop'?'손절':'지정가'} ${buy?'구매':'판매'} 예약 · ${fp(G.sel,px)}`);save();pushCloud();closeSheet();render()});
 function setMode(m){omode=m;$('shMode').querySelectorAll('button').forEach(b=>b.classList.toggle('on',b.dataset.m===m));$('pxWrap').hidden=m==='mkt';renderSheet()}
 $('shMode').addEventListener('click',e=>{const b=e.target.closest('button');if(b)setMode(b.dataset.m)});
 $('px').addEventListener('input',renderSheet);
 function orders(){if(!Array.isArray(G.orders))G.orders=[];return G.orders}
 function checkOrders(){const os=orders();for(let k=os.length-1;k>=0;k--){const o=os[k],p=G.stocks[o.i].p;
   const hit=o.side==='buy'?p<=o.px:o.type==='stop'?p<=o.px:p>=o.px;if(!hit)continue;os.splice(k,1);
-  const ok=trade(o.side==='buy',o.q,o.i);if(ok)toast(`예약 주문 체결: ${DEF[o.i][1]} ${ip(o.q)}주 ${o.side==='buy'?'구매':'판매'} @${usd(p)}`);
+  const ok=trade(o.side==='buy',o.q,o.i);if(ok)toast(`예약 주문 체결: ${DEF[o.i][1]} ${ip(o.q)}주 ${o.side==='buy'?'구매':'판매'} @${fp(o.i,p)}`);
   else{G.log.unshift({t:`예약 주문 취소 · ${DEF[o.i][1]}`,d:o.side==='buy'?'주문 가능 금액 부족':'보유 수량 부족',c:'dn',at:G.tick});toast(`${DEF[o.i][1]} 예약 주문이 체결되지 못해 취소됐어요`)}}}
 function renderOrders(){const os=orders(),ul=$('ordList'),key=os.map(o=>o.id).join(',')||'none';
   if(ul.dataset.k!==key){ul.dataset.k=key;
-    ul.innerHTML=os.length?os.map(o=>`<li data-o="${o.id}">${logo(o.i)}<span><button class="nm" data-open="${o.i}">${esc(DEF[o.i][1])}</button><span class="q num">${o.type==='stop'?'손절':'지정가'} ${o.side==='buy'?'구매':'판매'} · ${ip(o.q)}주 @${esc(usd(o.px))}</span></span><span class="r num"></span><button class="sellbtn" data-cancel="${o.id}">취소</button></li>`).join('')
+    ul.innerHTML=os.length?os.map(o=>`<li data-o="${o.id}">${logo(o.i)}<span><button class="nm" data-open="${o.i}">${esc(DEF[o.i][1])}</button><span class="q num">${o.type==='stop'?'손절':'지정가'} ${o.side==='buy'?'구매':'판매'} · ${ip(o.q)}주 @${esc(fp(o.i,o.px))}</span></span><span class="r num"></span><button class="sellbtn" data-cancel="${o.id}">취소</button></li>`).join('')
       :'<li class="minempty">예약해 둔 주문이 없어요. 구매·판매 창에서 "지정가"나 "손절"을 골라보세요.</li>'}
   for(const li of ul.children){if(!li.dataset.o)continue;const o=os.find(x=>String(x.id)===li.dataset.o);if(!o)continue;const p=G.stocks[o.i].p,gap=o.px/p-1;
-    li.querySelector('.r').innerHTML=`<span>현재 ${esc(usd(p))}</span><small class="mute">${esc(pct(gap))} 남음</small>`}}
+    li.querySelector('.r').innerHTML=`<span>현재 ${esc(fp(o.i,p))}</span><small class="mute">${esc(pct(gap))} 남음</small>`}}
 $('ordList').addEventListener('click',e=>{const c=e.target.closest('[data-cancel]');if(c){const os=orders(),k=os.findIndex(o=>String(o.id)===c.dataset.cancel);if(k>=0){os.splice(k,1);toast('예약 주문을 취소했어요');save();pushCloud();render()}return}
   const o=e.target.closest('[data-open]');if(o)openDetail(+o.dataset.open)});
 $('pause').addEventListener('click',()=>paused?start():stop());
