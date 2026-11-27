@@ -847,7 +847,7 @@ function tickOnce(){
     if(bd){const dy=norm()*bd[2]/100*.065+G.rr;s.y=Math.max(.01,(s.y!=null?s.y:bd[0])+dy);lr=-bd[1]*dy/100}
     else{const c=CUR(i),mf=c==='KRW'?zk:c==='JPY'?zj:zm;lr=s.beta*mf+s.vol*.065*norm()+eff}s.lr=lr;s.p=Math.max(.01,s.p*Math.exp(lr));bar(s);
   });
-  G.stocks.forEach((s,i)=>{if(UL[i]==null||isClosed(i))return;const u=G.stocks[UL[i]];if(REAL[i]){const a=REAL[i],np=a.p*Math.pow(u.p/a.up,DEF[i][8]);s.lr=Math.log(np/s.p);s.p=np;bar(s);return}s.lr=DEF[i][8]*(u.lr||0);s.p=Math.max(.01,s.p*Math.exp(s.lr));bar(s)});
+  G.stocks.forEach((s,i)=>{if(UL[i]==null||isClosed(i))return;const u=G.stocks[UL[i]];if(REAL[i]){if(!REAL[UL[i]]&&UL[i]!==BTC)return;const a=REAL[i],np=a.p*Math.pow(u.p/a.up,DEF[i][8]);s.lr=Math.log(np/s.p);s.p=np;bar(s);return}s.lr=DEF[i][8]*(u.lr||0);s.p=Math.max(.01,s.p*Math.exp(s.lr));bar(s)});
   settleOptions();checkOrders();
   if(G.tick%600===0)payDividends();
   G.pending=G.pending.filter(e=>e.to>G.tick);
@@ -1462,7 +1462,10 @@ setTimeout(syncPrices,1500);
 
 // ---- 실제 시세 연결 ----
 // REAL[i]={p,t,src}: 실제 시세가 들어온 종목은 그 가격을 그대로 따름 (레버리지·연동 ETF는 기초자산 움직임을 따라감)
-function setReal(i,p,src,ref,t){if(!(p>0)||i<0)return;const s=G.stocks[i];if(!REAL[i]||UL[i]!=null){s.p=p;s.lr=0;s.cur={o:p,h:p,l:p,c:p,n:0}}REAL[i]={p,t:t||Date.now(),src};if(UL[i]!=null)REAL[i].up=G.stocks[UL[i]].p;if(ref>0)s.ref=ref;
+function setReal(i,p,src,ref,t){if(!(p>0)||i<0)return;const s=G.stocks[i];if(UL[i]!=null&&REAL[i]){if(ref>0){s.ref=ref;s.real={day:'live'}}return}
+  if(!REAL[i]&&s.p>0&&Math.abs(Math.log(p/s.p))>.002){const f=p/s.p;s.c=s.c.map(b=>({o:b.o*f,h:b.h*f,l:b.l*f,c:b.c*f}))}
+  if(!REAL[i]&&UL[i]==null)G.stocks.forEach((x,j)=>{if(UL[j]===i&&REAL[j])REAL[j].up=p});
+  if(!REAL[i]){s.p=p;s.lr=0;s.cur={o:p,h:p,l:p,c:p,n:0}}REAL[i]={p,t:t||Date.now(),src};if(UL[i]!=null)REAL[i].up=G.stocks[UL[i]].p;if(ref>0){s.ref=ref;s.real={day:'live'}}
   if(BR[i])delete BR[i]}
 // 비트코인: 키 없는 공개 시세 (바이낸스 → 안 되면 코인베이스)
 function startBTC(){let got=false,ws;

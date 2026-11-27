@@ -1,8 +1,9 @@
 name: 실제 시세 갱신
+# GitHub 예약 실행은 자주 건너뛰어져서, 한 번 실행되면 최대 5시간 40분 동안 10분마다 갱신하고
+# 다음 실행은 대기열에 한 개만 남겨 끊기지 않게 이어 달림
 on:
   schedule:
-    - cron: '*/10 * * * 1-5'   # 평일 10분마다 (GitHub 사정에 따라 늦어질 수 있음)
-    - cron: '17 */3 * * 0,6'   # 주말엔 3시간마다
+    - cron: '7 * * * *'
   workflow_dispatch:
 permissions:
   contents: write
@@ -12,19 +13,24 @@ concurrency:
 jobs:
   update:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 350
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - run: python scripts/fetch_live.py
-      - name: 바뀐 시세 올리기
+      - name: 10분마다 시세 받아 올리기
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email '41898699+github-actions[bot]@users.noreply.github.com'
-          [ -f live.json ] || exit 0
-          git add live.json
-          git diff --cached --quiet && exit 0
-          git commit -m "실제 시세 갱신"
-          for i in 1 2 3; do git pull --rebase -q && git push -q && break; sleep 5; done
+          end=$(( $(date +%s) + 340*60 ))
+          while :; do
+            git pull --rebase -q || true
+            python scripts/fetch_live.py || echo "이번 회차 실패"
+            if [ -f live.json ] && ! git diff --quiet -- live.json; then
+              git add live.json && git commit -qm "실제 시세 갱신"
+              for i in 1 2 3; do git pull --rebase -q && git push -q && break; sleep 5; done
+            fi
+            [ $(( $(date +%s) + 600 )) -lt $end ] || break
+            sleep 600
+          done
