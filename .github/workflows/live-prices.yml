@@ -1,5 +1,5 @@
 name: 실제 시세 갱신
-# 한 번 실행되면 최대 5시간 40분 동안 2분마다 시세를 받아 data 브랜치의 live.json에 올림.
+# 한 번 실행되면 최대 5시간 40분 동안 1분마다 시세를 받아 data 브랜치의 live.json에 올림.
 # data 브랜치는 사이트 빌드를 일으키지 않고, 사이트는 raw.githubusercontent.com에서 바로 읽음.
 # GitHub 예약 실행이 자주 건너뛰어져서 매시간 다음 실행을 대기열에 걸어 끊기지 않게 함.
 on:
@@ -23,7 +23,7 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - name: 2분마다 시세 받아 data 브랜치에 올리기
+      - name: 1분마다 시세 받아 data 브랜치에 올리기
         run: |
           mkdir -p /tmp/out
           git fetch -q origin data 2>/dev/null && git show origin/data:live.json > /tmp/out/live.json 2>/dev/null || true
@@ -36,6 +36,6 @@ jobs:
                 && git -c user.name='github-actions[bot]' -c user.email='41898699+github-actions[bot]@users.noreply.github.com' commit -qm "실제 시세" \
                 && git push -qf "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" data ) || echo "올리기 실패"
             fi
-            [ $(( $(date +%s) + 120 )) -lt $end ] || break
-            sleep 120
+            [ $(( $(date +%s) + 60 )) -lt $end ] || break
+            sleep 60
           done

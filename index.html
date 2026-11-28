@@ -1538,7 +1538,7 @@ async function pullLive(){try{let r=await fetch('https://raw.githubusercontent.c
   for(const [t,q] of Object.entries(j.quotes||{})){const i=DEF.findIndex(d=>d[0]===t);if(i<0||!(q.p>0))continue;
     if(UL[i]!=null&&REAL[i]&&Date.now()-REAL[i].t<1800e3)continue;if(REAL[i]&&REAL[i].src!=='yh'&&Date.now()-REAL[i].t<300e3)continue;setReal(i,q.p,'yh',q.pc);n++}
   if(n&&!pullLive.done){pullLive.done=1;save();render();toast(`${n}개 종목이 실제 가격(약 20분 지연)을 따라요`)}}}catch(e){}
-  setTimeout(pullLive,60e3)}
+  setTimeout(pullLive,30e3)}
 setTimeout(pullLive,3000);
 function holPop(title,body){$('hTitle').textContent=title;$('hBody').textContent=body;$('hdim').classList.add('show');$('hOk').focus()}
 function holNotice(i){const m=MK[i],r=closedNow()[m];holPop(isHoli(r)?`${MNAME[m]} 증시 휴장일이에요`:`${MNAME[m]} 증시 ${r}이에요`,(isHoli(r)?`오늘은 ${MNAME[m]} 증시가 쉬는 날(${r})이라`:`지금은 ${MNAME[m]} 증시 거래 시간이 아니라`)+` ${DEF[i][1]}을(를) 사고팔 수 없어요. 거래 시간은 한국 시간 ${sessTxt(m)}이에요. 예약 주문은 장이 열리면 체결돼요.`)}
