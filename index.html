@@ -828,26 +828,27 @@ function closedNow(){if(Date.now()-mclAt<30e3)return MCL;mclAt=Date.now();const 
     const day=`${g('year')}-${g('month')}-${g('day')}`,wd=g('weekday');o[m]=wd==='Sat'||wd==='Sun'?'주말':HOL[m][day]||''}
   return MCL=o}
 const isClosed=i=>MK[i]&&closedNow()[MK[i]];
-// ---- 시장 엔진 ----
+// ---- 시장 엔진 ---- (1틱=1초, 하루(86400틱) 표준편차 ≈ 종목 일간변동성)
 function tickOnce(){
   G.tick++;
-  if(Math.random()<.01)G.regime=(Math.random()-.5)*.0003;
-  if(Math.random()<.01)G.rr=(Math.random()-.5)*.0004;if(G.rr==null)G.rr=0;
-  if(G.fx==null)G.fx=FX0;G.fx*=Math.exp(norm()*.0045*.065);if(G.krw==null)G.krw=0;
-  if(G.jfx==null)G.jfx=JFX0;G.jfx*=Math.exp(norm()*.005*.065);if(G.jpy==null)G.jpy=0;
-  const zm=norm()*.0007+G.regime;
-  const zk=zm*.4+norm()*.0008,zj=zm*.4+norm()*.0007;
+  if(Math.random()<.01)G.regime=(Math.random()-.5)*.000016;
+  if(Math.random()<.01)G.rr=(Math.random()-.5)*.00002;if(G.rr==null)G.rr=0;
+  if(G.fx==null)G.fx=FX0;G.fx*=Math.exp(norm()*.0045*.0034);if(G.krw==null)G.krw=0;
+  if(G.jfx==null)G.jfx=JFX0;G.jfx*=Math.exp(norm()*.005*.0034);if(G.jpy==null)G.jpy=0;
+  const zm=norm()*.000037+G.regime;
+  const zk=zm*.4+norm()*.000042,zj=zm*.4+norm()*.000037;
   G.stocks.forEach((s,i)=>{
-    if(UL[i]!=null||isClosed(i))return;
-    if(REAL[i]){const p=REAL[i].p;s.lr=Math.log(p/s.p);s.p=p;bar(s);return}
+    if(UL[i]!=null)return;
+    if(REAL[i]){pinReal(i,s,REAL[i].p);return}
+    if(isClosed(i))return;
     if(BR[i]){if(bridged(i)){bridgeTick(i,s);return}}
     let eff=0;
     for(const e of G.pending){if(G.tick>=e.from&&G.tick<e.to&&(e.all||e.id===i||e.sec===s.sec))eff+=(e.all||e.id===i?e.v:e.v*.6)/(e.to-e.from)}
     let lr;const bd=BOND[DEF[i][0]];
-    if(bd){const dy=norm()*bd[2]/100*.065+G.rr;s.y=Math.max(.01,(s.y!=null?s.y:bd[0])+dy);lr=-bd[1]*dy/100}
-    else{const c=CUR(i),mf=c==='KRW'?zk:c==='JPY'?zj:zm;lr=s.beta*mf+s.vol*.065*norm()+eff}s.lr=lr;s.p=Math.max(.01,s.p*Math.exp(lr));bar(s);
+    if(bd){const dy=norm()*bd[2]/100*.0034+G.rr;s.y=Math.max(.01,(s.y!=null?s.y:bd[0])+dy);lr=-bd[1]*dy/100}
+    else{const c=CUR(i),mf=c==='KRW'?zk:c==='JPY'?zj:zm;lr=s.beta*mf+s.vol*.0034*norm()+eff}s.lr=lr;s.p=Math.max(.01,s.p*Math.exp(lr));bar(s);
   });
-  G.stocks.forEach((s,i)=>{if(UL[i]==null||isClosed(i))return;const u=G.stocks[UL[i]];if(REAL[i]){if(!REAL[UL[i]]&&UL[i]!==BTC)return;const a=REAL[i],np=a.p*Math.pow(u.p/a.up,DEF[i][8]);s.lr=Math.log(np/s.p);s.p=np;bar(s);return}s.lr=DEF[i][8]*(u.lr||0);s.p=Math.max(.01,s.p*Math.exp(s.lr));bar(s)});
+  G.stocks.forEach((s,i)=>{if(UL[i]==null)return;const u=G.stocks[UL[i]];if(!REAL[i]&&isClosed(i))return;if(REAL[i]){const a=REAL[i];if(isClosed(i)){pinReal(i,s,a.p);a.up=u.p;return}if(!REAL[UL[i]]&&UL[i]!==BTC)return;const np=a.p*Math.pow(u.p/a.up,DEF[i][8]);pinReal(i,s,np);return}s.lr=DEF[i][8]*(u.lr||0);s.p=Math.max(.01,s.p*Math.exp(s.lr));bar(s)});
   settleOptions();checkOrders();
   if(G.tick%600===0)payDividends();
   G.pending=G.pending.filter(e=>e.to>G.tick);
@@ -872,7 +873,7 @@ function newGame(quiet){
   G={fx:FX0,krw:0,jfx:JFX0,jpy:0,rr:0,fxh:[FX0],orders:[],tick:0,cash:START,hold:{},news:[],log:[],pending:[],regime:0,sel:1,nextNews:12,claimed:keepClaimed,
      stocks:DEF.map(d=>({t:d[0],name:d[1],sec:d[2],ref:d[3],vol:d[4],beta:d[5],p:d[3],c:[],cur:null}))};
   G.stocks.forEach(s=>{let p=100;const arr=[];
-    for(let k=0;k<60;k++){const o=p;let h=o,l=o;for(let j=0;j<PER;j++){p*=Math.exp(s.vol*.065*norm());h=Math.max(h,p);l=Math.min(l,p)}arr.push({o,h,l,c:p})}
+    for(let k=0;k<60;k++){const o=p;let h=o,l=o;for(let j=0;j<PER;j++){p*=Math.exp(s.vol*.0034*norm());h=Math.max(h,p);l=Math.min(l,p)}arr.push({o,h,l,c:p})}
     const f=s.ref/p;s.c=arr.map(b=>({o:r2(b.o*f),h:r2(b.h*f),l:r2(b.l*f),c:r2(b.c*f)}));s.p=s.ref;s.cur={o:s.p,h:s.p,l:s.p,c:s.p,n:0}});
   if(quiet)return;save();lastSort=-99;render();
 }
@@ -890,7 +891,7 @@ function migrate(s){
   n.opts=(s.opts||[]).filter(o=>map[o.i]!=null).map(o=>({...o,i:map[o.i]}));
   n.sel=map[s.sel]!=null?map[s.sel]:1;return n;
 }
-function fill(x){const d=DEF.find(d=>d[0]===x.t);const base=[];let p=100;for(let k=0;k<60;k++){const o=p;let h=o,l=o;for(let j=0;j<PER;j++){p*=Math.exp(x.vol*.065*norm());h=Math.max(h,p);l=Math.min(l,p)}base.push({o,h,l,c:p})}
+function fill(x){const d=DEF.find(d=>d[0]===x.t);const base=[];let p=100;for(let k=0;k<60;k++){const o=p;let h=o,l=o;for(let j=0;j<PER;j++){p*=Math.exp(x.vol*.0034*norm());h=Math.max(h,p);l=Math.min(l,p)}base.push({o,h,l,c:p})}
   const f=(x.c[0]?x.c[0].o:x.p)/p;x.c=base.map(b=>({o:r2(b.o*f),h:r2(b.h*f),l:r2(b.l*f),c:r2(b.c*f)})).concat(x.c)}
 function load(){try{const s=migrate(JSON.parse(localStorage.getItem(UKEY)));if(s){G=s;lastSort=-99;return true}}catch(e){}return false}
 function loop(){for(let k=0;k<speed;k++)tickOnce();if(G.tick%5<speed)save();render()}
@@ -1128,7 +1129,7 @@ const OFEE=.65,SPREAD=.04;
 let oKind='C',oExp=180;
 function ncdf(x){const t=1/(1+.2316419*Math.abs(x)),d=.3989423*Math.exp(-x*x/2),p=d*t*(.3193815+t*(-.3565638+t*(1.781478+t*(-1.821256+t*1.330274))));return x>0?1-p:p}
 function oMid(i,k,K,T){const S=G.stocks[i].p;if(T<=0)return Math.max(0,k==='C'?S-K:K-S);
-  const sg=G.stocks[i].vol*.065*1.25*Math.sqrt(T),d1=(Math.log(S/K)+sg*sg/2)/sg,d2=d1-sg;
+  const sg=G.stocks[i].vol*.0034*1.25*Math.sqrt(T),d1=(Math.log(S/K)+sg*sg/2)/sg,d2=d1-sg;
   return k==='C'?S*ncdf(d1)-K*ncdf(d2):K*ncdf(-d2)-S*ncdf(-d1)}
 const oAsk=m=>Math.max(.01,m*(1+SPREAD)+.01),oBid=m=>Math.max(0,m*(1-SPREAD)-.01);
 function opts(){if(!Array.isArray(G.opts))G.opts=[];return G.opts}
@@ -1462,10 +1463,13 @@ setTimeout(syncPrices,1500);
 
 // ---- 실제 시세 연결 ----
 // REAL[i]={p,t,src}: 실제 시세가 들어온 종목은 그 가격을 그대로 따름 (레버리지·연동 ETF는 기초자산 움직임을 따라감)
-function setReal(i,p,src,ref,t){if(!(p>0)||i<0)return;const s=G.stocks[i];if(UL[i]!=null&&REAL[i]){if(ref>0){s.ref=ref;s.real={day:'live'}}return}
+// 저장본이 바뀌어(로그인·초기화) 화면 가격이 실제 가격과 크게 어긋나면 차트까지 같이 맞춰 고정
+function pinReal(i,s,p){const d=Math.log(p/s.p);if(!isFinite(d))return;if(Math.abs(d)>.3){const f=p/s.p;s.c=s.c.map(b=>({o:b.o*f,h:b.h*f,l:b.l*f,c:b.c*f}));s.cur={o:p,h:p,l:p,c:p,n:0};s.lr=0}else s.lr=d;
+  s.p=p;if(REAL[i]&&REAL[i].ref>0&&s.ref!==REAL[i].ref){s.ref=REAL[i].ref;s.real={day:'live'}}bar(s)}
+function setReal(i,p,src,ref,t){if(!(p>0)||i<0)return;const s=G.stocks[i];if(UL[i]!=null&&REAL[i]){if(ref>0){s.ref=ref;REAL[i].ref=ref;s.real={day:'live'}}if(isClosed(i)){REAL[i].p=p;REAL[i].t=t||Date.now()}return}
   if(!REAL[i]&&s.p>0&&Math.abs(Math.log(p/s.p))>.002){const f=p/s.p;s.c=s.c.map(b=>({o:b.o*f,h:b.h*f,l:b.l*f,c:b.c*f}))}
   if(!REAL[i]&&UL[i]==null)G.stocks.forEach((x,j)=>{if(UL[j]===i&&REAL[j])REAL[j].up=p});
-  if(!REAL[i]){s.p=p;s.lr=0;s.cur={o:p,h:p,l:p,c:p,n:0}}REAL[i]={p,t:t||Date.now(),src};if(UL[i]!=null)REAL[i].up=G.stocks[UL[i]].p;if(ref>0){s.ref=ref;s.real={day:'live'}}
+  if(!REAL[i]){s.p=p;s.lr=0;s.cur={o:p,h:p,l:p,c:p,n:0}}REAL[i]={p,t:t||Date.now(),src,ref:ref>0?ref:REAL[i]&&REAL[i].ref};if(UL[i]!=null)REAL[i].up=G.stocks[UL[i]].p;if(ref>0){s.ref=ref;s.real={day:'live'}}
   if(BR[i])delete BR[i]}
 // 비트코인: 키 없는 공개 시세 (바이낸스 → 안 되면 코인베이스)
 function startBTC(){let got=false,ws;
