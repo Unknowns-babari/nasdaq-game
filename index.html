@@ -851,6 +851,7 @@ function tickOnce(){
     if(UL[i]!=null)return;
     if(REAL[i]){pinReal(i,s,REAL[i].p);return}
     if(isClosed(i))return;
+    rollRef(i,s);
     if(BR[i]){if(bridged(i)){bridgeTick(i,s);return}}
     let eff=0;
     for(const e of G.pending){if(G.tick>=e.from&&G.tick<e.to&&(e.all||e.id===i||e.sec===s.sec))eff+=(e.all||e.id===i?e.v:e.v*.6)/(e.to-e.from)}
@@ -1046,7 +1047,7 @@ function renderDetail(){
   const lg=$('pLogo');lg.textContent=s.t.slice(0,4);lg.style.background=color(i);
   $('pName').textContent=s.name;$('openOpt').hidden=CUR(i)!=='USD';{const y=yieldOf(i),cc=CUR(i);$('pYield').textContent=cc!=='USD'?`${curName(cc)}로 거래 · ≈ ${usd(s.p/rateOf(cc))} · ${DEF[i][6]==='kospi'?'코스피':DEF[i][6]==='kosdaq'?'코스닥':'도쿄증권거래소'}`:isBond(i)?`현재 금리 ${y.toFixed(3)}% · 1좌 = 액면 $100 · 10분마다 이자 지급`:y?`연 배당률 ${y}% · 10분마다 배당 지급(게임용)`:''}$('pHeart').classList.toggle('on',isW(i));$('pHeart').setAttribute('aria-pressed',isW(i));$('pSub').textContent=`${s.t} · ${s.sec}`;
   $('pPrice').innerHTML=esc(fp(i,s.p))+(REAL[i]?`<span class="real">${(REAL[i].src==='gs'||REAL[i].src==='yh')?(MK[i]==='US'?'실제 가격 · 몇 분 지연':'실제 가격 · 약 20분 지연'):Date.now()-REAL[i].t<90e3?'실시간 체결가':'실제 가격 · 장 마감'}</span>`:bridged(i)?`<span class="real">${esc(PJ.date.slice(5).replace('-','/'))} 실제 시가·종가 고정</span>`:s.real?`<span class="real">실제 ${esc(s.real.day)} 반영</span>`:'');
-  $('pChg').textContent=`${s.real?'전일 종가':'시작가'}보다 ${fsg(i,s.p-s.ref)} (${pct(c)})`+(REAL[i]?(REAL[i].src==='btc'?' · 24시간 기준':''):bridged(i)?` · 오늘 밤 12시에 실제 종가 ${fp(i,BR[i].c)} 도달`:'');{const cl=isClosed(i);if(cl)$('pChg').textContent+=` · ${MNAME[MK[i]]} ${isHoli(cl)?'증시 휴장':cl}`;$('pClosed').hidden=!cl;if(cl)$('pClosed').textContent=isHoli(cl)?`🏖️ 오늘은 ${MNAME[MK[i]]} 증시 휴장일(${cl})이에요. 다음 거래일에 사고팔 수 있어요.`:`🌙 ${MNAME[MK[i]]} 증시 ${cl}이에요. 거래 시간은 한국 시간 ${sessTxt(MK[i])}이에요.`;['openBuy','openSell','openOpt'].forEach(id=>$(id).classList.toggle('off',!!cl))}$('pChg').className='pchg num '+cls(c);
+  $('pChg').textContent=`${i===BTC&&REAL[i]?'24시간 전':'전일 정규장 종가'}보다 ${fsg(i,s.p-s.ref)} (${pct(c)})`+(REAL[i]?(REAL[i].src==='btc'?' · 24시간 기준':''):bridged(i)?` · 오늘 밤 12시에 실제 종가 ${fp(i,BR[i].c)} 도달`:'');{const cl=isClosed(i);if(cl)$('pChg').textContent+=` · ${MNAME[MK[i]]} ${isHoli(cl)?'증시 휴장':cl}`;$('pClosed').hidden=!cl;if(cl)$('pClosed').textContent=isHoli(cl)?`🏖️ 오늘은 ${MNAME[MK[i]]} 증시 휴장일(${cl})이에요. 다음 거래일에 사고팔 수 있어요.`:`🌙 ${MNAME[MK[i]]} 증시 ${cl}이에요. 거래 시간은 한국 시간 ${sessTxt(MK[i])}이에요.`;['openBuy','openSell','openOpt'].forEach(id=>$(id).classList.toggle('off',!!cl))}$('pChg').className='pchg num '+cls(c);
   $('pos').innerHTML=h?`<div><span>보유 수량</span><b class="num">${ip(h.q)}주</b></div><div><span>평균 단가</span><b class="num">${fp(i,h.a)}</b></div><div><span>수익</span><b class="num ${cls(s.p-h.a)}">${fsg(i,(s.p-h.a)*h.q)}</b></div>`
     :`<div><span>보유 수량</span><b>0주</b></div><div><span>살 수 있는 수량</span><b class="num">${ip(maxBuy())}주</b></div><div><span>변동성</span><b>${s.vol>=.03?'높음':s.vol>=.018?'보통':'낮음'}</b></div>`;
   draw();
@@ -1473,6 +1474,9 @@ setTimeout(syncPrices,1500);
 
 // ---- 실제 시세 연결 ----
 // REAL[i]={p,t,src}: 실제 시세가 들어온 종목은 그 가격을 그대로 따름 (레버리지·연동 ETF는 기초자산 움직임을 따라감)
+// 정규장 기준가: 그 시장의 새 거래일 첫 틱에 직전 거래일 마지막 가격을 전일 종가로
+let MD={},mdAt=0;function mday(m){if(Date.now()-mdAt>20e3){mdAt=Date.now();for(const k of Object.keys(MZ))MD[k]=new Intl.DateTimeFormat('en-CA',{timeZone:MZ[k],year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date())}return MD[m]}
+function rollRef(i,s){const m=MK[i];if(!m)return;const d=mday(m);if(s.rd!==d){if(s.rd&&s.lp>0){s.ref=s.lp;s.real={day:'sim'}}s.rd=d}s.lp=s.p}
 // 저장본이 바뀌어(로그인·초기화) 화면 가격이 실제 가격과 크게 어긋나면 차트까지 같이 맞춰 고정
 function pinReal(i,s,p){const d=Math.log(p/s.p);if(!isFinite(d))return;if(Math.abs(d)>.3){const f=p/s.p;s.c=s.c.map(b=>({o:b.o*f,h:b.h*f,l:b.l*f,c:b.c*f}));s.cur={o:p,h:p,l:p,c:p,n:0};s.lr=0}else s.lr=d;
   s.p=p;if(REAL[i]&&REAL[i].ref>0&&s.ref!==REAL[i].ref){s.ref=REAL[i].ref;s.real={day:'live'}}bar(s)}
@@ -1503,14 +1507,14 @@ function startFinnhub(key){if(key===fh.key)return;fh.key=key;try{fh.ws&&(fh.ws.o
   const open=()=>{if(fh.key!==key)return;try{const ws=new WebSocket('wss://ws.finnhub.io?token='+encodeURIComponent(key));fh.ws=ws;
     ws.onopen=()=>FHSYM.forEach(i=>ws.send(JSON.stringify({type:'subscribe',symbol:DEF[i][0]})));
     ws.onmessage=e=>{const m=JSON.parse(e.data);if(m.type!=='trade'||!m.data)return;const last={};m.data.forEach(d=>last[d.s]=d.p);
-      for(const [t,p] of Object.entries(last)){const i=DEF.findIndex(x=>x[0]===t);if(i>=0)setReal(i,p,'fh')}};
+      for(const [t,p] of Object.entries(last)){const i=DEF.findIndex(x=>x[0]===t);if(i>=0&&!isClosed(i))setReal(i,p,'fh')}};
     ws.onclose=()=>{if(fh.key===key)fh.timer=setTimeout(open,20e3)}}catch(e){}};
   open();
   // 전일 종가·마지막 가격: 한 종목씩 천천히 조회 (분당 한도 보호)
   let k=0;const poll=async()=>{if(fh.key!==key)return;const i=FHSYM[k++%FHSYM.length];let wait=k<=FHSYM.length?1300:8000;
     try{const r=await fetch('https://finnhub.io/api/v1/quote?symbol='+DEF[i][0]+'&token='+encodeURIComponent(key));
       if(r.status===429)wait=60e3;else if(r.ok){const q=await r.json();if(q&&q.c>0){const fresh=REAL[i]&&REAL[i].src==='fh'&&Date.now()-REAL[i].t<60e3;
-        if(fresh)G.stocks[i].ref=q.pc;else setReal(i,q.c,'fh',q.pc,q.t*1000);if(k===FHSYM.length){save();render();toast(`미국 ${FHSYM.length}종목이 실제 가격을 따라요`)}}}}catch(e){}
+        if(fresh||(REAL[i]&&isClosed(i))){if(!REAL[i]||REAL[i].src==='fh'){G.stocks[i].ref=q.pc;if(REAL[i])REAL[i].ref=q.pc}}else setReal(i,q.c,'fh',q.pc,q.t*1000);if(k===FHSYM.length){save();render();toast(`미국 ${FHSYM.length}종목이 실제 가격을 따라요`)}}}}catch(e){}
     setTimeout(poll,wait)};
   poll()}
 startFinnhub(FH_DEFAULT);
